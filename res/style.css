@@ -1,0 +1,242 @@
+.copy {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+.button {
+    margin: 0 6px 6px 0;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    /* copied from sakura input[type] styles */
+    background: #4a4a4a;
+    color: #c9c9c9;
+    border: 1px solid #4a4a4a;
+    border-top: none;
+    font-size: 1.2rem;
+}
+.button:hover {
+    border-bottom: none;
+}
+.justify {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+.title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.verse {
+    position: relative;
+    margin-bottom: 0.5rem;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+[tabindex="-1"]:focus {
+    outline: none;
+}
+.verse.highlight {
+    color: #c9c9c9;
+    background: #4a4a4a;
+}
+.verse-number {
+    user-select: none;
+    position: absolute;
+    -webkit-transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    -o-transform: translateX(-100%);
+    transform: translateX(-100%);
+    font-weight: bold;
+}
+.play {
+    user-select: none;
+    display: none;
+    position: absolute;
+    font-size: 4rem;
+    cursor: pointer;
+    transform: translate(100%);
+    line-height: 1;
+    right: 0;
+}
+.has-js .verse:focus .play {
+    display: inline-block;
+}
+.has-js .verse:hover .play {
+    display: inline-block;
+}
+
+.verse-line {
+    display: block;
+}
+.verse-line:nth-of-type(2n+1) {
+    padding-left: 0.6rem;
+}
+.verse-line:nth-of-type(2n) {
+    padding-left: 2rem;
+}
+
+nav {
+    font-size: 1.2rem;
+}
+.nav-arr {
+    font-size: 18px;
+    line-height: 1rem;
+}
+
+small {
+    display: block;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+    text-align: justify;
+}
+
+.h-1, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+h1 {
+    margin-bottom: 1rem;
+}
+
+br {
+   user-select: none;
+}
+
+.tooltip {
+    position:relative;
+    text-align:left;
+    cursor: pointer;
+}
+
+.tooltip .right {
+    min-width:200px;
+    top:50%;
+    left:100%;
+    margin-left:20px;
+    transform:translate(0, -50%);
+    padding:10px 20px;
+    color:#c9c9c9;
+    background-color: #545454;
+    font-weight:normal;
+    font-size:1.3rem;
+    border-radius:8px;
+    position:absolute;
+    z-index:99999999;
+    box-sizing:border-box;
+    box-shadow:0 1px 8px rgba(174, 174, 174, 0.2);
+    display:none;
+
+}
+
+.tooltip:focus {
+    outline: none;
+}
+.tooltip:hover .right, .tooltip:focus .right {
+    display:block;
+}
+
+.tooltip .right i {
+    position:absolute;
+    top:50%;
+    right:100%;
+    margin-top:-12px;
+    width:12px;
+    height:24px;
+    overflow:hidden;
+}
+
+.tooltip .right i::after {
+    content:'';
+    position:absolute;
+    width:12px;
+    height:12px;
+    left:0;
+    top:50%;
+    transform:translate(50%,-50%) rotate(-45deg);
+    background-color:#545454;
+    box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}
+
+#menu {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    font-size: 1rem;
+    color: #c9c9c9;
+    background: #4a4a4a;
+    padding: 0.5rem;
+    z-index: 1;
+}
+#menu span {
+    font-size: 1.5rem;
+    float: right;
+}
+#menu ul {
+    display: none;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+    /*clear: right;*/
+}
+#menu:hover ul {
+    display: block;
+}
+#menu.show ul {
+    display: block;
+}
+
+/* global search */
+.verse-result {
+    max-width: 700px;
+    white-space: nowrap;
+}
+
+.verse-result:hover {
+    font-weight: bold;
+}
+
+.verse-result small {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.verse-result .match {
+	filter: brightness(0.5);
+}
+
+#search-input-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+}
+
+#search-input-overlay.hidden {
+    display: none;
+}
+
+#search-input-overlay > div {
+    min-width: 300px;
+}
+
+.no-select {
+    user-select: none;
+}
+[data-content]:before {
+    content: attr(data-content); /* this lets Ctrl+F to work over superscripts
+}

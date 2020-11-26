@@ -1,0 +1,8 @@
+{
+  "name": "Recovery Version",
+  "theme_color": "#222222",
+  "background_color": "#222222",
+  "display": "minimal-ui",
+  "scope": "/",
+  "start_url": "/"
+}

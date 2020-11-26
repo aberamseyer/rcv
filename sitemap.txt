@@ -1,0 +1,3 @@
+https://rcv.ramseyer.dev/bible
+https://rcv.ramseyer.dev/concordance
+https://rcv.ramseyer.dev/search
