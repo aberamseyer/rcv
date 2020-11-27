@@ -88,7 +88,7 @@ if ($q) {
 	}
 }
 
-echo "<h2>Search".($q ? ": '".htmlentities($q, ENT_HTML5)."'" : '')."</h2>";
+echo "<h2><a href='/bible'>Search".($q ? ": '".htmlentities($q, ENT_HTML5)."'" : '')."</a></h2>";
 ?>
 <style>
 	.match {

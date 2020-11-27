@@ -14,19 +14,20 @@ require "head.php";
 <p>A few tips for using this website:</p>
 
 <ol>
-  <li>Click a book title to go back to the list of books</li>
+  <li>Use your browser's "Back" and "Forward" navigation to jump between footnotes and pages that you have visited</li>
+  <li>Click the title of any page to go back to the list of books</li>
   <li>Click a verse number to go to the list of chapters for the current book</li>
-  <li>Type anywhere to begin searching for a verse - search by reference or keyword. 
+  <li>Type anywhere to begin searching for a verse by reference or keyword
     <ul>
-      <li>Click any verse to go directly to that verse</li>
-      <li>Pressing 'Enter' from the quick search will take you to the advanced search page.</li>
-      <li>Typing a ';' will insert a ':' to make entering references faster.</li>
-      <li>Pressing 'Esc' or clicking off a verse will dismiss the search tool.</li>
+      <li>Click any verse to open it</li>
+      <li>Pressing 'Enter' from the quick search will navigate to the advanced search page</li>
+      <li>Typing a ';' will insert a ':' to make entering references faster</li>
+      <li>Pressing 'Esc' or clicking off a verse will dismiss the search tool</li>
     </ul>
   </li>
-  <li>The 'Play' button that appears when hovering over each verse to the right will begin playing audio of the chapter from that verse until the end of the chapter.
+  <li>The 'Play' button that appears when hovering over each verse to the right will begin playing audio of the chapter from that verse until the end of the chapter
     <ul>
-      <li>Stop the speaking using the option in the menu at the top-right of the page.</li>
+      <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
   </li>
   <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible?book={BOOK NAME or BOOK ABBREVIATION}&amp;chapter={CHAPTER NUMBER}&amp;number={VERSE NUMBER}</pre>

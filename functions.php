@@ -274,6 +274,7 @@
 		if (!$book && !$concordance) {
 			$parts[] = "<a href='concordance'>Concordance</a>";
 		}
+		$parts[] = "<a href='/help'>Help</a>";
 		if ($book) {
 			if ($chapter) {
 				$parts[] = "<a href='bible?book=$book[name]'>Chapters</a>";
