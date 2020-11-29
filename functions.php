@@ -223,14 +223,14 @@
 				$pos = $note['position'];
 				foreach(explode(',', $note['position']) as $pos) {
 					array_splice($arr, $pos, 1,
-						"<sup class='tooltip' data-content='$note[letter]'><span class='right'>".format_note($note['cross_reference'], false)."</span></sup>".
+						"<sup class='tooltip' data-content='$note[letter]' tabindex='-1'><span class='right'>".format_note($note['cross_reference'], false)."</span></sup>".
 						$arr[ $pos ]);
 				}
 			}
 			foreach($element['notes']['fn'] as $i => $note) {
 				foreach(explode(',', $note['position']) as $pos) {
 					array_splice($arr, $pos, 1,
-						"<sup><span class='right'><a href='#fn-$note[id]' class='fn' data-content='$note[number]'></a></span></sup>".
+						"<sup><span class='right'><a href='#fn-$note[id]' class='fn' data-content='$note[number]' tabindex='-1'></a></span></sup>".
 						$arr[ $pos ]);
 				}
 			}
