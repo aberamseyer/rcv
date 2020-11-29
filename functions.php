@@ -223,7 +223,7 @@
 				$pos = $note['position'];
 				foreach(explode(',', $note['position']) as $pos) {
 					array_splice($arr, $pos, 1,
-						"<sup tabindex='-1' class='tooltip' data-content='$note[letter]'><span class='right'>".format_note($note['cross_reference'], false)."</span></sup>".
+						"<sup class='tooltip' data-content='$note[letter]'><span class='right'>".format_note($note['cross_reference'], false)."</span></sup>".
 						$arr[ $pos ]);
 				}
 			}
@@ -245,9 +245,9 @@
 		unset($el);
 		$content = implode('', $content);
 
-		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]' tabindex='-1'>".
-			($element['number'] ? "<a href='bible?book=$book[name]' class='verse-number'>".($element['number'] ?: '')."</a>" : "").
-			" <a class='play' onclick='startReading($element[id])'>&#8227;</a>".
+		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
+			($element['number'] ? "<a href='bible?book=$book[name]' class='verse-number'>$element[number]</a>
+			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").
 			"$content</p>";
 	}
 
