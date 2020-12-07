@@ -92,8 +92,6 @@ switch($_POST['action']) {
 
 				if (!$book && !$prev_book)
 			        continue;
-				if (!$section_str)
-				    continue;
 				
 				if ($books_by_abbr[$book] || $books_by_name[$book]) {
 					$book = $books_by_abbr[$book] ?: $books_by_name[$book];
@@ -110,6 +108,8 @@ switch($_POST['action']) {
 
 			    if (!$book)
 				    $book = $prev_book;
+				if (!$section_str)
+					$section_str = $verse;
 
 				$is_single_book = in_array($book, $single_books);
 
@@ -206,7 +206,7 @@ switch($_POST['action']) {
 					$final_verses[] = $raw_verses[ $ordered_verse ];
 			}
 		}
-		
+
 		header("Content-type: application/json");
 		echo json_encode([
 			"q" => $q ?: '',
