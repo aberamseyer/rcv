@@ -275,7 +275,7 @@
 			$parts[] = "<a href='concordance'>Concordance</a>";
 		}
 		$parts[] = "<a href='/help'>Help</a>";
-		$parts[] = "<a href='/verse'>Verse Requester</a>";
+		$parts[] = "<a href='/verse'>Verse Lookup</a>";
 		if ($book) {
 			if ($chapter) {
 				$parts[] = "<a href='bible?book=$book[name]'>Chapters</a>";
