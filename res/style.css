@@ -4,6 +4,10 @@
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
 .button {
     margin: 0 6px 6px 0;
     -webkit-border-radius: 2px;
