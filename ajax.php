@@ -4,7 +4,7 @@ require "init.php";
 
 switch($_POST['action']) {
 	case 'request':
-		if ($q = ucwords(trim($_POST['q']))) {
+		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
 			$single_books = ["Obad.","3 John","Jude","Philem.","2 John"];
 			$books = [
 			  [ 'name' => 'Genesis','abbreviation' => 'Gen.' ],
@@ -177,7 +177,7 @@ switch($_POST['action']) {
 				    	}
 				    }
 				    else {
-				    	$v = "$book ".($is_single_book ? '' : $chapter.":")."$verse";
+				    	$v = "$book ".($is_single_book ? '' : (int)$chapter.":").(int)$verse;
 				    	$parsed_verses[] = "'$v'";
 				    	$ordered_verses[] = $v;
 				    }

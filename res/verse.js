@@ -9,7 +9,7 @@
 
 		const { key } = e;
 
-		if (verseInput.value.length > 3 && /^\w$/.test(key) || key === 'Backspace') {
+		if (verseInput.value.length > 3 && /^[\w:;\-,\.]$/.test(key) || key === 'Backspace') {
 			const formData = new FormData();
 			formData.append('action', 'request');
 			formData.append('q', verseInput.value.trim());
@@ -30,7 +30,7 @@
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<small>
-							<a href='' onclick='navigator.clipboard.writeText("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}"); return false;'>Copy link to these verses to clipboard</a></small>`;
+							<a href='' onclick='this.innerText = "Copied!"; setTimeout(() => this.innerText = "Copy link to these verses to clipboard", 1500); navigator.clipboard.writeText("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}"); return false;'>Copy link to these verses to clipboard</a></small>`;
 					}
 				}
 			}
