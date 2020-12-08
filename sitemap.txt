@@ -1,3 +1,5 @@
 https://rcv.ramseyer.dev/bible
 https://rcv.ramseyer.dev/concordance
 https://rcv.ramseyer.dev/search
+https://rcv.ramseyer.dev/help
+https://rcv.ramseyer.dev/verse
