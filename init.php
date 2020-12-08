@@ -16,11 +16,12 @@ $db = LOCAL || isset($_GET['abe'])
 require "functions.php";
 
 if (!LOCAL) {
-	require "vendor/autoload.php";
-	$redis_client = new Predis\Client([
-		'host' => '127.0.0.1'
-	]);
 	if (!$no_stats) {
+		require "vendor/autoload.php";
+		$redis_client = new Predis\Client([
+			'host' => '127.0.0.1'
+		]);
+
 		$redis_client->incr("rcv.ramseyer.dev/ips/".$_SERVER['REMOTE_ADDR']);
 		$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
 		$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));
@@ -37,13 +38,12 @@ $chapter = null;
 $footnotes = null;
 
 
-$q_book = $_GET['book'];
-if ($q_book && in_array($q_book, array_column($books, 'name'), true)) {
-	$query = "SELECT * FROM books WHERE name = '".db_esc($q_book)."'";
-	$book = row($query);
+$q_book = ucwords(strtolower($_GET['book']));
+if ($q_book && ($index = array_search($q_book, array_column($books, 'name'), true)) !== false) {
+	$book = $books[$index];
 }
-else if ($q_book && in_array($q_book, array_column($books, 'abbreviation'))) {
-	$book = row("SELECT * FROM books WHERE abbreviation = '".db_esc($q_book)."'");
+else if ($q_book && ($index = array_search($q_book, array_column($books, 'abbreviation'))) !== false) {
+	$book = $books[$index];
 }
 
 if ($book) {
