@@ -38,6 +38,13 @@ require "head.php";
       <li>Philemon<pre>https://rcv.ramseyer.dev/bible?book=Philemon</pre></li>
     </ul>
   </li>
+  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
+    <ul>
+      <li>Separate verses with a semicolon, i.e., Gen. 1:26; 2:14</li>
+      <li>verses can have a range, i.e., Dan. 2:4-7</li>
+      <li>Separate verses in the same chapter with a comma, i.e., Rom. 8:2, 6, 10</li>
+      <li>Click the link that appears below the set of returned verses to copy a link to that set of verses to your clipboard</li>
+  </li>
 </ol> 
 
 <p>

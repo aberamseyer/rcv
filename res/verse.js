@@ -30,7 +30,7 @@
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<small>
-							<a href='' onclick='this.innerText = "Copied!"; setTimeout(() => this.innerText = "Copy link to these verses to clipboard", 1500); navigator.clipboard.writeText("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}"); return false;'>Copy link to these verses to clipboard</a></small>`;
+							<a href='' onclick='this.innerText = "Copied!"; setTimeout(() => this.innerHTML = "&#128279; to these verses", 1500); navigator.clipboard.writeText("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}"); return false;'>&#128279  to these verses</a></small>`;
 					}
 				}
 			}
@@ -41,5 +41,6 @@
 	}
 
 	if (verseInput.value.length)
-			verseInput.onkeyup({ key: 'a' }); // manually trigger on load
+		verseInput.onkeyup({ key: 'a' }); // manually trigger on load
+	verseInput.focus();
 })();
