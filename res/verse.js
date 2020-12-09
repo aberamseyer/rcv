@@ -9,7 +9,7 @@
 
 		const { key } = e;
 
-		if (verseInput.value.length > 3 && /^[\w:;\-,\.]$/.test(key) || key === 'Backspace') {
+		if (verseInput.value.length > 3 && /^[\w:;\-,\.]$/.test(key) || [ 'Backspace', 'Unidentified' ].includes(key)) {
 			const formData = new FormData();
 			formData.append('action', 'request');
 			formData.append('q', verseInput.value.trim());

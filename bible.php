@@ -109,13 +109,11 @@ if ($verse):
 <script type="text/javascript">
     if (!window.location.hash)
         window.addEventListener('load', function() {
-          setTimeout(function() {
+          setTimeout(()  => {
             const el = document.querySelectorAll('.verse')[<?= $verse - 1 ?>];
             el.classList.add('highlight');
             el.scrollIntoView({ block: "center" });
-            setTimeout(function() {
-                el.classList.remove('highlight');
-            }, 1000);
+            setTimeout(() => el.classList.remove('highlight'), 1000);
           }, 250);
         });
 </script>

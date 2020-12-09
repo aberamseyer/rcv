@@ -16,7 +16,7 @@ $db = LOCAL || isset($_GET['abe'])
 require "functions.php";
 
 if (!LOCAL) {
-	if (!$no_stats) {
+	if (!$no_stats || isset($_GET['no_track'])) {
 		require "vendor/autoload.php";
 		$redis_client = new Predis\Client([
 			'host' => '127.0.0.1'
