@@ -29,8 +29,8 @@ if (!LOCAL) {
 	}
 }
 
-$old = select("SELECT * FROM books WHERE testament = 0 ORDER BY sort_order");
-$new = select("SELECT * FROM books WHERE testament = 1 ORDER BY sort_order");
+$old = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 0 ORDER BY sort_order");
+$new = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 1 ORDER BY sort_order");
 $books = array_merge($old, $new);
 
 $book = null;
@@ -38,11 +38,11 @@ $chapter = null;
 $footnotes = null;
 
 
-$q_book = ucwords(strtolower($_GET['book']));
-if ($q_book && ($index = array_search($q_book, array_column($books, 'name'), true)) !== false) {
+$q_book = strtoupper($_GET['book']);
+if ($q_book && ($index = array_search($q_book, array_column($books, 'ucName'), true)) !== false) {
 	$book = $books[$index];
 }
-else if ($q_book && ($index = array_search($q_book, array_column($books, 'abbreviation'))) !== false) {
+else if ($q_book && ($index = array_search($q_book, array_column($books, 'ucAbbr'))) !== false) {
 	$book = $books[$index];
 }
 
