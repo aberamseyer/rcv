@@ -173,8 +173,8 @@ br {
 
 #menu {
     position: fixed;
-    top: 2rem;
-    right: 2rem;
+    top: 1rem;
+    right: 1rem;
     font-size: 1rem;
     color: #c9c9c9;
     background: #4a4a4a;

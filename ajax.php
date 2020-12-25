@@ -99,8 +99,8 @@ switch($_POST['action']) {
 				else {
 					foreach($books as $to_check) {
 						if (
-							strpos($to_check['name'], $book) === 0 ||
-							strpos($to_check['abbreviation'], $book) === 0
+							stripos($to_check['name'], $book) === 0 ||
+							stripos($to_check['abbreviation'], $book) === 0
 						)
 							$book = $to_check['abbreviation'];
 					}
@@ -111,7 +111,7 @@ switch($_POST['action']) {
 				if (!$section_str)
 					$section_str = $verse;
 
-				$is_single_book = in_array($book, $single_books);
+				$is_single_book = in_array($book, $single_books, true);
 
 				$sections = explode(',', $section_str);
 

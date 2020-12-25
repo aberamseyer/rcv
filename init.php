@@ -85,8 +85,8 @@ if ($chapter) {
 if (!$_POST['action']) {
 	// server should keep session data for AT LEAST 1 hour
 	ini_set('session.gc_maxlifetime', 86400);
-
 	session_start();
+
 	$light_theme = $_SESSION['theme'] == 'light';
 	if ($_GET['set_theme'] == 'light') {
 		$_SESSION['theme'] = 'light';
@@ -96,6 +96,7 @@ if (!$_POST['action']) {
 		unset($_SESSION['theme']);
 		$light_theme = false;
 	}
+
 	$minimal_layout = $_SESSION['minimal'] == 'true';
 	if ($_GET['set_minimal'] == 'true') {
 		$_SESSION['minimal'] = true;
@@ -105,6 +106,17 @@ if (!$_POST['action']) {
 		unset($_SESSION['minimal']);
 		$minimal_layout = false;
 	}
+
+	$serif_text = $_SESSION['serif'] == 'true';
+	if ($_GET['set_serif'] == 'true') {
+		$_SESSION['serif'] = true;
+		$serif_text = true;
+	}
+	if ($_GET['set_serif'] == 'false') {
+		unset($_SESSION['serif']);
+		$serif_text = false;
+	}
+
 	session_write_close();
-	unset($_GET['set_theme']);
+	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);
 }
