@@ -83,8 +83,7 @@ if ($chapter) {
 }
 
 if (!$_POST['action']) {
-	// server should keep session data for AT LEAST 1 hour
-	ini_set('session.gc_maxlifetime', 86400);
+	ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 	session_start();
 
 	$light_theme = $_SESSION['theme'] == 'light';

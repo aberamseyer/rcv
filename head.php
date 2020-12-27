@@ -23,8 +23,8 @@ require_once "init.php";
 <?php
     if ($serif_text) {
         echo '<style>
-            .verse-line, .footnote, .result { font-family: serif; }
-            .footnote a, .result a { font-family: sans-serif; }
+            .verse-line, .footnote, .result, #verses { font-family: serif; }
+            .footnote a, .result a, #verses a { font-family: sans-serif; }
         </style>';
     }
     echo '<div id="menu">';

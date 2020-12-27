@@ -147,7 +147,7 @@ if ($q) {
 			        echo nav_line();
 			        $count = 0;
                 }
-				echo "<div class='result'><a href='$result[href]'>$result[a_tag]</a>: ".
+				echo "<div class='result'><a target='_blank' href='$result[href]'>$result[a_tag]</a>: ".
 					nl2br(preg_replace("/($q)/i", "<span class='match'>\$1</span>", $result['content'])).
 					"</div>";
 			}
