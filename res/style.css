@@ -242,5 +242,13 @@ br {
     user-select: none;
 }
 [data-content]:before {
-    content: attr(data-content); /* this lets Ctrl+F to work over superscripts
+    content: attr(data-content); /* this lets Ctrl+F to work over superscripts */
+}
+
+/* serif font selectors */
+.serif .verse-line, .serif .footnote, .serif .result, .serif #verses {
+    font-family: serif;
+}
+.serif .footnote a, .serif .result a, .serif #verses a {
+    font-family: sans-serif;
 }

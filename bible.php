@@ -58,7 +58,7 @@
 	  FROM chapter_contents cc
 	  JOIN chapters c ON cc.chapter_id = c.id
 	  WHERE c.book_id = $book[id] AND tier IS NOT NULL
-	ORDER BY outline_order");
+	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
 	    if (strpos($outline_point['content'], "cont'd") === false)
                 echo "<a href='/bible?book=$book[abbreviation]&chapter=$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";

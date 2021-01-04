@@ -19,14 +19,8 @@ require_once "init.php";
 	<link rel="stylesheet" href="res/sakura-dark.css" type="text/css">
 	<link rel="stylesheet" href="res/style.css" type="text/css">
 </head>
-<body id="top">
+<body id="top" class="<?= $serif_text ? 'serif' : '' ?>">
 <?php
-    if ($serif_text) {
-        echo '<style>
-            .verse-line, .footnote, .result, #verses { font-family: serif; }
-            .footnote a, .result a, #verses a { font-family: sans-serif; }
-        </style>';
-    }
     echo '<div id="menu">';
         echo '<span>&#8942;</span>';
         echo '<ul>';

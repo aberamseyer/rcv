@@ -5,8 +5,12 @@
  * Date: 2020-07-17
  * Time: 09:05
  */
-$time = microtime(true);
+
 error_reporting(E_ALL^E_NOTICE);
+ini_set('post_max_size', '512K');
+ini_set('upload_max_filesize', '512K');
+
+$time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
 
 $db = LOCAL || isset($_GET['abe'])

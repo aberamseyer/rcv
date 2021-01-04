@@ -171,13 +171,13 @@ switch($_POST['action']) {
 				    		continue;
 
 				    	while ($low <= $high) {
-				    		$v = "$book ".($is_single_book ? '' : $chapter.":").$low++;
+				    		$v = db_esc("$book ".($is_single_book ? '' : $chapter.":").$low++);
 				    		$parsed_verses[] = "'$v'";
 				    		$ordered_verses[] = $v;
 				    	}
 				    }
 				    else {
-				    	$v = "$book ".($is_single_book ? '' : (int)$chapter.":").(int)$verse;
+				    	$v = db_esc("$book ".($is_single_book ? '' : (int)$chapter.":").(int)$verse);
 				    	$parsed_verses[] = "'$v'";
 				    	$ordered_verses[] = $v;
 				    }

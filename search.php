@@ -122,7 +122,7 @@ echo "<h2><a href='/bible'>Search".($q ? ": '".htmlentities($q, ENT_HTML5)."'" :
 		}
 		echo "</optgroup>";
 ?></select> chapter <input name='chapter' placeholder="Any Chapter" type="number" min="1" value="<?= $chapter['number'] ?>"> for
-	<input type="text" name="q" minlength="3" placeholder="these words..." value="<?= htmlentities($q, ENT_HTML5) ?>">
+	<input type="text" name="q" minlength="3" maxlength="2000" placeholder="these words..." value="<?= htmlentities($q, ENT_HTML5) ?>">
 	<h5 style="margin-top: 0">Also Search</h5>
 	<ul style="list-style:none;">
 		<li><label><input name="also[fn]" type="checkbox" value="true" <?= $also['fn'] ? 'checked' : '' ?>> Footnotes</label></li>
