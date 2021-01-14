@@ -3,6 +3,7 @@ $no_stats = true;
 require "init.php";
 
 switch($_POST['action']) {
+  // verse lookup page that parses a set of verses
 	case 'request':
 		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
 			$single_books = ["Obad.","3 John","Jude","Philem.","2 John"];
@@ -215,6 +216,7 @@ switch($_POST['action']) {
     	die;
 		break;
 
+  // global verse search that pops up when you start typing
 	case 'verse':
 		$q = strtolower($_POST['q']);
 		$ref_like = db_esc_like($q)."%";

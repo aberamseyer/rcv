@@ -67,6 +67,7 @@ if ($letter) {
   $count = 0;
   foreach($rows as $row)
     $arr[$row['word']][] = $row;
+  ksort($arr, SORT_STRING);
   foreach($arr as $word => $refs) {
 		if (++$count && $count % 50 == 0 && count($rows) - $count > 30) {
 			echo "<hr />";
