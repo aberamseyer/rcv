@@ -1,4 +1,11 @@
 const verseContainer = document.getElementById('verses');
+function copyToClip(copyText, element) {
+	const html = element.innerHTML;
+	element.innerText = `Copied!`;
+	navigator.clipboard.writeText(copyText);
+	setTimeout(() => element.innerHTML = html, 1500);
+}
+
 (() => {
 	const recognizedVerses = document.getElementById('recognized-verses');
 	const exceededMax = document.getElementById('exceeded-max');
@@ -31,8 +38,8 @@ const verseContainer = document.getElementById('verses');
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='this.innerText = "Copied!"; setTimeout(() => this.innerHTML = "&#128203; link to verses", 1500); navigator.clipboard.writeText("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}"); return false;'>&#128203 link to verses</a> <br>
-							<a href='' onclick='this.innerText = "Copied!"; setTimeout(() => this.innerHTML = "&#128203; verse text", 1500); navigator.clipboard.writeText(verseContainer.innerText); return false;'>&#128203 verse text</a>`;
+							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'>&#128203 link to verses</a> <br>
+							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'>&#128203 verse text</a>`;
 					}
 				}
 			}

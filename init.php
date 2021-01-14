@@ -22,9 +22,7 @@ require "functions.php";
 if (!LOCAL) {
 	if (!$no_stats || isset($_GET['no_track'])) {
 		require "vendor/autoload.php";
-		$redis_client = new Predis\Client([
-			'host' => '127.0.0.1'
-		]);
+		$redis_client = new Predis\Client([ 'host' => '127.0.0.1' ]);
 
 		$redis_client->incr("rcv.ramseyer.dev/ips/".$_SERVER['REMOTE_ADDR']);
 		$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
