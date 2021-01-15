@@ -80,7 +80,8 @@ if ($letter) {
 ?>
 <script type='text/javascript'>
 function getRefs(id, details) {
-  if (details.open) {
+  const container = details.querySelector('small');
+  if (details.open && container.innerHTML === '') {
 	  const formData = new FormData();
 	  formData.append('action', 'conc');
     formData.append('type', '<?= $q_conc ?>');
@@ -94,7 +95,7 @@ function getRefs(id, details) {
 	  		const results = JSON.parse(request.response);
 
         if (results.length) {
-          details.querySelector('small').innerHTML = 
+          container.innerHTML = 
             results.map(ref => 
               `<a target='_blank' href='${ref.href}'>${ref.reference}${+ref.number ? '<sup>' + ref.number + '</sup>' : ''}</a>`
             ).join(`&nbsp;&nbsp;&nbsp;`);
