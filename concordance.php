@@ -44,7 +44,7 @@ if ($letter) {
       SELECT bc.id, bc.word, COUNT(*) refs #, cc.reference, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href
       FROM bible_concordance bc
       JOIN bible_concordance_to_chapter_contents c2cc ON bc.id = c2cc.concordance_id
-      WHERE SUBSTR(bc.word, 1, 1) = '$letter'
+      WHERE SUBSTR(bc.word, 1, 1) = '$letter' AND bc.status = 1
       GROUP BY bc.id, bc.word
       ORDER BY bc.word");
   }
@@ -53,7 +53,7 @@ if ($letter) {
       SELECT fc.id, fc.word, COUNT(*) refs
       FROM footnote_concordance fc
       JOIN footnote_concordance_to_footnotes fc2f ON fc.id = fc2f.footnote_concordance_id
-      WHERE SUBSTR(fc.word, 1, 1) = '$letter'
+      WHERE SUBSTR(fc.word, 1, 1) = '$letter' AND fc.status = 1
       GROUP BY fc.id, fc.word
       ORDER BY fc.word");
   }
