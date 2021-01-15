@@ -3,6 +3,36 @@ $no_stats = true;
 require "init.php";
 
 switch($_POST['action']) {
+  // concordance to request list of verses that contain a word
+  case 'conc':
+    $id = (int) $_POST['id']; // id we're looking up
+    $type = $_POST['type'] === 'foot' ? 'foot' : 'bible'; // bible concordance or footnote concordance
+
+    if ($type === 'bible') {
+      $rows = select("
+        SELECT cc.reference, 0 number, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href
+        FROM bible_concordance_to_chapter_contents c2cc
+        JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
+        JOIN chapters c ON cc.chapter_id = c.id
+        JOIN books b ON b.id = c.book_id
+        WHERE c2cc.concordance_id = $id
+        ORDER BY b.sort_order, c.number, cc.sort_order");
+    }
+    else { // $type === 'foot'
+      $rows = select("
+        SELECT cc.reference, f.number, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#fn-', f.id) href
+        FROM footnote_concordance_to_footnotes fc2f
+        JOIN footnotes f ON f.id = fc2f.footnotes_id
+        JOIN chapter_contents cc ON cc.id = f.verse_id
+        JOIN chapters c ON cc.chapter_id = c.id
+        JOIN books b ON b.id = c.book_id
+        WHERE fc2f.footnote_concordance_id = $id
+        ORDER BY b.sort_order, c.number, cc.sort_order");
+    }
+
+		header("Content-type: application/json");
+		echo json_encode($rows);
+    break;
   // verse lookup page that parses a set of verses
 	case 'request':
 		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
@@ -213,7 +243,6 @@ switch($_POST['action']) {
 			"q" => $q ?: '',
 			"results" => $final_verses ?: []
 		]);
-    	die;
 		break;
 
   // global verse search that pops up when you start typing
@@ -248,6 +277,5 @@ switch($_POST['action']) {
 			"count" => $count,
 			"results" => $results
 		]);
-		die;
 		break;
 }

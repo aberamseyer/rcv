@@ -41,33 +41,43 @@ if ($letter) {
   // get our entries from the bible or footnote tables
 	if ($q_conc === 'bible') {
     $rows = select("
-      SELECT bc.id, bc.word, COUNT(*) refs #, cc.reference, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href
+      SELECT bc.word, cc.reference, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href
       FROM bible_concordance bc
       JOIN bible_concordance_to_chapter_contents c2cc ON bc.id = c2cc.concordance_id
+      JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
+      JOIN chapters c ON cc.chapter_id = c.id
+      JOIN books b ON b.id = c.book_id
       WHERE SUBSTR(bc.word, 1, 1) = '$letter'
-      GROUP BY bc.id, bc.word
-      ORDER BY bc.word");
+      ORDER BY b.sort_order, c.number, cc.sort_order");
   }
 	else { // $q_conc == 'foot'
     $rows = select("
-      SELECT fc.id, fc.word, COUNT(*) refs
+      SELECT fc.word, cc.reference, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#fn-', f.id) href
       FROM footnote_concordance fc
       JOIN footnote_concordance_to_footnotes fc2f ON fc.id = fc2f.footnote_concordance_id
+      JOIN footnotes f ON f.id = fc2f.footnotes_id
+      JOIN chapter_contents cc ON cc.id = f.verse_id
+      JOIN chapters c ON cc.chapter_id = c.id
+      JOIN books b ON b.id = c.book_id
       WHERE SUBSTR(fc.word, 1, 1) = '$letter'
-      GROUP BY fc.id, fc.word
-      ORDER BY fc.word");
+      ORDER BY b.sort_order, c.number, cc.sort_order");
   }
 
   // print them
   $count = 0;
-  foreach($rows as $row) {
+  foreach($rows as $row)
+    $arr[$row['word']][] = $row;
+  ksort($arr, SORT_STRING);
+  foreach($arr as $word => $refs) {
 		if (++$count && $count % 50 == 0 && count($rows) - $count > 30) {
 			echo "<hr />";
 			echo nav_line();
 		}
-    echo "<details ontoggle='getRefs($row[id], this)'>
-      <summary><b>$row[word]</b>: ".number_format($row['refs'])."</summary>
-      <small></small>
+    echo "<details>
+      <summary><b>$word</b>: ".number_format(count($refs))."</summary>
+      <div class='details'>".
+        implode(", ",  array_map(function($row) { return "<a href='$row[href]' target='_blank'>$row[reference]</a>"; }, $refs))."
+      </div>
     </details>";
 	}
 }
@@ -77,33 +87,5 @@ if ($letter) {
 	echo copyright;
 }
 
-?>
-<script type='text/javascript'>
-function getRefs(id, details) {
-  if (details.open) {
-	  const formData = new FormData();
-	  formData.append('action', 'conc');
-    formData.append('type', '<?= $q_conc ?>');
-	  formData.append('id', id); 
 
-	  const request = new XMLHttpRequest();
-	  request.open("POST", "/ajax");
-
-	  request.onloadend = () => {
-	  	if (request.status === 200) {
-	  		const results = JSON.parse(request.response);
-
-        if (results.length) {
-          details.querySelector('small').innerHTML = 
-            results.map(ref => 
-              `<a target='_blank' href='${ref.href}'>${ref.reference}${+ref.number ? '<sup>' + ref.number + '</sup>' : ''}</a>`
-            ).join(`&nbsp;&nbsp;&nbsp;`);
-        }
-	  	}
-    }
-    request.send(formData); 
-  }
-}
-</script>
-<?php
 require "foot.php";
