@@ -11,10 +11,11 @@ require_once "init.php";
 <html lang="en-US"<?= $light_theme ? " style='filter: invert(1)'" : "" ?>>
 <head>
 	<title><?= $title ?> - Recovery Version</title>
-	<meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta charset="utf-8">
-    <meta name="description" content="Read the Holy Bible Recovery Versions complete with outlines, footnotes, cross-references, and book details.">
-    <link rel="canonical" href="https://rcv.ramseyer.dev/bible">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta charset="utf-8">
+  <meta name="description" content="Read the Holy Bible Recovery Versions complete with outlines, footnotes, cross-references, and book details.">
+  <link rel="shortcut icon" type="image/png" href="/res/favicon.png">
+  <link rel="canonical" href="https://rcv.ramseyer.dev/bible">
 	<link rel="manifest" href="res/manifest.json">
 	<link rel="stylesheet" href="res/sakura-dark.css" type="text/css">
 	<link rel="stylesheet" href="res/style.css" type="text/css">
