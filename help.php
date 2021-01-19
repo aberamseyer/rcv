@@ -30,12 +30,12 @@ require "head.php";
       <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
   </li>
-  <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible?book={BOOK NAME or BOOK ABBREVIATION}&amp;chapter={CHAPTER NUMBER}&amp;number={VERSE NUMBER}</pre>
+  <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible/{BOOK NAME or BOOK ABBREVIATION}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
     <ul>
       <li>Ommit the verse number or chapter number if you want to link to a book or chapter</li>
-      <li>John 1:1 <pre>https://rcv.ramseyer.dev/bible?book=John&amp;chapter=1&amp;verse=1</pre></li>
-      <li>2 Cor. 4 <pre>https://rcv.ramseyer.dev/bible?book=2 Cor.&amp;chapter=4</pre></li>
-      <li>Philemon<pre>https://rcv.ramseyer.dev/bible?book=Philemon</pre></li>
+      <li>John 1:1 <pre>https://rcv.ramseyer.dev/bible/John/1?verse=1</pre></li>
+      <li>2 Cor. 4 - note that spaces should be replaced with a '_' <pre>https://rcv.ramseyer.dev/bible/2_Cor./4</pre></li>
+      <li>Philemon<pre>https://rcv.ramseyer.dev/bible/Philemon</pre></li>
     </ul>
   </li>
   <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
@@ -46,10 +46,6 @@ require "head.php";
       <li>Click the link that appears below the set of returned verses to copy a link to that set of verses to your clipboard</li>
   </li>
 </ol> 
-
-<p>
-There might be some outline points interspersed with the verses or missing footnotes, if you find them, you can email <a href='mailto:abe%40ramseyer.dev'>here</a>.
-</p>
 <?php
 
 echo "<hr />".nav_line();

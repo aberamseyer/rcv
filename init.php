@@ -24,7 +24,7 @@ if (!LOCAL) {
 		require "vendor/autoload.php";
 		$redis_client = new Predis\Client([ 'host' => '127.0.0.1' ]);
 
-		$redis_client->incr("rcv.ramseyer.dev/ips/".$_SERVER['REMOTE_ADDR']);
+//		$redis_client->incr("rcv.ramseyer.dev/ips/".$_SERVER['REMOTE_ADDR']);
 		$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
 		$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));
 		$redis_client->incr("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'));
@@ -35,12 +35,12 @@ $old = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM boo
 $new = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 1 ORDER BY sort_order");
 $books = array_merge($old, $new);
 
-$book = null;
-$chapter = null;
 $footnotes = null;
+// get parts from permalink path if they exists
+list ($_, $_, $url_book, $url_chapter) = explode('/', str_replace('_', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
 
-
-$q_book = strtoupper($_GET['book']);
+// otherwise, get them from the request parameters
+$q_book = strtoupper($url_book ?: $_GET['book']);
 if ($q_book && ($index = array_search($q_book, array_column($books, 'ucName'), true)) !== false) {
 	$book = $books[$index];
 }
@@ -50,7 +50,7 @@ else if ($q_book && ($index = array_search($q_book, array_column($books, 'ucAbbr
 
 if ($book) {
 	$chapters = select("SELECT * FROM chapters WHERE book_id = $book[id]");
-	$q_chapter = $_GET['chapter'];
+	$q_chapter = $url_chapter ?: $_GET['chapter'];
 	if ($q_chapter && in_array($q_chapter, array_column($chapters, 'number'))) {
 		$chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = ".db_esc($q_chapter));
 	}

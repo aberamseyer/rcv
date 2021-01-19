@@ -20,7 +20,7 @@ echo "<h2><a href='/bible'>Concordance".($letter ? ": '".strtoupper($letter)."'"
 	<div class='justify'>";
 
 foreach(range('A', 'Z') as $alpha) {
-	echo "<a class='button' href='concordance?conc=".$q_conc."&start=$alpha'>$alpha</a>";
+	echo "<a class='button' href='/concordance?conc=".$q_conc."&start=$alpha'>$alpha</a>";
 }
 echo "</div>";
 ?>
@@ -41,7 +41,7 @@ if ($letter) {
   // get our entries from the bible or footnote tables
 	if ($q_conc === 'bible') {
     $rows = select("
-      SELECT bc.id, bc.word, COUNT(*) refs #, cc.reference, CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href
+      SELECT bc.id, bc.word, COUNT(*) refs #, cc.reference, CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href
       FROM bible_concordance bc
       JOIN bible_concordance_to_chapter_contents c2cc ON bc.id = c2cc.concordance_id
       WHERE SUBSTR(bc.word, 1, 1) = '$letter' AND bc.status = 1

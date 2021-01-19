@@ -16,9 +16,9 @@ require_once "init.php";
   <meta name="description" content="Read the Holy Bible Recovery Versions complete with outlines, footnotes, cross-references, and book details.">
   <link rel="shortcut icon" type="image/png" href="/res/favicon.png">
   <link rel="canonical" href="https://rcv.ramseyer.dev/bible">
-	<link rel="manifest" href="res/manifest.json">
-	<link rel="stylesheet" href="res/sakura-dark.css" type="text/css">
-	<link rel="stylesheet" href="res/style.css" type="text/css">
+	<link rel="manifest" href="/res/manifest.json">
+	<link rel="stylesheet" href="/res/sakura-dark.css" type="text/css">
+	<link rel="stylesheet" href="/res/style.css" type="text/css">
 </head>
 <body id="top" class="<?= $serif_text ? 'serif' : '' ?>">
 <?php

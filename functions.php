@@ -246,7 +246,7 @@
 		$content = implode('', $content);
 
 		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
-			($element['number'] ? "<a href='bible?book=$book[name]' class='verse-number'>$element[number]</a>
+			($element['number'] ? "<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
 			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").
 			"$content</p>";
 	}
@@ -254,7 +254,7 @@
 	function format_note($note, $break = true) {
 		preg_match(verse_regex, $note, $matches);
 		$content = preg_replace_callback(verse_regex, function($matches) {
-			return "<a href='bible?book=$matches[1]&chapter=$matches[2]&verse=$matches[3]'>$matches[0]</a>";
+			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
 		}, $note);
 		return $break ? nl2br($content) : $content;
 	}
@@ -265,30 +265,30 @@
 		$next = $prev = '';
 
 		$parts = [
-			"<a href='bible'>Books</a>",
-			"<a href='search'>Search</a>",
+			"<a href='/bible'>Books</a>",
+			"<a href='/search'>Search</a>",
 		];
 		if (!$no_top) {
 			$parts[] = "<a href='#top'>Top</a>";
 		}
-		if (!$book && !$concordance) {
-			$parts[] = "<a href='concordance'>Concordance</a>";
-		}
+		// if (!$book && !$concordance) {
+			$parts[] = "<a href='/concordance'>Concordance</a>";
+		  $parts[] = "<a href='/verse'>Verse Lookup</a>";
+		// }
 		$parts[] = "<a href='/help'>Help</a>";
-		$parts[] = "<a href='/verse'>Verse Lookup</a>";
 		if ($book) {
 			if ($chapter) {
-				$parts[] = "<a href='bible?book=$book[name]'>Chapters</a>";
+				$parts[] = "<a href='/bible/".link_book($book['name'])."'>Chapters</a>";
 			}
 
 			if (!$search) {
 				if ($chapter) {
 					// viewing chapter, nav arrows change chapter
 					if ($book['chapters'] > $chapter['number']) {
-						$next = "<a class='nav-arr' href='bible?book=$book[name]&chapter=".($chapter['number']+1)."'>&raquo;</a>";
+						$next = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']+1)."'>&raquo;</a>";
 					}
 					if ($chapter['number'] > 1) {
-						$prev = "<a class='nav-arr' href='bible?book=$book[name]&chapter=".($chapter['number']-1)."'>&laquo;</a>";
+						$prev = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']-1)."'>&laquo;</a>";
 					}
 				}
 				else {
@@ -300,18 +300,22 @@
 					if (!$next_book) {
 						// genesis or revelation
 						if ($book['name'] == 'Genesis') {
-							$next = "<a class='nav-arr' href='bible?book=$prev_book[name]'>&raquo;</a>";
+							$next = "<a class='nav-arr' href='/bible/".link_book($prev_book['name'])."'>&raquo;</a>";
 						}
 						else {
-							$prev = "<a class='nav-arr' href='bible?book=$prev_book[name]'>&laquo;</a>";
+							$prev = "<a class='nav-arr' href='/bible/".link_book($prev_book['name'])."'>&laquo;</a>";
 						}
 					}
 					else {
-						$next = "<a class='nav-arr' href='bible?book=$next_book[name]'>&raquo;</a>";
-						$prev = "<a class='nav-arr' href='bible?book=$prev_book[name]'>&laquo;</a>";
+						$next = "<a class='nav-arr' href='/bible/".link_book($next_book['name'])."'>&raquo;</a>";
+						$prev = "<a class='nav-arr' href='/bible/".link_book($prev_book['name'])."'>&laquo;</a>";
 					}
 				}
 			}
 		}
 		return "<nav id='nav-".($i++)."' class='justify'>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
 	}
+
+  function link_book($book) {
+    return str_replace(' ', '_', $book);
+  }

@@ -21,7 +21,7 @@ if ($q) {
 	$only_new = $_GET['book'] === 'new';
 
 	$results['Verse'] = select("
-		SELECT CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href, cc.reference a_tag, cc.content content
+		SELECT CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href, cc.reference a_tag, cc.content content
 		FROM chapter_contents cc
 		JOIN chapters c ON c.id = cc.chapter_id
 		JOIN books b ON b.id = c.book_id
@@ -35,7 +35,7 @@ if ($q) {
 	$num_results = count($results['Verse']);
 	if ($also['out']) {
 		$results['Outline'] = select("
-		SELECT CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href, CONCAT(b.abbreviation, ' ', c.number) a_tag, cc.content content
+		SELECT CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href, CONCAT(b.abbreviation, ' ', c.number) a_tag, cc.content content
 		FROM chapter_contents cc
 		JOIN chapters c ON c.id = cc.chapter_id
 		JOIN books b ON b.id = c.book_id
@@ -50,7 +50,7 @@ if ($q) {
     }
 	if ($also['fn']) {
 		$results['Footnote'] = select("
-			SELECT CONCAT('bible?book=', b.name, '&chapter=', c.number, '#fn-', f.id) href, cc.reference a_tag, f.note content
+			SELECT CONCAT('/bible/', b.name, '/', c.number, '#fn-', f.id) href, cc.reference a_tag, f.note content
 			FROM footnotes f
 			JOIN chapter_contents cc ON cc.id = f.verse_id
 			JOIN chapters c ON c.id = cc.chapter_id
@@ -65,7 +65,7 @@ if ($q) {
 	}
 	if ($also['cr']) {
 		$results['Cross Reference'] = select("
-			SELECT CONCAT('bible?book=', b.name, '&chapter=', c.number, '#verse-', cc.id) href, cc.reference a_tag, f.cross_reference content
+			SELECT CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href, cc.reference a_tag, f.cross_reference content
 			FROM footnotes f
 			JOIN chapter_contents cc ON cc.id = f.verse_id
 			JOIN chapters c ON c.id = cc.chapter_id
@@ -80,7 +80,7 @@ if ($q) {
 	}
 	if ($also['subj']) {
 		$results['Book Subject'] = select("
-			SELECT CONCAT('bible?book=', name) href, name a_tag, details content 
+			SELECT CONCAT('/bible/', name) href, name a_tag, details content 
 			FROM books
 			WHERE LOWER(details) LIKE $q_like
 				AND ".($book ? "id = '$book[id]'" : "1"));

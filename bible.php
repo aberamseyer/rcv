@@ -13,7 +13,7 @@
     require "head.php";
 
     if ($book) {
-        echo "<h1><a href='bible'>".$book['name'].(
+        echo "<h1><a href='/bible'>".$book['name'].(
                 $book['chapters'] > 1 && $chapter
                     ? " ".$chapter['number'] : ""
             )."</a></h1>";
@@ -25,12 +25,12 @@
         // show book names to select
         echo "<div class='justify'>";
         foreach($old as $i => $book_option) {
-            echo "<a class='button' href='bible?book=$book_option[name]'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
         }
         echo "</div>";
         echo "<div class='justify' style='margin-top: 1rem;'>";
         foreach($new as $i => $book_option) {
-            echo "<a class='button' href='bible?book=$book_option[name]'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
         }
         echo "</div>";
     }
@@ -48,7 +48,7 @@
         echo "<h6>Chapters</h6>";
         echo "<div class='justify'>";
         foreach($chapters as $chapter_option) {
-            echo "<a class='button' href='bible?book=$book[name]&chapter=$chapter_option[number]'>$chapter_option[number]</a>";
+            echo "<a class='button' href='/bible/".link_book($book['name'])."/$chapter_option[number]'>$chapter_option[number]</a>";
         }
         echo "</div><hr />";
         echo nav_line(true);
@@ -61,7 +61,7 @@
 	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
 	    if (strpos($outline_point['content'], "cont'd") === false)
-                echo "<a href='/bible?book=$book[abbreviation]&chapter=$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
+                echo "<a href='/bible/".link_book($book['abbreviation'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
         }
     }
     else {
@@ -120,6 +120,6 @@ if ($verse):
 <?php
 endif;
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
-    echo '<script type="text/javascript" src="res/read.js"></script>';
+    echo '<script type="text/javascript" src="/res/read.js"></script>';
     require "foot.php";
 ?>
