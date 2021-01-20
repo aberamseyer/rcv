@@ -63,7 +63,7 @@
 					searchResults.innerHTML = results
 						.map(res => 
 							`<div class='verse-result'><a href='/bible/${res.book.replaceAll(/ /g, '_')}/${res.chapter}?verse=${res.verse}'>
-								<small><b>${res.book} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
+								<small><b>${res.abbr} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
 							</div>`)
 						.join('');
 					if (count > results.length)
