@@ -7,7 +7,7 @@
  */
 ?>
 <!doctype html>
-<html lang="en-US"<?= $light_theme ? " style='filter: invert(1)'" : "" ?>>
+<html lang="en-US">
 <head>
   <title><?= $title ?> - Recovery Version</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="/res/sakura-dark.css" type="text/css">
   <link rel="stylesheet" href="/res/style.css" type="text/css">
 </head>
-<body id="top" class="<?= $serif_text ? 'serif' : '' ?>">
+<body id="top" class="<?= $serif_text ? 'serif' : '' ?><?= $light_theme ? ' light' : '' ?>">
 <?php
     echo '<div id="menu">';
         echo '<span>&#8942;</span>';
