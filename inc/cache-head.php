@@ -6,7 +6,7 @@ $url = str_replace('/', '-',
 		), '?'
 	)
 );
-$cachefile = $_SERVER['DOCUMENT_ROOT']."/extras/cache/cached-".$url;
+$cachefile = $_SERVER['DOCUMENT_ROOT']."/extras/cache/cached-".$url.".html";
 
 if (file_exists($cachefile)) {
 	echo "<!-- Cached copy, generated ".date("Y-m-d H:i:s", filemtime($cachefile))." -->\n";
