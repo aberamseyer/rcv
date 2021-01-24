@@ -6,11 +6,11 @@ $url = str_replace('/', '-',
 		), '?'
 	)
 );
-$cachefile = $_SERVER['DOCUMENT_ROOT']."/extras/cache/cached-".$url.".html";
+$cachekey = "rcv.ramseyer.dev/cache/".$url;
 
-if (file_exists($cachefile)) {
-	echo "<!-- Cached copy, generated ".date("Y-m-d H:i:s", filemtime($cachefile))." -->\n";
-	readfile($cachefile);
+if ($redis_client->exists($cachekey)) {
+	echo "<!-- Cached copy, generated ".$redis_client->get($cachekey."-date")." -->\n";
+	echo $redis_client->get($cachekey);
 	exit;
 }
 
