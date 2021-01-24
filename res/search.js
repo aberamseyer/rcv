@@ -45,9 +45,11 @@
 			return;
 		}
 
-		overlay.classList[searchInput.innerHTML.length
-			? 'remove'
-			: 'add']('hidden');
+		overlay.classList[
+			searchInput.innerHTML.length
+				? 'remove'
+				: 'add'
+		]('hidden');
 
 		if (searchInput.innerHTML.length > 1) {
 			const formData = new FormData();
@@ -74,7 +76,7 @@
 			}
 
 			clearTimeout(timer);
-			timer = setTimeout(() => request.send(formData), 200);
+			timer = setTimeout(() => request.send(formData), 300);
 		}
 	}
 })();

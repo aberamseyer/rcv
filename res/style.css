@@ -14,9 +14,9 @@
     -moz-border-radius: 2px;
     border-radius: 2px;
     /* copied from sakura input[type] styles */
-    background: #4a4a4a;
-    color: #c9c9c9;
-    border: 1px solid #4a4a4a;
+    background: var(--contrast-bg);
+    color: var(--main-text);
+    border: 1px solid var(--contrast-bg);
     border-top: none;
     font-size: 1.2rem;
 }
@@ -49,8 +49,8 @@
     outline: none;
 }
 .verse.highlight {
-    color: #c9c9c9;
-    background: #4a4a4a;
+    color: var(--main-text);
+    background: var(--contrast-bg);
 }
 .verse-number {
     user-select: none;
@@ -123,23 +123,22 @@ br {
 }
 
 .tooltip .right {
-    min-width:200px;
-    top:50%;
-    left:100%;
-    margin-left:20px;
-    transform:translate(0, -50%);
-    padding:10px 20px;
-    color:#c9c9c9;
-    background-color: #545454;
+    min-width: 200px;
+    top: 50%;
+    left: 100%;
+    margin-left: 20px;
+    transform: translate(0, -50%);
+    padding: 10px 20px;
+    color: var(--main-text);
+    background-color: var(--tooltip-bg);
     font-weight:normal;
     font-size:1.3rem;
     border-radius:8px;
-    position:absolute;
-    z-index:99999999;
-    box-sizing:border-box;
-    box-shadow:0 1px 8px rgba(174, 174, 174, 0.2);
-    display:none;
-
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    box-shadow: 0 1px 8px rgba(174, 174, 174, 0.2);
+    display: none;
 }
 
 .tooltip:focus {
@@ -176,8 +175,8 @@ br {
     top: 1rem;
     right: 1rem;
     font-size: 1rem;
-    color: #c9c9c9;
-    background: #4a4a4a;
+    color: var(--main-text);
+    background: var(--contrast-bg);
     padding: 0.5rem;
     z-index: 1;
 }
@@ -190,7 +189,6 @@ br {
     list-style: none;
     padding-left: 0;
     margin-bottom: 0;
-    /*clear: right;*/
 }
 #menu:hover ul {
     display: block;
@@ -219,6 +217,7 @@ br {
 }
 
 #search-input-overlay {
+    z-index: 2;
     position: fixed;
     top: 0;
     bottom: 0;

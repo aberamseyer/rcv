@@ -1,3 +1,11 @@
+:root {
+  --main-bg: #222222;
+  --main-text: #c9c9c9;
+  --white: #ffffff;
+  --contrast-bg: #4a4a4a;
+  --tooltip-bg: #545454;
+}
+
 /* $color-text: #dedce5; */
 /* Sakura.css v1.3.0
  * ================
@@ -14,8 +22,8 @@ body {
   line-height: 1.618;
   max-width: 38em;
   margin: auto;
-  color: #c9c9c9;
-  background-color: #222222;
+  color: var(--main-text);
+  background-color: var(--main-bg);
   padding: 0 3rem 3rem 3rem; }
 
 @media (max-width: 684px) {
@@ -75,8 +83,8 @@ a {
   text-decoration: none;
   color: #ffffff; }
   a:hover {
-    color: #c9c9c9;
-    border-bottom: 2px solid #c9c9c9; }
+    color: var(--main-text);
+    border-bottom: 2px solid var(--main-text); }
 
 ul {
   padding-left: 1.4em;
@@ -90,7 +98,7 @@ blockquote {
   font-style: italic;
   margin-left: 1.5em;
   padding-left: 1em;
-  border-left: 3px solid #ffffff; }
+  border-left: 3px solid var(--white); }
 
 img {
   height: auto;
@@ -100,7 +108,7 @@ img {
 
 /* Pre and Code */
 pre {
-  background-color: #4a4a4a;
+  background-color: var(--contrast-bg);
   display: block;
   padding: 1em;
   overflow-x: auto;
@@ -110,7 +118,7 @@ pre {
 code {
   font-size: 0.9em;
   padding: 0 0.5em;
-  background-color: #4a4a4a;
+  background-color: var(--contrast-bg);
   white-space: pre-wrap; }
 
 pre > code {
@@ -126,13 +134,13 @@ table {
 
 td, th {
   padding: 0.5em;
-  border-bottom: 1px solid #4a4a4a; }
+  border-bottom: 1px solid var(--contrast-bg); }
 
 /* Buttons, forms and input */
 input, textarea {
-  border: 1px solid #c9c9c9; }
+  border: 1px solid var(--main-text); }
   input:focus, textarea:focus {
-    border: 1px solid #ffffff; }
+    border: 1px solid var(--white); }
 
 textarea {
   width: 100%; }
@@ -143,37 +151,37 @@ textarea {
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
-  background-color: #ffffff;
-  color: #222222;
+  background-color: var(--white);
+  color: var(--main-bg);
   border-radius: 1px;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--white);
   cursor: pointer;
   box-sizing: border-box; }
   .button[disabled], button[disabled], input[type="submit"][disabled], input[type="reset"][disabled], input[type="button"][disabled] {
     cursor: default;
     opacity: .5; }
   .button:focus, .button:hover, button:focus, button:hover, input[type="submit"]:focus, input[type="submit"]:hover, input[type="reset"]:focus, input[type="reset"]:hover, input[type="button"]:focus, input[type="button"]:hover {
-    background-color: #c9c9c9;
-    border-color: #c9c9c9;
+    background-color: var(--main-text);
+    border-color: var(--main-text);
     color: #222222;
     outline: 0; }
 
 textarea, select, input[type] {
-  color: #c9c9c9;
+  color: var(--main-text);
   padding: 6px 10px;
   /* The 6px vertically centers text on FF, ignored by Webkit */
   margin-bottom: 10px;
-  background-color: #4a4a4a;
-  border: 1px solid #4a4a4a;
+  background-color: var(--contrast-bg);
+  border: 1px solid var(--contrast-bg);
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
   textarea:focus, select:focus, input[type]:focus {
-    border: 1px solid #ffffff;
+    border: 1px solid var(--white);
     outline: 0; }
 
 input[type="checkbox"]:focus {
-  outline: 1px dotted #ffffff; }
+  outline: 1px dotted var(--white); }
 
 label, legend, fieldset {
   display: block;
