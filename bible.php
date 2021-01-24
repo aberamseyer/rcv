@@ -1,6 +1,7 @@
 <?php
     $bible = true;
     require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+    require $_SERVER['DOCUMENT_ROOT']."/inc/cache-head.php";
 
     $old = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 0 ORDER BY sort_order");
     $new = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 1 ORDER BY sort_order");
@@ -176,4 +177,6 @@ endif;
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
     echo '<script type="text/javascript" src="/res/read.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+
+    require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
 ?>
