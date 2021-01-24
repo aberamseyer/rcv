@@ -8,7 +8,8 @@
 
 $concordance = true;
 $title = "Concordance";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 $q_conc = strtolower($_GET['conc']) ?: 'bible';
 $q_letter = strtolower($_GET['start']) ?: '';
@@ -107,4 +108,4 @@ function getRefs(id, details) {
 }
 </script>
 <?php
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

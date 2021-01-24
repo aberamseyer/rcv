@@ -8,7 +8,8 @@
 
 $search = true;
 $title = "Search";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 $q = $_GET['q'];
 $also = is_array($_GET['also']) ? $_GET['also'] : [ ];
@@ -161,4 +162,4 @@ if ($q) {
     }
 }
 
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

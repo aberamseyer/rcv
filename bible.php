@@ -1,6 +1,60 @@
 <?php
     $bible = true;
-    require "init.php";
+    require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+
+    $old = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 0 ORDER BY sort_order");
+    $new = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 1 ORDER BY sort_order");
+    $books = array_merge($old, $new);
+
+    $footnotes = null;
+    // get parts from permalink path if they exists
+    list ($_, $_, $url_book, $url_chapter) = explode('/', str_replace('_', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
+
+    // otherwise, get them from the request parameters
+    $q_book = strtoupper($url_book ?: $_GET['book']);
+    if ($q_book && ($index = array_search($q_book, array_column($books, 'ucName'), true)) !== false) {
+        $book = $books[$index];
+    }
+    else if ($q_book && ($index = array_search($q_book, array_column($books, 'ucAbbr'))) !== false) {
+        $book = $books[$index];
+    }
+
+    // determine what book/chapter we need to navigate to
+    if ($book) {
+        $chapters = select("SELECT * FROM chapters WHERE book_id = $book[id]");
+        $q_chapter = $url_chapter ?: $_GET['chapter'];
+        if ($q_chapter && in_array($q_chapter, array_column($chapters, 'number'))) {
+            $chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = ".db_esc($q_chapter));
+        }
+    }
+    if ($chapter) {
+        $contents = array_column(
+            select("SELECT * FROM chapter_contents WHERE chapter_id = $chapter[id] ORDER BY sort_order"),
+            null,
+            'id'
+        );
+        $verse_ids = array_column($contents, 'id');
+        $notes = select("SELECT * FROM footnotes WHERE verse_id IN(".implode(',', $verse_ids).") ORDER BY number");
+
+        $footnotes = $cross_refs = [];
+        foreach($contents as &$content) {
+            $content['notes'] = [
+                'cr' => [],
+                'fn' => []
+            ];
+        }
+        unset($content);
+        foreach($notes as $note) {
+            if ($note['cross_reference']) {
+                $contents[ $note['verse_id'] ]['notes']['cr'][] = $note;
+                $cross_refs[] = $note;
+            }
+            if ($note['note']) {
+                $contents[ $note['verse_id'] ]['notes']['fn'][] = $note;
+                $footnotes[] = $note;
+            }
+        }
+    }
 
     $title = "Holy Bible";
     if ($book) {
@@ -10,7 +64,7 @@
         }
     }
 
-    require "head.php";
+    require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
     if ($book) {
         echo "<h1><a href='/bible'>".$book['name'].(
@@ -121,5 +175,5 @@ if ($verse):
 endif;
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
     echo '<script type="text/javascript" src="/res/read.js"></script>';
-    require "foot.php";
+    require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
 ?>

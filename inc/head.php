@@ -5,7 +5,6 @@
  * Date: 2020-07-15
  * Time: 15:39
  */
-require_once "init.php";
 ?>
 <!doctype html>
 <html lang="en-US"<?= $light_theme ? " style='filter: invert(1)'" : "" ?>>

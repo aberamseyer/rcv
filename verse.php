@@ -7,8 +7,8 @@
  */
 
 $title = "Verse Lookup";
-require "init.php";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 $permalink = $_GET['verses'];
 ?>
@@ -83,4 +83,4 @@ function copyToClip(copyText, element) {
 
 echo nav_line();
 echo copyright;
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

@@ -8,7 +8,7 @@
 
 $concordance = true;
 $title = "Concordance";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 $q_conc = strtolower($_GET['conc']) ?: 'bible';
 $q_letter = strtolower($_GET['start']) ?: '';
@@ -88,4 +88,4 @@ if ($letter) {
 }
 
 
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

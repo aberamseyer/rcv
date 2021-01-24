@@ -7,7 +7,7 @@
  */
 
 $title = "Help";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 ?>
 
 <h2><a href='/bible'>Help</a></h2>
@@ -50,4 +50,4 @@ require "head.php";
 
 echo "<hr />".nav_line();
 
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

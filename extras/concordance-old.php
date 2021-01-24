@@ -8,7 +8,7 @@
 
 $concordance = true;
 $title = "Concordance";
-require "head.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 $q_letter = strtolower($_GET['start'] ?: '');
 if (in_array($q_letter, range('a', 'z'))) {
@@ -44,4 +44,4 @@ if ($letter) {
 }
 
 
-require "foot.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

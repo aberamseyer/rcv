@@ -1,6 +1,6 @@
 <?php
 $no_stats = true;
-require "init.php";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 switch($_POST['action']) {
   // concordance to request list of verses that contain a word
