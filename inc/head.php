@@ -13,6 +13,7 @@
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta charset="utf-8">
   <meta name="description" content="<?= $meta_description ?>">
+  <link rel="canonical" href="<?= $meta_canonical ?>">
   <link rel="shortcut icon" type="image/png" href="/res/favicon.png">
   <link rel="manifest" href="/res/manifest.json">
   <link rel="stylesheet" href="/res/sakura-dark.css" type="text/css">

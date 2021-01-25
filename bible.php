@@ -69,6 +69,15 @@
 
 
     $meta_description = "Read the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+    $meta_canonical = "https://rcv.ramseyer.dev/bible";
+    if ($book) {
+        $meta_description = "Read $book[name] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+        $meta_canonical = "https://rcv.ramseyer.dev/".link_book($book['name']);
+        if ($chapter) {
+            $meta_description = "Read $book[name] chapter $chapter[number] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+            $meta_canonical = "https://rcv.ramseyer.dev/".link_book($book['name'])."/".$chapter['number'];
+        }
+    }
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
     if ($book) {
@@ -106,7 +115,7 @@
                 : "<b>".html($detail_line)."</b><br/>";
         }
         echo "</small></p>";
-        // echo "<p><small>".nl2br(str_replace("\n\n", "\n", $book['details']))."</small></p>";
+
         echo "<h6>Chapters</h6>";
         echo "<div class='justify'>";
         foreach($chapters as $chapter_option) {
@@ -116,24 +125,24 @@
         echo nav_line(true);
         echo "<h6>Outline</h6>";
         $outline = select("
-	  SELECT cc.*, c.number chapter
-	  FROM chapter_contents cc
-	  JOIN chapters c ON cc.chapter_id = c.id
-	  WHERE c.book_id = $book[id] AND tier IS NOT NULL
-	  ORDER BY outline_order");
+    	  SELECT cc.*, c.number chapter
+    	  FROM chapter_contents cc
+    	  JOIN chapters c ON cc.chapter_id = c.id
+    	  WHERE c.book_id = $book[id] AND tier IS NOT NULL
+    	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
-	    if (strpos($outline_point['content'], "cont'd") === false)
+	       if (strpos($outline_point['content'], "cont'd") === false)
                 echo "<a href='/bible/".link_book($book['abbreviation'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
         }
     }
     else {
-	echo "<div id='chp-$chapter[id]'>";
+	    echo "<div id='chp-$chapter[id]'>";
         foreach($contents as $element) {
             if ($minimal_layout && $element['tier'])
                 continue;
             echo format_verse($element);
         }
-	echo "</div>";
+	   echo "</div>";
         if ($footnotes && !$minimal_layout) {
             echo nav_line();
             echo "<hr/>";

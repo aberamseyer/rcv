@@ -9,6 +9,7 @@
 $concordance = true;
 $title = "Concordance";
 $meta_description = "Browse concordances of the Holy Bible Recovery Version and the footnotes.";
+$meta_canonical = "https://rcv.ramseyer.dev/concordance";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
