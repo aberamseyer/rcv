@@ -7,6 +7,7 @@
  */
 
 $title = "Help";
+$meta_description = "Get help for navigating the website and using all of its features.";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 ?>

@@ -7,6 +7,7 @@
  */
 
 $title = "Verse Lookup";
+$meta_description = "Request sets of verses in the Holy Bible Recovery Version.";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 

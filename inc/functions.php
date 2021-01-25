@@ -206,7 +206,7 @@
 	function format_verse($element) {
 		global $book, $minimal_layout;
 
-		$content = $element['content'];
+		$content = html($element['content']);
 		$arr = str_split($content);
 		$heading_class = 'verse';
 		if ($element['number'] == 0) {
@@ -240,7 +240,7 @@
 			$style = "";
 			if ($element['tier'])
 				$style = "style='padding-left: ".max(0, $element['tier'])."rem;'";
-			$el = "<span class='verse-line' $style>".htmlspecialchars($el)."</span>";
+			$el = "<span class='verse-line' $style>".$el."</span>";
 		}
 		unset($el);
 		$content = implode('', $content);
@@ -251,7 +251,7 @@
 	}
 
 	function format_note($note, $break = true) {
-		$note = htmlspecialchars($note);
+		$note = html($note);
 		preg_match(verse_regex, $note, $matches);
 		$content = preg_replace_callback(verse_regex, function($matches) {
 			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
