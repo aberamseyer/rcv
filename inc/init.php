@@ -63,7 +63,7 @@ if (!$_POST['action']) {
 	}
 	if (isset($_GET['set_serif']) || isset($_GET['set_minimal']) || isset($_GET['set_theme'])) {
 		// redirect to same page
-		redirect();
+		redirect(strtok($_SERVER['REQUEST_URI'], '?'));
 		exit;
 	}
 
