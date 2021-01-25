@@ -156,24 +156,23 @@
         // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
         echo "<div style='height: 90vh;'></div>";
     }
-
-// verse scroll into view for links
-$verse = (int)$_GET['verse'];
-if ($verse):
 ?>
 <script type="text/javascript">
-    if (!window.location.hash)
-        window.addEventListener('load', function() {
-          setTimeout(()  => {
-            const el = document.querySelectorAll('.verse')[<?= $verse - 1 ?>];
-            el.classList.add('highlight');
-            el.scrollIntoView({ block: "center" });
-            setTimeout(() => el.classList.remove('highlight'), 1000);
-          }, 250);
-        });
+    if (!window.location.hash) {
+        const matches = window.location.search.match(/verse=(\d+)/);
+        if (matches) {
+            window.addEventListener('load', function() {
+              setTimeout(()  => {
+                const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
+                el.classList.add('highlight');
+                el.scrollIntoView({ block: "center" });
+                setTimeout(() => el.classList.remove('highlight'), 1000);
+              }, 250);
+            });   
+        }
+    }
 </script>
 <?php
-endif;
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
     echo '<script type="text/javascript" src="/res/read.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
