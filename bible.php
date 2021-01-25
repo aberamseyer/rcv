@@ -9,7 +9,9 @@
 
     $footnotes = null;
     // get parts from permalink path if they exists
-    list ($_, $_, $url_book, $url_chapter) = explode('/', str_replace('_', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
+    $parts = explode('/', str_replace('-', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
+    $url_book = ucwords($parts[2]);
+    $url_chapter = $parts[3];
 
     // otherwise, get them from the request parameters
     $q_book = strtoupper($url_book ?: $_GET['book']);
@@ -65,27 +67,32 @@
         }
     }
 
+
+    $meta_description = "Read the Holy Bible Recovery Versions complete with outlines, footnotes, cross-references, and book details.";
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
     if ($book) {
-        echo "<h1><a href='/bible'>".$book['name'].(
+        echo "<h1><a href='/bible'>".htmlspecialchars(
+            $book['name'].(
                 $book['chapters'] > 1 && $chapter
                     ? " ".$chapter['number'] : ""
-            )."</a></h1>";
+            )
+        )."</a></h1>";
     }
     else {
         echo "<h1 style='margin-bottom: 3rem;'>Holy Bible - Recovery Version</h1>";
     }
+    
     if (!$book) {
         // show book names to select
         echo "<div class='justify'>";
         foreach($old as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".htmlspecialchars($book_option['name'])."</a>";
         }
         echo "</div>";
         echo "<div class='justify' style='margin-top: 1rem;'>";
         foreach($new as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".htmlspecialchars($book_option['name'])."</a>";
         }
         echo "</div>";
     }
@@ -95,8 +102,8 @@
         foreach(explode("\n", str_replace("\n\n", "\n", $book['details'])) as $detail_line) {
             $parts = explode(": ", $detail_line);
             echo count($parts) === 2
-                ? "<b>".$parts[0].": </b>".$parts[1]."<br/>"
-                : "<b>".$detail_line."</b><br/>";
+                ? "<b>".htmlspecialchars($parts[0]).": </b>".htmlspecialchars($parts[1])."<br/>"
+                : "<b>".htmlspecialchars($detail_line)."</b><br/>";
         }
         echo "</small></p>";
         // echo "<p><small>".nl2br(str_replace("\n\n", "\n", $book['details']))."</small></p>";

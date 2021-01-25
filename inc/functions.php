@@ -248,10 +248,11 @@
 		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
 			($element['number'] ? "<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
 			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").
-			"$content</p>";
+			htmlspecialchars($content)."</p>";
 	}
 
 	function format_note($note, $break = true) {
+		$note = htmlspecialchars($note);
 		preg_match(verse_regex, $note, $matches);
 		$content = preg_replace_callback(verse_regex, function($matches) {
 			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
@@ -317,5 +318,5 @@
 	}
 
   function link_book($book) {
-    return str_replace(' ', '_', $book);
+    return str_replace(' ', '-', strtolower($book));
   }

@@ -7,10 +7,11 @@
  */
 
 $title = "Help";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 ?>
 
-<h2><a href='/bible'>Help</a></h2>
+<h1><a href='/bible'>Help</a></h1>
 <p>A few tips for using this website:</p>
 
 <ol>
@@ -44,6 +45,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>verses can have a range, i.e., Dan. 2:4-7</li>
       <li>Separate verses in the same chapter with a comma, i.e., Rom. 8:2, 6, 10</li>
       <li>Click the link that appears below the set of returned verses to copy a link to that set of verses to your clipboard</li>
+    </ul>
   </li>
 </ol> 
 <?php

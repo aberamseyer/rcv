@@ -61,6 +61,11 @@ if (!$_POST['action']) {
 		unset($_SESSION['serif']);
 		$serif_text = false;
 	}
+	if (isset($_GET['set_serif']) || isset($_GET['set_minimal']) || isset($_GET['set_theme'])) {
+		// redirect to same page
+		header("Location: ".strtok($_SERVER['REQUEST_URI'], '?'));
+		exit;
+	}
 
 	session_write_close();
 	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);

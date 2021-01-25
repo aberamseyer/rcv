@@ -17,7 +17,7 @@ if (in_array($q_letter, range('a', 'z'))) {
 	$letter = $q_letter;
 }
 
-echo "<h2><a href='/bible'>Concordance".($letter ? ": '".strtoupper($letter)."'" : '')."</a></h2>
+echo "<h1><a href='/bible'>Concordance".($letter ? ": '".strtoupper($letter)."'" : '')."</a></h1>
 	<div class='justify'>";
 
 foreach(range('A', 'Z') as $alpha) {
@@ -72,7 +72,7 @@ if ($letter) {
     </details>";
 	}
 }
-echo "</div>";
+
 if ($letter) {
 	echo "<hr />".nav_line();
 	echo copyright;
