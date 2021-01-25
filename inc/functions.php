@@ -240,15 +240,14 @@
 			$style = "";
 			if ($element['tier'])
 				$style = "style='padding-left: ".max(0, $element['tier'])."rem;'";
-			$el = "<span class='verse-line' $style>$el</span>";
+			$el = "<span class='verse-line' $style>".htmlspecialchars($el)."</span>";
 		}
 		unset($el);
 		$content = implode('', $content);
 
 		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
 			($element['number'] ? "<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
-			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").
-			htmlspecialchars($content)."</p>";
+			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").$content."</p>";
 	}
 
 	function format_note($note, $break = true) {
