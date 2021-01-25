@@ -72,10 +72,10 @@
     $meta_canonical = "https://rcv.ramseyer.dev/bible";
     if ($book) {
         $meta_description = "Read $book[name] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
-        $meta_canonical = "https://rcv.ramseyer.dev/".link_book($book['name']);
+        $meta_canonical = "https://rcv.ramseyer.dev/bible/".link_book($book['name']);
         if ($chapter) {
             $meta_description = "Read $book[name] chapter $chapter[number] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
-            $meta_canonical = "https://rcv.ramseyer.dev/".link_book($book['name'])."/".$chapter['number'];
+            $meta_canonical = "https://rcv.ramseyer.dev/bible/".link_book($book['name'])."/".$chapter['number'];
         }
     }
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
