@@ -8,11 +8,12 @@
 if (php_sapi_name() != 'cli') die("no");
 
 error_reporting(E_ALL^E_NOTICE);
+ini_set('memory_limit', '-1'); // glhf
 
 $time = microtime(true);
-$db = mysqli_connect('127.0.0.1',  'abe', 'mlroot7y', 'backup_rcv');
+$db = mysqli_connect('127.0.0.1',  'docker', 'docker', 'rcv_backup');
 
-require "functions.php";
+require "../inc/functions.php";
 
 echo "Truncating tables..";
 query("TRUNCATE TABLE footnote_concordance");
@@ -44,7 +45,7 @@ foreach($notes as $note) {
 			)
 		) as $word
 	) {
-		$word = strtolower($word); // case-insensitive
+		$word = strtolower(trim($word, " \n\r\t\v\0-")); // case-insensitive
 		if (!$conc [ $word ])
 			$conc [ $word ] = [ 'count' => 0, 'refs' => [ ] ];
 		$conc[ $word ]['count']++;

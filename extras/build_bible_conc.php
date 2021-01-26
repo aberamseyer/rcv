@@ -8,18 +8,19 @@
 if (php_sapi_name() != 'cli') die("no");
 
 error_reporting(E_ALL^E_NOTICE);
+ini_set('memory_limit', '-1'); // glhf
 
 $time = microtime(true);
-$db = mysqli_connect('127.0.0.1',  'abe', 'mlroot7y', 'backup_rcv');
+$db = mysqli_connect('127.0.0.1',  'docker', 'docker', 'rcv_backup');
 
-require "functions.php";
+require "../inc/functions.php";
 
 echo "Truncating tables..";
 query("TRUNCATE TABLE bible_concordance");
 query("TRUNCATE TABLE bible_concordance_to_chapter_contents");
-query("ALTER TABLE `bible_concordance` DROP INDEX `word`");
-query("ALTER TABLE `bible_concordance_to_chapter_contents` DROP INDEX `concordance_id`");
-query("ALTER TABLE `bible_concordance_to_chapter_contents` DROP INDEX `chapter_contents_id`");
+//query("ALTER TABLE `bible_concordance` DROP INDEX `word`");
+//query("ALTER TABLE `bible_concordance_to_chapter_contents` DROP INDEX `concordance_id`");
+//query("ALTER TABLE `bible_concordance_to_chapter_contents` DROP INDEX `chapter_contents_id`");
 echo "done!\n";
 
 // all verses in order in the Bible
@@ -43,7 +44,7 @@ foreach($verses as $verse) {
 			)
 		) as $word
 	) {
-		$word = strtolower($word); // case-insensitive
+		$word = strtolower(trim($word, " \n\r\t\v\0-")); // case-insensitive
 		if (!$conc [ $word ])
 			$conc [ $word ] = [ 'count' => 0, 'refs' => [ ] ];
 		$conc[ $word ]['count']++;
