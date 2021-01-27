@@ -7,7 +7,7 @@ $url = str_replace('/', '-',
 	)
 );
 // track individual page views
-$redis_client->hincrby("rcv.ramseyer.dev/page-views", $url, 1);
+$redis_client->hincrby("rcv.ramseyer.dev/page-views", str_replace("-", "/", $url), 1);
 
 if (!isset($_GET['no_cache']) && !LOCAL) {
 	$filename = $url."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0).".html";
