@@ -48,8 +48,12 @@ if ($_GET['end_date'])
 $page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
 ksort($page_views, SORT_NATURAL);
 foreach($page_views as $k => &$view) {
-	if (strpos($k, "/bible") !== 0 || strlen($k) <= 6) // starts with '/bible' and isn't just '/bible'
-		unset($page_views[ $k ]);
+	if (strpos($k, "bible-") !== 0 || strlen($k) <= 6) // starts with '/bible' and isn't just '/bible'
+		unset($page_views[ 
+			str_replace("-", "/", 
+				str_replace("bible-", "", $k)
+			)
+		]);
 }
 unset($view);
 ?>
