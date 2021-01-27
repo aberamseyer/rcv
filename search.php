@@ -163,7 +163,7 @@ if ($q) {
 			        $count = 0;
                 }
 				echo "<div class='result'><a target='_blank' href='$result[href]'>$result[a_tag]</a>: ".
-					nl2br(preg_replace("/($q)/i", "<span class='match'>\$1</span>", $result['content'])).
+					str_replace("\n", " / ", preg_replace("/($q)/i", "<span class='match'>\$1</span>", trim($result['content']))).
 					"</div>";
 			}
 		}
