@@ -10,7 +10,7 @@
     	$user_row = row("SELECT * FROM admin.users WHERE username = '".db_esc($_POST['user'])."'");
     	if ($user_row) {
     		if (password_verify($_POST['password'], $user_row['password'])) {
-    			$_SESSION['user'] = $user;
+    			$_SESSION['user'] = $user_row;
     			redirect("/admin");
     		}
     	}
