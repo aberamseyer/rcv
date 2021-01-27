@@ -1,6 +1,5 @@
 <?php
-	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' href='https://www.lsm.org'>www.lsm.org</a></div>";
-	// const verse_regex = '/((?:\d )?(?:\w\w\w+\.?)|(?:S\.S\.)) (\d+):(\d+)/';
+	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='noopener' href='https://www.lsm.org'>www.lsm.org</a></div>";
 	const verse_regex = '/(Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.) (\d+):(\d+)/';
 	
 	function query ($query, $return = "") {
@@ -206,7 +205,7 @@
 	function format_verse($element) {
 		global $book, $minimal_layout;
 
-		$content = $element['content'];
+		$content = html($element['content']);
 		$arr = str_split($content);
 		$heading_class = 'verse';
 		if ($element['number'] == 0) {
@@ -240,18 +239,18 @@
 			$style = "";
 			if ($element['tier'])
 				$style = "style='padding-left: ".max(0, $element['tier'])."rem;'";
-			$el = "<span class='verse-line' $style>$el</span>";
+			$el = "<span class='verse-line' $style>".$el."</span>";
 		}
 		unset($el);
 		$content = implode('', $content);
 
 		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
 			($element['number'] ? "<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
-			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").
-			"$content</p>";
+			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "").$content."</p>";
 	}
 
 	function format_note($note, $break = true) {
+		$note = html($note);
 		preg_match(verse_regex, $note, $matches);
 		$content = preg_replace_callback(verse_regex, function($matches) {
 			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
@@ -317,5 +316,5 @@
 	}
 
   function link_book($book) {
-    return str_replace(' ', '_', $book);
+    return str_replace(' ', '-', strtolower($book));
   }

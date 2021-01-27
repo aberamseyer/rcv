@@ -8,20 +8,34 @@
 
 $search = true;
 $title = "Search";
+$meta_description = "Search in the Holy Bible Recovery Version for text, footnotes, cross-references, and outline points.";
+$meta_canonical = "https://rcv.ramseyer.dev/search";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
+
+$old = select("SELECT id, name, chapters FROM books WHERE testament = 0 ORDER BY sort_order");
+$new = select("SELECT id, name, chapters FROM books WHERE testament = 1 ORDER BY sort_order");
 
 $q = $_GET['q'];
 $also = is_array($_GET['also']) ? $_GET['also'] : [ ];
 
 $results = [];
 if ($q) {
-	//$q_like = "'%".implode('%', array_map('db_esc_like', explode(' ', $q)))."%'";
+	$books = array_column(array_merge($old, $new), null, 'name');
+	$book = $books[ $_GET['book'] ];
+	if ($book) {
+		$q_chp = (int) $_GET['chapter'];
+		if ($q_chp > 0 && $q_chp <= $book['chapters']) {
+			$chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = $q_chp");
+		}
+	}
+
 	$q_like = "'%".db_esc_like(strtolower($q))."%'";
 	$only_old = $_GET['book'] === 'old';
 	$only_new = $_GET['book'] === 'new';
 
-	$results['Verse'] = select("
+	// keys of $results are used as headings in results
+	$results['Verses'] = select("
 		SELECT CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href, cc.reference a_tag, cc.content content
 		FROM chapter_contents cc
 		JOIN chapters c ON c.id = cc.chapter_id
@@ -33,7 +47,7 @@ if ($q) {
 			AND ".($only_new ? "b.testament = '1'" : 1)."
 			AND ".($chapter ? "c.id = '$chapter[id]'" : 1)."
         ORDER BY b.sort_order, c.number, cc.number");
-	$num_results = count($results['Verse']);
+	$num_results = count($results['Verses']);
 	if ($also['out']) {
 		$results['Outline'] = select("
 		SELECT CONCAT('/bible/', b.name, '/', c.number, '#verse-', cc.id) href, CONCAT(b.abbreviation, ' ', c.number) a_tag, cc.content content
@@ -89,7 +103,7 @@ if ($q) {
 	}
 }
 
-echo "<h2><a href='/bible'>Search".($q ? ": '".htmlentities($q, ENT_HTML5)."'" : '')."</a></h2>";
+echo "<h1><a href='/bible'>Search".($q ? ": '".html($q)."'" : '')."</a></h1>";
 ?>
 <style>
 	.match {
@@ -123,7 +137,7 @@ echo "<h2><a href='/bible'>Search".($q ? ": '".htmlentities($q, ENT_HTML5)."'" :
 		}
 		echo "</optgroup>";
 ?></select> chapter <input name='chapter' placeholder="Any Chapter" type="number" min="1" value="<?= $chapter['number'] ?>"> for
-	<input type="text" name="q" minlength="3" maxlength="2000" placeholder="these words..." value="<?= htmlentities($q, ENT_HTML5) ?>">
+	<input type="text" name="q" minlength="3" maxlength="2000" placeholder="this phrase..." value="<?= htmlentities($q, ENT_HTML5) ?>">
 	<h5 style="margin-top: 0">Also Search</h5>
 	<ul style="list-style:none;">
 		<li><label><input name="also[fn]" type="checkbox" value="true" <?= $also['fn'] ? 'checked' : '' ?>> Footnotes</label></li>

@@ -12,7 +12,8 @@
   <title><?= $title ?> - Recovery Version</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta charset="utf-8">
-  <meta name="description" content="Read the Holy Bible Recovery Versions complete with outlines, footnotes, cross-references, and book details.">
+  <meta name="description" content="<?= $meta_description ?>">
+  <link rel="canonical" href="<?= $meta_canonical ?>">
   <link rel="shortcut icon" type="image/png" href="/res/favicon.png">
   <link rel="manifest" href="/res/manifest.json">
   <link rel="stylesheet" href="/res/sakura-dark.css" type="text/css">

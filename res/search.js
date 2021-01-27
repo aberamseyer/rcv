@@ -64,7 +64,7 @@
 					const { results, count, q } = JSON.parse(request.response);
 					searchResults.innerHTML = results
 						.map(res => 
-							`<div class='verse-result'><a href='/bible/${res.book.replaceAll(/ /g, '_')}/${res.chapter}?verse=${res.verse}'>
+							`<div class='verse-result'><a href='/bible/${res.book.replaceAll(/ /g, '-').toLowerCase()}/${res.chapter}?verse=${res.verse}'>
 								<small><b>${res.abbr} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
 							</div>`)
 						.join('');

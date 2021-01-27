@@ -8,6 +8,8 @@
 
 $concordance = true;
 $title = "Concordance";
+$meta_description = "Browse concordances of the Holy Bible Recovery Version and the footnotes.";
+$meta_canonical = "https://rcv.ramseyer.dev/concordance";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
@@ -17,7 +19,7 @@ if (in_array($q_letter, range('a', 'z'))) {
 	$letter = $q_letter;
 }
 
-echo "<h2><a href='/bible'>Concordance".($letter ? ": '".strtoupper($letter)."'" : '')."</a></h2>
+echo "<h1><a href='/bible'>Concordance".($letter ? ": '".strtoupper($letter)."'" : '')."</a></h1>
 	<div class='justify'>";
 
 foreach(range('A', 'Z') as $alpha) {
@@ -72,7 +74,7 @@ if ($letter) {
     </details>";
 	}
 }
-echo "</div>";
+
 if ($letter) {
 	echo "<hr />".nav_line();
 	echo copyright;

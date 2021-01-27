@@ -7,10 +7,13 @@
  */
 
 $title = "Help";
+$meta_description = "Get help for navigating the website and using all of its features.";
+$meta_canonical = "https://rcv.ramseyer.dev/help";
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 ?>
 
-<h2><a href='/bible'>Help</a></h2>
+<h1><a href='/bible'>Help</a></h1>
 <p>A few tips for using this website:</p>
 
 <ol>
@@ -33,9 +36,9 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
   <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible/{BOOK NAME or BOOK ABBREVIATION}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
     <ul>
       <li>Ommit the verse number or chapter number if you want to link to a book or chapter</li>
-      <li>John 1:1 <pre>https://rcv.ramseyer.dev/bible/John/1?verse=1</pre></li>
-      <li>2 Cor. 4 - note that spaces should be replaced with a '_' <pre>https://rcv.ramseyer.dev/bible/2_Cor./4</pre></li>
-      <li>Philemon<pre>https://rcv.ramseyer.dev/bible/Philemon</pre></li>
+      <li>John 1:1 <pre>https://rcv.ramseyer.dev/bible/john/1?verse=1</pre></li>
+      <li>2 Cor. 4 - note that spaces should be replaced with a '-' <pre>https://rcv.ramseyer.dev/bible/2-cor./4</pre></li>
+      <li>Philemon<pre>https://rcv.ramseyer.dev/bible/philemon</pre></li>
     </ul>
   </li>
   <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
@@ -43,7 +46,8 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Separate verses with a semicolon, i.e., Gen. 1:26; 2:14</li>
       <li>verses can have a range, i.e., Dan. 2:4-7</li>
       <li>Separate verses in the same chapter with a comma, i.e., Rom. 8:2, 6, 10</li>
-      <li>Click the link that appears below the set of returned verses to copy a link to that set of verses to your clipboard</li>
+      <li>Two links appear below the set of returned verses. The first copies a link to that set of verses to your clipboard and the second copies all the verses requested to your clipboard as plain text.</li>
+    </ul>
   </li>
 </ol> 
 <?php

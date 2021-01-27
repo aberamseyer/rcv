@@ -9,7 +9,9 @@
 
     $footnotes = null;
     // get parts from permalink path if they exists
-    list ($_, $_, $url_book, $url_chapter) = explode('/', str_replace('_', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
+    $parts = explode('/', str_replace('-', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
+    $url_book = ucwords($parts[2]);
+    $url_chapter = $parts[3];
 
     // otherwise, get them from the request parameters
     $q_book = strtoupper($url_book ?: $_GET['book']);
@@ -65,27 +67,41 @@
         }
     }
 
+
+    $meta_description = "Read the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+    $meta_canonical = "https://rcv.ramseyer.dev/bible";
+    if ($book) {
+        $meta_description = "Read $book[name] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+        $meta_canonical = "https://rcv.ramseyer.dev/bible/".link_book($book['name']);
+        if ($chapter) {
+            $meta_description = "Read $book[name] chapter $chapter[number] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
+            $meta_canonical = "https://rcv.ramseyer.dev/bible/".link_book($book['name'])."/".$chapter['number'];
+        }
+    }
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
     if ($book) {
-        echo "<h1><a href='/bible'>".$book['name'].(
+        echo "<h1><a href='/bible'>".html(
+            $book['name'].(
                 $book['chapters'] > 1 && $chapter
                     ? " ".$chapter['number'] : ""
-            )."</a></h1>";
+            )
+        )."</a></h1>";
     }
     else {
         echo "<h1 style='margin-bottom: 3rem;'>Holy Bible - Recovery Version</h1>";
     }
+
     if (!$book) {
         // show book names to select
         echo "<div class='justify'>";
         foreach($old as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
         echo "<div class='justify' style='margin-top: 1rem;'>";
         foreach($new as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>$book_option[name]</a>";
+            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
     }
@@ -95,11 +111,11 @@
         foreach(explode("\n", str_replace("\n\n", "\n", $book['details'])) as $detail_line) {
             $parts = explode(": ", $detail_line);
             echo count($parts) === 2
-                ? "<b>".$parts[0].": </b>".$parts[1]."<br/>"
-                : "<b>".$detail_line."</b><br/>";
+                ? "<b>".html($parts[0]).": </b>".html($parts[1])."<br/>"
+                : "<b>".html($detail_line)."</b><br/>";
         }
         echo "</small></p>";
-        // echo "<p><small>".nl2br(str_replace("\n\n", "\n", $book['details']))."</small></p>";
+
         echo "<h6>Chapters</h6>";
         echo "<div class='justify'>";
         foreach($chapters as $chapter_option) {
@@ -109,24 +125,24 @@
         echo nav_line(true);
         echo "<h6>Outline</h6>";
         $outline = select("
-	  SELECT cc.*, c.number chapter
-	  FROM chapter_contents cc
-	  JOIN chapters c ON cc.chapter_id = c.id
-	  WHERE c.book_id = $book[id] AND tier IS NOT NULL
-	  ORDER BY outline_order");
+    	  SELECT cc.*, c.number chapter
+    	  FROM chapter_contents cc
+    	  JOIN chapters c ON cc.chapter_id = c.id
+    	  WHERE c.book_id = $book[id] AND tier IS NOT NULL
+    	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
-	    if (strpos($outline_point['content'], "cont'd") === false)
+	       if (strpos($outline_point['content'], "cont'd") === false)
                 echo "<a href='/bible/".link_book($book['abbreviation'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
         }
     }
     else {
-	echo "<div id='chp-$chapter[id]'>";
+	    echo "<div id='chp-$chapter[id]'>";
         foreach($contents as $element) {
             if ($minimal_layout && $element['tier'])
                 continue;
             echo format_verse($element);
         }
-	echo "</div>";
+	   echo "</div>";
         if ($footnotes && !$minimal_layout) {
             echo nav_line();
             echo "<hr/>";
@@ -156,24 +172,23 @@
         // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
         echo "<div style='height: 90vh;'></div>";
     }
-
-// verse scroll into view for links
-$verse = (int)$_GET['verse'];
-if ($verse):
 ?>
 <script type="text/javascript">
-    if (!window.location.hash)
-        window.addEventListener('load', function() {
-          setTimeout(()  => {
-            const el = document.querySelectorAll('.verse')[<?= $verse - 1 ?>];
-            el.classList.add('highlight');
-            el.scrollIntoView({ block: "center" });
-            setTimeout(() => el.classList.remove('highlight'), 1000);
-          }, 250);
-        });
+    if (!window.location.hash) {
+        const matches = window.location.search.match(/verse=(\d+)/);
+        if (matches) {
+            window.addEventListener('load', function() {
+              setTimeout(()  => {
+                const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
+                el.classList.add('highlight');
+                el.scrollIntoView({ block: "center" });
+                setTimeout(() => el.classList.remove('highlight'), 1000);
+              }, 250);
+            });   
+        }
+    }
 </script>
 <?php
-endif;
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
     echo '<script type="text/javascript" src="/res/read.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
