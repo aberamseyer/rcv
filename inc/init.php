@@ -19,20 +19,6 @@ $db = LOCAL || isset($_GET['abe'])
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 
-require "vendor/autoload.php";
-$redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);
-if (!$no_stats || isset($_GET['no_track'])) {
-	// page views
-	$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
-	$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));
-	$redis_client->incr("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'));
-	// unique visitors
-	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?: $_SERVER['REMOTE_ADDR'];
-	$redis_client->hset("rcv.ramseyer.dev/stats/monthly-unique/".date('Y-m'), $ip, 1);
-	$redis_client->hset("rcv.ramseyer.dev/stats/weekly-unique/".date('Y').'-week-'.date('W'), $ip, 1);
-	$redis_client->hset("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip, 1);
-}
-
 // session starts out here so admin page can close the session on its own terms
 ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 session_start();
@@ -75,4 +61,21 @@ if (!$_POST['action']) {
 	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);
 	if (!$admin)
 		session_write_close();
+}
+
+// load redis after the customization so we don't track simple state changes
+require "vendor/autoload.php";
+$redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);
+if (!$no_stats || isset($_GET['no_track'])) {
+	// page views
+	$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
+	$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));
+	$redis_client->incr("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'));
+	// unique visitors
+	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?: $_SERVER['REMOTE_ADDR']; // ip comes through cloudflare or not
+	$redis_client->hset("rcv.ramseyer.dev/stats/monthly-unique/".date('Y-m'), $ip, 1);
+	$redis_client->hset("rcv.ramseyer.dev/stats/weekly-unique/".date('Y').'-week-'.date('W'), $ip, 1);
+	$redis_client->hset("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip, 1);
+	// specific page views
+	$redis_client->hincrby("rcv.ramseyer.dev/page-views", $_SERVER['REQUEST_URI'], 1);
 }

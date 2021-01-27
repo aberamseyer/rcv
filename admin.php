@@ -30,6 +30,7 @@ if ($_GET['end_date'])
 	$end_date = new DateTime($_GET['end_date']) ?: $end_date;
 
 ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1><a href='/bible'>Stats</a></h1>
 <form method="get">
 	<p>
@@ -40,7 +41,44 @@ if ($_GET['end_date'])
 		<button type="submit">Filter</button>
 	</p>
 </form>
+<?php 
+//
+// page views radar chart
+//
+$page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
+ksort($page_views, SORT_NATURAL);
+foreach($page_views as $k => &$view) {
+	if (strpos($k, "/bible") !== 0 || strlen($k) <= 6) // starts with '/bible' and isn't just '/bible'
+		unset($page_views[ $k ]);
+}
+unset($view);
+?>
+<h2>Site Heatmap</h2>
+<canvas id='page-hits'></canvas>
+<script>
+new Chart(document.getElementById('page-hits').getContext('2d'), {
+	type: 'radar',
+	data: {
+        labels: <?= json_encode(array_keys($page_views)) ?>,
+        datasets: [{
+            borderColor: 'rgb(81, 192, 191)',
+            data: <?= json_encode(array_values($page_views)) ?>
+        }]
+    },
+    options: {
+    	legend: { display: false },
+    	scale: {
+    		gridLines: {
+    			color: 'rgb(74,74,74)'
+    		}
+    	}
+    }
+});
+</script>
 <?php
+//
+// line charts
+//
 $views = [ ];
 
 // monthly views
@@ -121,26 +159,18 @@ foreach($raw_visitors as $key) {
 <form method='post'>
 	<button type='submit' name='logout'>Logout</button>
 </form>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
 const options = {
-	legend: {
-		display: false
-	},
+	legend: { display: false },
     scales: {
         yAxes: [{
-            ticks: {
-                callback: value => value.toLocaleString()
-            },
-        	gridLines: {
-        		color: 'rgb(74,74,74)'
-        	}
+            ticks: { callback: value => value.toLocaleString() },
+        	gridLines: { color: 'rgb(74,74,74)' }
         }]
     }
 };
 <?php foreach($views as $type => $data): ?>
-var monthlyCtx = document.getElementById('<?= $type ?>').getContext('2d');
-new Chart(monthlyCtx, {
+new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
     type: 'line',
     data: {
         labels: <?= json_encode(array_keys($data)) ?>,

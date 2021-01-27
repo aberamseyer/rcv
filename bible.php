@@ -78,6 +78,8 @@
             $meta_canonical = "https://rcv.ramseyer.dev/bible/".link_book($book['name'])."/".$chapter['number'];
         }
     }
+    // track individual page views
+    $redis_client->hincrby("rcv.ramseyer.dev/page-views", str_replace("https://rcv.ramseyer.dev", "", $meta_canonical), 1);
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
     if ($book) {
