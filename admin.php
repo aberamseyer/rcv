@@ -4,7 +4,7 @@ $no_stats = true;
 $admin = true;
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
-if (isset($_POST['logout'])) {
+if (isset($_POST['logout']) || !$_SESSION['user']) {
 	unset($_SESSION['user']);
 	redirect("/login");
 }

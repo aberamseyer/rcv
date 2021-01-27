@@ -22,7 +22,6 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 require "vendor/autoload.php";
 $redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);
 if (!$no_stats || isset($_GET['no_track'])) {
-
 	$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
 	$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));
 	$redis_client->incr("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'));
