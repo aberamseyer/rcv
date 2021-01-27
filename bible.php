@@ -132,7 +132,7 @@
     	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
 	       if (strpos($outline_point['content'], "cont'd") === false)
-                echo "<a href='/bible/".link_book($book['abbreviation'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
+                echo "<a href='/bible/".link_book($book['name'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
         }
     }
     else {

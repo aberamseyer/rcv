@@ -10,7 +10,7 @@ switch($_POST['action']) {
 
     if ($type === 'bible') {
       $rows = select("
-        SELECT cc.reference, 0 number, CONCAT('/bible/', REPLACE(b.name, ' ', '_'), '/', c.number, '#verse-', cc.id) href
+        SELECT cc.reference, 0 number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
         FROM bible_concordance_to_chapter_contents c2cc
         JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
         JOIN chapters c ON cc.chapter_id = c.id
@@ -20,7 +20,7 @@ switch($_POST['action']) {
     }
     else { // $type === 'foot'
       $rows = select("
-        SELECT cc.reference, f.number, CONCAT('/bible/', REPLACE(b.name, ' ', '_'), '/', c.number, '#fn-', f.id) href
+        SELECT cc.reference, f.number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#fn-', f.id) href
         FROM footnote_concordance_to_footnotes fc2f
         JOIN footnotes f ON f.id = fc2f.footnotes_id
         JOIN chapter_contents cc ON cc.id = f.verse_id
@@ -222,7 +222,7 @@ switch($_POST['action']) {
 			// go get 'em
 			$raw_verses = !count($parsed_verses) ? [ ] : array_column(
 				select("
-					SELECT CONCAT('/bible/', REPLACE(b.name, ' ', '_'), '/', c.number, '#verse-', cc.id) href, cc.reference, cc.content text
+					SELECT CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href, cc.reference, cc.content text
 					FROM chapter_contents cc
 					JOIN chapters c ON c.id = cc.chapter_id
 					JOIN books b ON b.id = c.book_id

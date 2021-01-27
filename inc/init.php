@@ -77,9 +77,4 @@ if (!$no_stats || isset($_GET['no_track'])) {
 	$redis_client->hset("rcv.ramseyer.dev/stats/monthly-unique/".date('Y-m'), $ip, 1);
 	$redis_client->hset("rcv.ramseyer.dev/stats/weekly-unique/".date('Y').'-week-'.date('W'), $ip, 1);
 	$redis_client->hset("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip, 1);
-	
-	// individual page views
-	if (strpos($_SERVER['REQUEST_URI'], '/bible') === 0) {
-	    $redis_client->hincrby("rcv.ramseyer.dev/page-views", strtok($_SERVER['REQUEST_URI'], '?'), 1);
-	}
 }
