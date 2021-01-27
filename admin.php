@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by Sublime Text 3.
+ * User: user
+ * Date: 2021-01-27
+ * Time: 13:23
+ */
 
 $no_stats = true;
 $admin = true;
@@ -24,7 +30,7 @@ if ($_GET['end_date'])
 	$end_date = new DateTime($_GET['end_date']) ?: $end_date;
 
 ?>
-<h1><a href='/bible'>Admin</a></h1>
+<h1><a href='/bible'>Stats</a></h1>
 <form method="get">
 	<p>
 		Date Range: &nbsp;
@@ -37,73 +43,116 @@ if ($_GET['end_date'])
 <?php
 $views = [ ];
 
-echo "<h6>Monthly Views</h6>";
-$raw_views = $redis_client->KEYS("rcv.ramseyer.dev/stats/monthly-views/*");
+// monthly views
+$raw_views = $redis_client->keys("rcv.ramseyer.dev/stats/monthly-views/*");
 natsort($raw_views);
 foreach($raw_views as $key) {
 	$date = date_create_from_format("Y-m", str_replace("rcv.ramseyer.dev/stats/monthly-views/", "", $key));
 	if ($begin_date < $date && $date < $end_date)
-		$views['monthly'][ $date->format("M Y") ] = $redis_client->get($key);
+		$views['monthly-views'][ $date->format("M Y") ] = $redis_client->get($key);
 }
-echo "<canvas id='monthly-views'></canvas>";
 
-echo "<h6>Weekly Views</h6>";
-$raw_views = $redis_client->KEYS("rcv.ramseyer.dev/stats/weekly-views/*");
+// weekly views
+$raw_views = $redis_client->keys("rcv.ramseyer.dev/stats/weekly-views/*");
 natsort($raw_views);
 foreach($raw_views as $key) {
 	list($y, $_, $w) = explode('-', str_replace("rcv.ramseyer.dev/stats/weekly-views/", "", $key));
 	$date = new DateTime();
 	$date->setISODate($y,$w);
 	if ($begin_date < $date && $date < $end_date)
-		$views['weekly'][ "Week of ".$date->format("M j, Y") ] = $redis_client->get($key);
+		$views['weekly-views'][ "Week of ".$date->format("M j, Y") ] = $redis_client->get($key);
 }
-echo "<canvas id='weekly-views'></canvas>";
 
-echo "<h6>Daily Views</h6>";
-$raw_views = $redis_client->KEYS("rcv.ramseyer.dev/stats/daily-views/*");
+// daily views
+$raw_views = $redis_client->keys("rcv.ramseyer.dev/stats/daily-views/*");
 natsort($raw_views);
 foreach($raw_views as $key) {
 	$date = date_create_from_format("Y-m-d", str_replace("rcv.ramseyer.dev/stats/daily-views/", "", $key));
 	if ($begin_date < $date && $date < $end_date)
-		$views['daily'][ $date->format("M j, Y") ] = $redis_client->get($key);
+		$views['daily-views'][ $date->format("M j, Y") ] = $redis_client->get($key);
 }
-echo "<canvas id='daily-views'></canvas>";
+
+// monthly unique
+$raw_visitors = $redis_client->keys("rcv.ramseyer.dev/stats/monthly-unique/*");
+natsort($raw_visitors);
+foreach($raw_visitors as $key) {
+	$date = date_create_from_format("Y-m", str_replace("rcv.ramseyer.dev/stats/monthly-unique/", "", $key));
+	if ($begin_date < $date && $date < $end_date)
+		$views['monthly-unique'][ $date->format("M Y") ] = count($redis_client->hkeys($key));
+}
+
+// weekly views
+$raw_visitors = $redis_client->keys("rcv.ramseyer.dev/stats/weekly-unique/*");
+natsort($raw_visitors);
+foreach($raw_visitors as $key) {
+	list($y, $_, $w) = explode('-', str_replace("rcv.ramseyer.dev/stats/weekly-unique/", "", $key));
+	$date = new DateTime();
+	$date->setISODate($y,$w);
+	if ($begin_date < $date && $date < $end_date)
+		$views['weekly-unique'][ "Week of ".$date->format("M j, Y") ] = count($redis_client->hkeys($key));
+}
+
+// daily views
+$raw_visitors = $redis_client->keys("rcv.ramseyer.dev/stats/daily-unique/*");
+natsort($raw_visitors);
+foreach($raw_visitors as $key) {
+	$date = date_create_from_format("Y-m-d", str_replace("rcv.ramseyer.dev/stats/daily-unique/", "", $key));
+	if ($begin_date < $date && $date < $end_date)
+		$views['daily-unique'][ $date->format("M j, Y") ] = count($redis_client->hkeys($key));
+}
 
 ?>
+<h2>Total Views</h2>
+<h6>Monthly</h6>
+<canvas id='monthly-views'></canvas>
+<h6>Weekly</h6>
+<canvas id='weekly-views'></canvas>
+<h6>Daily</h6>
+<canvas id='daily-views'></canvas>
+
+<h2>Unique Visitors</h2>
+<h6>Monthly</h6>
+<canvas id='monthly-unique'></canvas>
+<h6>Weekly</h6>
+<canvas id='weekly-unique'></canvas>
+<h6>Daily</h6>
+<canvas id='daily-unique'></canvas>
+
 <form method='post'>
 	<button type='submit' name='logout'>Logout</button>
 </form>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <script>
+const options = {
+	legend: {
+		display: false
+	},
+    scales: {
+        yAxes: [{
+            ticks: {
+                callback: value => value.toLocaleString()
+            },
+        	gridLines: {
+        		color: 'rgb(74,74,74)'
+        	}
+        }]
+    }
+};
 <?php foreach($views as $type => $data): ?>
-var monthlyCtx = document.getElementById('<?= $type ?>-views').getContext('2d');
-var chart = new Chart(monthlyCtx, {
+var monthlyCtx = document.getElementById('<?= $type ?>').getContext('2d');
+new Chart(monthlyCtx, {
     type: 'line',
     data: {
         labels: <?= json_encode(array_keys($data)) ?>,
         datasets: [{
             borderColor: 'rgb(81, 192, 191)',
-
             data: <?= json_encode(array_values($data)) ?>
         }]
     },
-    options: {
-    	legend: {
-    		display: false
-    	},
-        scales: {
-            yAxes: [{
-                ticks: {
-                    callback: value => value.toLocaleString()
-                },
-	        	gridLines: {
-	        		color: 'rgb(74,74,74)'
-	        	}
-            }]
-        }
-    }
+    options
 });
 <?php endforeach; ?>
 </script>
 <?php
+echo "<hr>".nav_line();
 require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

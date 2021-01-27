@@ -3,6 +3,9 @@
     margin-top: 0.5rem;
     text-align: center;
 }
+.copy a {
+    color: var(--main-text);
+}
 
 .hidden {
     display: none;

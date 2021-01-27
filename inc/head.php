@@ -7,7 +7,7 @@
  */
 ?>
 <!doctype html>
-<html lang="en-US">
+<html lang="en-US" class="<?= $light_theme ? 'light' : '' ?>">
 <head>
   <title><?= $title ?> - Recovery Version</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/res/sakura-dark.css" type="text/css">
   <link rel="stylesheet" href="/res/style.css" type="text/css">
 </head>
-<body id="top" class="<?= $serif_text ? 'serif' : '' ?><?= $light_theme ? ' light' : '' ?>">
+<body id="top" class="<?= $serif_text ? 'serif' : '' ?>">
 <?php
     echo '<div id="menu">';
         echo '<span>&#8942;</span>';

@@ -5,13 +5,13 @@
   --contrast-bg: #4a4a4a;
   --tooltip-bg: #545454;
 }
-
-:root .light {
-  --main-bg: #f9f9f9;
-  --main-text: #4a4a4a;
-  --white: #ffffff;
-  --contrast-bg: #1d7484;
-  --tooltip-bg: #545454;
+.light:root {
+  filter: invert(1) hue-rotate(180deg);
+  --main-bg: #020202;
+  --main-text: #b5b5b5;
+  --white: #e6e6e6;
+  --contrast-bg: #232323;
+  /*--tooltip-bg: #545454;*/
 }
 
 /* $color-text: #dedce5; */
