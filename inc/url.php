@@ -13,13 +13,12 @@ else if ($parts[1] === 'bible') {
 	if (count($parts) > 4) {
 		redirect("/bible");
 	}
-	else if ($parts[3] && !intval($parts[3]) != $parts[3]) {
+	else if ($parts[3] && intval($parts[3]) != $parts[3]) {
 		redirect("/bible");
 	}
 
 	$bible_page = valid_bible_page($parts[2], $parts[3]);
 	if (!$bible_page) {
-		debug($bible_page);
 		redirect("/bible");
 	}
 

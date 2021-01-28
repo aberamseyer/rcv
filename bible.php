@@ -12,7 +12,7 @@
     if ($book) {
         $chapters = select("SELECT * FROM chapters WHERE book_id = $book[id]");
         if ($bible_page['chapter']) {
-            $chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = ".db_esc($q_chapter));
+            $chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = ".db_esc($bible_page['chapter']));
         }
     }
     if ($chapter) {
