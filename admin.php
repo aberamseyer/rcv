@@ -30,6 +30,11 @@ if ($_GET['end_date'])
 	$end_date = new DateTime($_GET['end_date']) ?: $end_date;
 
 ?>
+<style>
+	body {
+		max-width: 80vw; /* give the graphs some breathing room */
+	}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1><a href='/bible'>Stats</a></h1>
 <form method="get">
@@ -53,7 +58,7 @@ foreach($page_views as $k => &$view) {
 }
 unset($view);
 ?>
-<h2>Site Heatmap</h2>
+<h2>Individual Page Views</h2>
 <canvas id='page-hits'></canvas>
 <script>
 new Chart(document.getElementById('page-hits').getContext('2d'), {

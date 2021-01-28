@@ -12,6 +12,7 @@ ini_set('upload_max_filesize', '512K');
 
 $time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
+define("STATS", $no_stats && !isset($_GET['no_track']));
 
 $db = LOCAL || isset($_GET['abe'])
 	? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')
@@ -63,10 +64,12 @@ if (!$_POST['action']) {
 		session_write_close();
 }
 
-// load redis after the customization so we don't track simple state changes
+require $_SERVER['DOCUMENT_ROOT']."/inc/url.php";
+
+// load redis after the customization and url.php so we don't track simple state changes and invalid url redirects
 require "vendor/autoload.php";
 $redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);
-if (!$no_stats || isset($_GET['no_track'])) {
+if (STATS) {
 	// page views
 	$redis_client->incr("rcv.ramseyer.dev/stats/monthly-views/".date('Y-m'));
 	$redis_client->incr("rcv.ramseyer.dev/stats/weekly-views/".date('Y')."-week-".date('W'));

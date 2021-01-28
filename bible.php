@@ -3,30 +3,15 @@
     require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
     require $_SERVER['DOCUMENT_ROOT']."/inc/cache-head.php";
 
-    $old = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 0 ORDER BY sort_order");
-    $new = select("SELECT *, UPPER(name) ucName, UPPER(abbreviation) ucAbbr FROM books WHERE testament = 1 ORDER BY sort_order");
-    $books = array_merge($old, $new);
-
     $footnotes = null;
-    // get parts from permalink path if they exists
-    $parts = explode('/', str_replace('-', ' ', strtok($_SERVER['REQUEST_URI'], '?')));
-    $url_book = ucwords($parts[2]);
-    $url_chapter = $parts[3];
 
-    // otherwise, get them from the request parameters
-    $q_book = strtoupper($url_book ?: $_GET['book']);
-    if ($q_book && ($index = array_search($q_book, array_column($books, 'ucName'), true)) !== false) {
-        $book = $books[$index];
+    if ($bible_page) {
+        $book = row("SELECT * FROM books WHERE id = $bible_page[book]");
     }
-    else if ($q_book && ($index = array_search($q_book, array_column($books, 'ucAbbr'))) !== false) {
-        $book = $books[$index];
-    }
-
-    // determine what book/chapter we need to navigate to
+    // determine what book and/or chapter we need to navigate to. it's already a valid page bc of url.php, included at the bottom of init.php
     if ($book) {
         $chapters = select("SELECT * FROM chapters WHERE book_id = $book[id]");
-        $q_chapter = $url_chapter ?: $_GET['chapter'];
-        if ($q_chapter && in_array($q_chapter, array_column($chapters, 'number'))) {
+        if ($bible_page['chapter']) {
             $chapter = row("SELECT * FROM chapters WHERE book_id = $book[id] AND number = ".db_esc($q_chapter));
         }
     }
@@ -95,12 +80,12 @@
     if (!$book) {
         // show book names to select
         echo "<div class='justify'>";
-        foreach($old as $i => $book_option) {
+        foreach(select("SELECT name FROM books WHERE testament = 0 ORDER BY sort_order") as $i => $book_option) {
             echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
         echo "<div class='justify' style='margin-top: 1rem;'>";
-        foreach($new as $i => $book_option) {
+        foreach(select("SELECT name FROM books WHERE testament = 1 ORDER BY sort_order") as $i => $book_option) {
             echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
@@ -192,6 +177,5 @@
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
     echo '<script type="text/javascript" src="/res/read.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
-
     require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
 ?>
