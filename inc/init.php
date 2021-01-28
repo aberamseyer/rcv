@@ -12,7 +12,7 @@ ini_set('upload_max_filesize', '512K');
 
 $time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
-define("STATS", $no_stats && !isset($_GET['no_track']));
+define("STATS", !$no_stats && !isset($_GET['no_track']));
 
 $db = LOCAL || isset($_GET['abe'])
 	? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')

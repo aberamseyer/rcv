@@ -58,7 +58,7 @@ foreach($page_views as $k => &$view) {
 unset($view);
 
 arsort($page_views); // sort by value high -> low
-$page_views = array_slice($page_views, 0, 50, true); // pull top 50 from list
+//$page_views = array_slice($page_views, 0, 50, true); // pull top 50 from list
 ksort($page_views, SORT_NATURAL); // sort by key low -> high
 ?>
 <h2>Individual Page Views</h2>
