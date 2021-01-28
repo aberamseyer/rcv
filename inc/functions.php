@@ -18,7 +18,7 @@
 				}
 			}
 		}
-		return [ 'book' => 0, 'chapter' => 0 ];
+		return $book ? false : [ 'book' => 0, 'chapter' => 0 ];
 	}
 	
 	function query ($query, $return = "") {
@@ -270,7 +270,6 @@
 
 	function format_note($note, $break = true) {
 		$note = html($note);
-		preg_match(verse_regex, $note, $matches);
 		$content = preg_replace_callback(verse_regex, function($matches) {
 			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
 		}, $note);

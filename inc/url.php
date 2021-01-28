@@ -2,7 +2,14 @@
 /**
  * This file validates urls. If they're not valid, redirect back to /bible
  */
-$parts = explode('/', strtok(strtolower($_SERVER['REQUEST_URI']), '?'));
+
+// to keep things sane in redis, make all our urls lowercase
+$uri = strtok($_SERVER['REQUEST_URI'], '?');
+if ($uri !== strtolower($uri)) {
+	redirect(strtolower($uri));
+}
+
+$parts = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
 if (!in_array(
 	$parts[1],
 	[ 'ajax', 'bible', 'search', 'admin', 'login', 'help', 'verse', 'concordance' ])
