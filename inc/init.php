@@ -79,5 +79,5 @@ if (STATS) {
 	$ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?: $_SERVER['REMOTE_ADDR']; // ip comes through cloudflare or not
 	$redis_client->hset("rcv.ramseyer.dev/stats/monthly-unique/".date('Y-m'), $ip, 1);
 	$redis_client->hset("rcv.ramseyer.dev/stats/weekly-unique/".date('Y').'-week-'.date('W'), $ip, 1);
-	$redis_client->hset("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip, 1);
+	$redis_client->hincrby("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip, 1);
 }
