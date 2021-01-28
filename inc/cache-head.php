@@ -1,10 +1,8 @@
 <?php
-$url = str_replace('/', '-',
-	strtok(
-		substr(
-			strtolower($_SERVER['REQUEST_URI']), 1
-		), '?'
-	)
+$url = strtok(
+	substr(
+		strtolower($_SERVER['REQUEST_URI']), 1
+	), '?'
 );
 
 // track individual page views.
@@ -14,7 +12,7 @@ if (STATS) {
 }
 
 if (!isset($_GET['no_cache']) && !LOCAL) {
-	$filename = $url."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0).".html";
+	$filename = str_replace('/', '-', $url)."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0).".html";
 	$cachekey = $_SERVER['DOCUMENT_ROOT']."/extras/cache/".$filename;
 
 	if (file_exists($cachekey)) {

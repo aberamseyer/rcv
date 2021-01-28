@@ -51,12 +51,15 @@ if ($_GET['end_date'])
 // page views radar chart
 //
 $page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
-ksort($page_views, SORT_NATURAL);
 foreach($page_views as $k => &$view) {
 	if (strpos($k, "bible") !== 0 || strlen($k) <= 6) // starts with '/bible' and isn't just '/bible'
 		unset($page_views[ $k ]);
 }
 unset($view);
+
+arsort($page_views); // sort by value high -> low
+$page_views = array_slice($page_views, 0, 50, true); // pull top 50 from list
+ksort($page_views, SORT_NATURAL); // sort by key low -> high
 ?>
 <h2>Individual Page Views</h2>
 <canvas id='page-hits'></canvas>
@@ -73,9 +76,8 @@ new Chart(document.getElementById('page-hits').getContext('2d'), {
     options: {
     	legend: { display: false },
     	scale: {
-    		gridLines: {
-    			color: 'rgb(74,74,74)'
-    		}
+    		gridLines: { color: 'rgb(74,74,74)' },
+    		ticks: { min: 0 }
     	}
     }
 });
@@ -169,7 +171,10 @@ const options = {
 	legend: { display: false },
     scales: {
         yAxes: [{
-            ticks: { callback: value => value.toLocaleString() },
+            ticks: {
+            	callback: value => value.toLocaleString(),
+            	min: 0
+            },
         	gridLines: { color: 'rgb(74,74,74)' }
         }]
     }
