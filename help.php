@@ -33,20 +33,20 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
   </li>
-  <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible/{BOOK NAME or BOOK ABBREVIATION}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
+  <li>You can link to this website, directly to a verse using the format: <pre>https://rcv.ramseyer.dev/bible/{BOOK NAME}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
     <ul>
       <li>Ommit the verse number or chapter number if you want to link to a book or chapter</li>
       <li>John 1:1 <pre>https://rcv.ramseyer.dev/bible/john/1?verse=1</pre></li>
-      <li>2 Cor. 4 - note that spaces should be replaced with a '-' <pre>https://rcv.ramseyer.dev/bible/2-cor./4</pre></li>
+      <li>2 Corinthians 4 - note that spaces should be replaced with a '-' <pre>https://rcv.ramseyer.dev/bible/2-corinthians/4</pre></li>
       <li>Philemon<pre>https://rcv.ramseyer.dev/bible/philemon</pre></li>
     </ul>
   </li>
   <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
     <ul>
-      <li>Separate verses with a semicolon, i.e., Gen. 1:26; 2:14</li>
-      <li>verses can have a range, i.e., Dan. 2:4-7</li>
-      <li>Separate verses in the same chapter with a comma, i.e., Rom. 8:2, 6, 10</li>
-      <li>Two links appear below the set of returned verses. The first copies a link to that set of verses to your clipboard and the second copies all the verses requested to your clipboard as plain text.</li>
+      <li>Separate verses with a semicolon: Gen. 1:26; 2:14</li>
+      <li>verses can have a range: Dan. 2:4-7</li>
+      <li>Separate verses in the same chapter with a comma: Rom. 8:2, 6, 10</li>
+      <li>Two links appear below the set of returned verses. The first copies a <em>link</em> to that set of verses to your clipboard and the second copies <em>the text of the verses</em> to your clipboard.</li>
     </ul>
   </li>
 </ol> 
