@@ -17,6 +17,17 @@ if (isset($_POST['logout']) || !$_SESSION['user']) {
 
 session_write_close();
 
+// ajax get number of views
+if (isset($_GET['get_views'])) {
+	header("Content-type: application/json");
+	echo json_encode([
+		'views' => $redis_client->get("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'))
+	]);
+	die;
+}
+
+
+
 $title = "Admin";
 $meta_description = "Admin portal";
 $meta_canonical = "https://rcv.ramseyer.dev/admin";
@@ -61,6 +72,29 @@ arsort($page_views); // sort by value high -> low
 $page_views = array_slice($page_views, 0, 30, true); // pull top 30 from list
 ksort($page_views, SORT_NATURAL); // sort by key low -> high
 ?>
+<h6>Page Views Today: <span id='number'>0</span></h6>
+<noscript>
+	You're gonna want js for this page :/
+</noscript>
+<script>
+	const el = document.getElementById('number');
+	function updateViews() {
+		function animateViews(from, to) {
+			el.innerText = from;
+			let number = from;
+			let interval = setInterval(() => {
+		        el.innerText = number;
+		        if (number >= to) clearInterval(interval);
+		        number += Math.ceil((to - number)/(to / 10))
+		    }, 30);
+		}
+	    fetch(`/admin?get_views`)
+	    .then(rsp => rsp.json())
+	    .then(json => animateViews(parseInt(el.innerText), parseInt(json.views)));
+	}
+	setInterval(updateViews, 1000 * 60 * 5);
+	updateViews();
+</script>
 <h2>Individual Page Views</h2>
 <canvas id='page-hits'></canvas>
 <script>
