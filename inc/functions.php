@@ -2,8 +2,11 @@
 	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='noopener' href='https://www.lsm.org'>www.lsm.org</a></div>";
 	const verse_regex = '/(Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.) (\d+):(\d+)/';
 
+	require_once $_SERVER['DOCUMENT_ROOT']."/inc/books.php";
+
 	function valid_bible_page($book, $chapter = null) {
-		require_once $_SERVER['DOCUMENT_ROOT']."/inc/books.php";
+		global $books; // inc/books.php
+
 		$book = link_book($book);
 		$chapter = max($chapter, 0);
 		foreach($books as $opt) {
@@ -269,9 +272,11 @@
 	}
 
 	function format_note($note, $break = true) {
+		global $books_by_abbr; // inc/books.php
+
 		$note = html($note);
-		$content = preg_replace_callback(verse_regex, function($matches) {
-			return "<a href='/bible/".link_book($matches[1])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
+		$content = preg_replace_callback(verse_regex, function($matches) use ($books_by_abbr) {
+			return "<a href='/bible/".link_book($books_by_abbr[ $matches[1] ])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
 		}, $note);
 		return $break ? nl2br($content) : $content;
 	}
