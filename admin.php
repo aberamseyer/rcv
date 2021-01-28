@@ -52,13 +52,13 @@ if ($_GET['end_date'])
 //
 $page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
 foreach($page_views as $k => &$view) {
-	if (strpos($k, "bible") !== 0 || strlen($k) <= 5) // starts with '/bible' and isn't just '/bible'
+	if (strpos($k, "bible") !== 0 || strlen($k) <= 6) // starts with 'bible' and isn't just 'bible/'
 		unset($page_views[ $k ]);
 }
 unset($view);
 
 arsort($page_views); // sort by value high -> low
-$page_views = array_slice($page_views, 0, 50, true); // pull top 50 from list
+$page_views = array_slice($page_views, 0, 30, true); // pull top 30 from list
 ksort($page_views, SORT_NATURAL); // sort by key low -> high
 ?>
 <h2>Individual Page Views</h2>
