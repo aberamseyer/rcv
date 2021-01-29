@@ -48,15 +48,6 @@ if ($_GET['end_date'])
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1><a href='/bible'>Stats</a></h1>
-<form method="get">
-	<p>
-		Date Range: &nbsp;
-		<input type='date' name='start_date'> through <input type="date" name='end_date'>
-		<br>
-		<button type="reset">Reset</button>
-		<button type="submit">Filter</button>
-	</p>
-</form>
 <?php 
 //
 // page views radar chart
@@ -98,22 +89,28 @@ ksort($page_views, SORT_NATURAL); // sort by key low -> high
 <h2>Individual Page Views</h2>
 <canvas id='page-hits'></canvas>
 <script>
+<?php
+// create random colors for the page views
+$color_opts = ["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"];
+$border_color_opts = ["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"];
+$colors = [ ];
+$border_colors = [ ];
+for($i = 0; $i < count($page_views); $i++) {
+	$colors[] = $color_opts[ $i % count($color_opts) ];
+	$border_colors[] = $border_color_opts[ $i % count($border_color_opts) ];
+}
+?>
 new Chart(document.getElementById('page-hits').getContext('2d'), {
-	type: 'radar',
+	type: 'doughnut',
 	data: {
         labels: <?= json_encode(array_keys($page_views)) ?>,
         datasets: [{
-            borderColor: 'rgb(81, 192, 191)',
+        	backgroundColor: <?= json_encode($colors) ?>,
+        	borderColor: <?= json_encode($border_colors) ?>,
             data: <?= json_encode(array_values($page_views)) ?>
         }]
     },
-    options: {
-    	legend: { display: false },
-    	scale: {
-    		gridLines: { color: 'rgb(74,74,74)' },
-    		ticks: { min: 0 }
-    	}
-    }
+    options: { legend: { display: false } }
 });
 </script>
 <?php
@@ -181,7 +178,16 @@ foreach($raw_visitors as $key) {
 }
 
 ?>
-<h2>Total Views</h2>
+<hr style="margin: 5rem 2rem;">
+<form method="get">
+	<p>
+		Date Range: &nbsp;
+		<input type='date' name='start_date'> through <input type="date" name='end_date'>
+		<button type="reset">Reset</button>
+		<button type="submit">Filter</button>
+	</p>
+</form>
+<h2>Total Views</h2> 
 <h6>Monthly</h6>
 <canvas id='monthly-views'></canvas>
 <h6>Weekly</h6>
