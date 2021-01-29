@@ -227,7 +227,7 @@
 	function format_verse($element) {
 		global $book, $minimal_layout;
 
-		$content = html($element['content']);
+		$content = $element['content'];
 		$arr = str_split($content);
 		$heading_class = 'verse';
 		if ($element['number'] == 0) {
