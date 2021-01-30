@@ -175,7 +175,7 @@
 </script>
 <?php
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
-    echo '<script type="text/javascript" src="/res/read.js"></script>';
+    echo '<script type="text/javascript" src="/res/js/read.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
     require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
 ?>

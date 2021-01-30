@@ -53,15 +53,8 @@ if ($_GET['end_date'])
 // page views radar chart
 //
 $page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
-foreach($page_views as $k => &$view) {
-	if (strpos($k, "bible") !== 0 || strlen($k) <= 6) // starts with 'bible' and isn't just 'bible/'
-		unset($page_views[ $k ]);
-}
-unset($view);
-
 arsort($page_views); // sort by value high -> low
-$page_views = array_slice($page_views, 0, 30, true); // pull top 30 from list
-ksort($page_views, SORT_NATURAL); // sort by key low -> high
+$total_page_views = array_sum($page_views);
 ?>
 <h6>Page Views Today: <span id='number'>0</span></h6>
 <noscript>
@@ -87,32 +80,52 @@ ksort($page_views, SORT_NATURAL); // sort by key low -> high
 	updateViews();
 </script>
 <h2>Individual Page Views</h2>
-<canvas id='page-hits'></canvas>
-<script>
-<?php
-// create random colors for the page views
-$color_opts = ["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"];
-$border_color_opts = ["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"];
-$colors = [ ];
-$border_colors = [ ];
-for($i = 0; $i < count($page_views); $i++) {
-	$colors[] = $color_opts[ $i % count($color_opts) ];
-	$border_colors[] = $border_color_opts[ $i % count($border_color_opts) ];
-}
-?>
-new Chart(document.getElementById('page-hits').getContext('2d'), {
-	type: 'doughnut',
-	data: {
-        labels: <?= json_encode(array_keys($page_views)) ?>,
-        datasets: [{
-        	backgroundColor: <?= json_encode($colors) ?>,
-        	borderColor: <?= json_encode($border_colors) ?>,
-            data: <?= json_encode(array_values($page_views)) ?>
-        }]
-    },
-    options: { legend: { display: false } }
-});
-</script>
+<style>
+	table {
+	    width: 100%;
+	}
+
+	thead, tbody, tr, td, th { display: block; }
+
+	tr:after {
+	    content: ' ';
+	    display: block;
+	    visibility: hidden;
+	    clear: both;
+	}
+
+	thead th {
+	    height: 30px;
+	}
+
+	tbody {
+	    height: 280px;
+	    overflow-y: auto;
+	}
+
+	tbody td, thead th {
+	    width: 30%;
+	    float: left;
+	}
+</style>
+<table class='tableFixHead'>
+	<thead>
+		<tr>
+			<th>Location</th>
+			<th>Visits</th>
+			<th>%</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php foreach($page_views as $url => $value): ?>
+		<tr>
+			<td><?= preg_replace('/bible\//', '', $url) ?: "&nbsp;" ?></td>
+			<td><?= number_format($value) ?></td>
+			<td><?= number_format($value / $total_page_views * 100, 2) ?>%</td>
+		</tr>
+<?php endforeach; ?>
+	</tbody>
+</table>
 <?php
 //
 // line charts

@@ -19,10 +19,8 @@ if (!isset($_GET['no_cache']) && !LOCAL) {
 		($output = $redis_client->get("rcv.ramseyer.dev/cache".$cachekey)) ||
 		file_exists($cachekey)
 	) {
-		if ($output) {
-			// $output contains page from memory
-		}
-		else { // file exists, cache it in memory
+		if (!$output) {
+			// file exists, cache it in redis
 			$output = file_get_contents($cachekey);
 			$redis_client->set("rcv.ramseyer.dev/cache".$cachekey, $output);
 			$redis_client->expire("rcv.ramseyer.dev/cache".$cachekey, 60 * 60); // cache pages for 1 hour in memory
