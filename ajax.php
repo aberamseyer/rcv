@@ -251,7 +251,7 @@ switch($_POST['action']) {
 		$ref_like = db_esc_like($q)."%";
 
 		$results = select("
-			SELECT b.abbreviation abbr, b.name book, c.number chapter, cc.number verse, cc.content text
+			SELECT b.abbreviation abbr, LOWER(b.name) book, c.number chapter, cc.number verse, cc.content text
 			FROM rcv.chapter_contents cc
 			JOIN rcv.chapters c ON c.id = cc.chapter_id
 			JOIN rcv.books b ON b.id = c.book_id
