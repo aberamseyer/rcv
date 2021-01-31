@@ -1,0 +1,7 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+	<ShortName>Recovery Version</ShortName>
+	<Description>Search the Holy Bible Recovery Version</Description>
+	<InputEncoding>UTF-8</InputEncoding>
+	<Image width="16" height="16" type="image/x-icon">https://rcv.ramseyer.dev/res/site/favicon.png</Image>
+	<Url type="text/html" method="get" template="https://rcv.ramseyer.dev/search?q={searchTerms}"/>
+</OpenSearchDescription>

@@ -16,6 +16,7 @@
   <link rel="canonical" href="<?= $meta_canonical ?>">
   <link rel="shortcut icon" type="image/png" href="/res/site/favicon.png">
   <link rel="manifest" href="/res/site/manifest.json">
+  <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml"> 
   <link rel="stylesheet" href="/res/css/sakura-dark.css" type="text/css">
   <link rel="stylesheet" href="/res/css/style.css" type="text/css">
 </head>
