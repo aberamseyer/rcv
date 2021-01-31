@@ -69,7 +69,7 @@ $total_page_views = array_sum($page_views);
 			let interval = setInterval(() => {
 		        el.innerText = number;
 		        if (number >= to) clearInterval(interval);
-		        number += Math.ceil((to - number)/(to / 10))
+		        number += Math.ceil((to - number)/(to / 50));
 		    }, 30);
 		}
 	    fetch(`/admin?get_views`)
