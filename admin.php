@@ -269,7 +269,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		$row = row("SELECT * FROM (
 	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
 		) AS tmp WHERE ip_from <= INET_ATON('$ip')");
-		$locations[] = [ $row['longitude'], $row['latitude'] ]; ?>
+		$locations[ $ip ] = [ $row['longitude'], $row['latitude'] ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $row['country_name'] ?: '&nbsp;' ?></td>
@@ -284,19 +284,26 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 <!-- mapbox embed -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css" rel="stylesheet" />
-<div id='map' style="height: 400px;"></div>
+<div id='map' style="height: 400px; margin-top: 2rem;"></div>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYWJlcmFtc2V5ZXIiLCJhIjoiY2trbjI3dmY3MGtmZzJ3czMxZGZsM241ZSJ9.0YYBE5Yj5UVae8WPQQ1weQ';
 	const map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [0, 0],
 		zoom: 1
 	});
-	(<?= json_encode($locations) ?> || []).map(loc =>
-		new mapboxgl.Marker()
-		.setLngLat([ loc[0], loc[1] ])
-		.addTo(map));
+	(Object.entries(<?= json_encode($locations) ?> || { }))
+		.forEach(([ ip, [ long, lat ] ]) => {
+			if (parseInt(long) && parseInt(lat)) {
+				const label = new mapboxgl.Popup({ closeButton: false })
+			      .setText(ip)
+			      .addTo(map);
+				new mapboxgl.Marker()
+					.setLngLat([ long, lat ])
+					.setPopup(label)
+					.addTo(map);
+			}
+		});
 </script>
  
 <form method='post' style="margin: 5rem 2rem;">
