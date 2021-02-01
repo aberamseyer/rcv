@@ -70,6 +70,8 @@ if ($_GET['end_date'])
 
 	table tbody td, table thead th {
 		float: left;
+		overflow-x: scroll;
+		font-size: 1.4rem;
 	}
 	table.width-30 tbody td, table.width-30 thead th {
 		width: 30%;
@@ -268,9 +270,9 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		) AS tmp WHERE ip_from <= INET_ATON('$ip')"); ?>
 		<tr>
 			<td><?= $ip ?></td>
-			<td><?= $row['country_name'] ?></td>
-			<td><?= $row['city_name'] ?></td>
-			<td><?= $row['latitude'] ?> / <?= $row['longitude'] ?></td>
+			<td><?= $row['country_name'] ?: '&nbsp;' ?></td>
+			<td><?= $row['city_name'] ?: '&nbsp;' ?></td>
+			<td><?= $row['latitude'] ?: '&nbsp;' ?> / <?= $row['longitude'] ?: '&nbsp;' ?></td>
 			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
 		</tr>
 <?php endforeach; ?>
