@@ -265,7 +265,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	foreach($ips as $ip):
 		$row = row("SELECT * FROM (
 	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
-		) AS tmp WHERE ip_from <= INET_ATON('$ip')"); debug($row);?>
+		) AS tmp WHERE ip_from <= INET_ATON('$ip')"); ?>
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $row['country_name'] ?></td>
