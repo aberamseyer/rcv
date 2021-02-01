@@ -264,10 +264,12 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'));
 	arsort($visitors_today); // sort by visits descending
 	$ips = array_keys($visitors_today);
+	$locations = [];
 	foreach($ips as $ip):
 		$row = row("SELECT * FROM (
 	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
-		) AS tmp WHERE ip_from <= INET_ATON('$ip')"); ?>
+		) AS tmp WHERE ip_from <= INET_ATON('$ip')");
+		$locations[] = [ $row['longitude'], $row['latitude'] ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $row['country_name'] ?: '&nbsp;' ?></td>
@@ -279,7 +281,25 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	</tbody>
 </table>
 
-<form method='post'>
+<!-- mapbox embed -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css" rel="stylesheet" />
+<div id='map' style="height: 400px;"></div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYWJlcmFtc2V5ZXIiLCJhIjoiY2trbjI3dmY3MGtmZzJ3czMxZGZsM241ZSJ9.0YYBE5Yj5UVae8WPQQ1weQ';
+	const map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11',
+		center: [0, 0],
+		zoom: 1
+	});
+	(<?= json_encode($locations) ?> || []).map(loc =>
+		new mapboxgl.Marker()
+		.setLngLat([ loc[0], loc[1] ])
+		.addTo(map));
+</script>
+ 
+<form method='post' style="margin: 5rem 2rem;">
 	<button type='submit' name='logout'>Logout</button>
 </form>
 <?php
