@@ -45,6 +45,39 @@ if ($_GET['end_date'])
 	body {
 		max-width: 80vw; /* give the graphs some breathing room */
 	}
+
+	table {
+	    width: 100%;
+	}
+
+	thead, tbody, tr, td, th { display: block; }
+
+	tr:after {
+	    content: ' ';
+	    display: block;
+	    visibility: hidden;
+	    clear: both;
+	}
+
+	thead th {
+	    height: 30px;
+	}
+
+	tbody {
+	    height: 280px;
+	    overflow-y: auto;
+	}
+
+	table tbody td, table thead th {
+		float: left;
+	}
+	table.width-30 tbody td, table.width-30 thead th {
+		width: 30%;
+	}
+	table.width-15 tbody td, table.width-15 thead th {
+		width: 15%;
+	}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <h1><a href='/bible'>Stats</a></h1>
@@ -80,35 +113,7 @@ $total_page_views = array_sum($page_views);
 	updateViews();
 </script>
 <h2>Individual Page Views</h2>
-<style>
-	table {
-	    width: 100%;
-	}
-
-	thead, tbody, tr, td, th { display: block; }
-
-	tr:after {
-	    content: ' ';
-	    display: block;
-	    visibility: hidden;
-	    clear: both;
-	}
-
-	thead th {
-	    height: 30px;
-	}
-
-	tbody {
-	    height: 280px;
-	    overflow-y: auto;
-	}
-
-	tbody td, thead th {
-	    width: 30%;
-	    float: left;
-	}
-</style>
-<table class='tableFixHead'>
+<table class='width-30'>
 	<thead>
 		<tr>
 			<th>Location</th>
@@ -215,10 +220,6 @@ foreach($raw_visitors as $key) {
 <canvas id='weekly-unique'></canvas>
 <h6>Daily</h6>
 <canvas id='daily-unique'></canvas>
-
-<form method='post'>
-	<button type='submit' name='logout'>Logout</button>
-</form>
 <script>
 const options = {
 	legend: { display: false },
@@ -246,6 +247,39 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 });
 <?php endforeach; ?>
 </script>
+<table class='width-15'>
+	<thead>
+		<tr>
+			<th>IP</th>
+			<th>Country</th>
+			<th>City</th>
+			<th>Lat/Long</th>
+			<th>Visits</th>
+		</tr>
+	</thead>
+	<tbody>
+<?php
+	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'));
+	arsort($visitors_today); // sort by visits descending
+	$ips = array_keys($visitors_today);
+	foreach($ips as $ip):
+		$row = row("SELECT * FROM (
+	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
+		) AS tmp WHERE ip_from <= INET_ATON('$ip')"); debug($row);?>
+		<tr>
+			<td><?= $ip ?></td>
+			<td><?= $row['country_name'] ?></td>
+			<td><?= $row['city_name'] ?></td>
+			<td><?= $row['latitude'] ?> / <?= $row['longitude'] ?></td>
+			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
+		</tr>
+<?php endforeach; ?>
+	</tbody>
+</table>
+
+<form method='post'>
+	<button type='submit' name='logout'>Logout</button>
+</form>
 <?php
 echo "<hr>".nav_line();
 require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
