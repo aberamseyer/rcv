@@ -265,30 +265,19 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	$ips = array_keys($visitors_today);
 	$locations = [];
 	foreach($ips as $ip):
-		if (col("SELECT IS_IPV6('$ip')")) {
-			$ip_conv = "CONV(
-				HEX (
-					INET6_ATON('$ip')
-				), 16, 10
-			)";
-			$row = row("SELECT * FROM (
-		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from
-		    	FROM ip2location.ip2location_db11_ipv6
-		    	WHERE ip_to >= $ip_conv LIMIT 1
-			) AS tmp WHERE ip_from <= $ip_conv");
+		$info = json_decode(`curl https://freegeoip.app/json/$ip`, true);
+		if (!$info['city']) {
+			$info = row("SELECT * FROM (
+		       SELECT country_name, city_name city, latitude, longitude, ip_to, ip_from
+		       FROM ip2location.ip2location_db11_ipv4
+		       WHERE ip_to >= INET_ATON('$ip') LIMIT 1
+	       ) AS tmp WHERE ip_from <= INET_ATON('$ip')");
 		}
-		else {
-			$row = row("SELECT * FROM (
-		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from
-		    	FROM ip2location.ip2location_db11_ipv4
-		    	WHERE ip_to >= INET_ATON('$ip') LIMIT 1
-			) AS tmp WHERE ip_from <= INET_ATON('$ip')");
-		}
-		$locations[ $ip ] = [ $row['longitude'], $row['latitude'] ]; ?>
+		$locations[ $ip ] = [ $info['longitude'], $info['latitude'] ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
-			<td><?= $row['country_name'] ?: '&nbsp;' ?></td>
-			<td><?= $row['city_name'] ?: '&nbsp;' ?></td>
+			<td><?= $info['country_name'] ?: '&nbsp;' ?></td>
+			<td><?= $info['city'] ?: '&nbsp;' ?></td>
 			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
 		</tr>
 <?php endforeach; ?>
