@@ -263,9 +263,41 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'));
 	arsort($visitors_today); // sort by visits descending
 	$ips = array_keys($visitors_today);
+
+	// fetch from freegeoip.app in parallel
+	$curls = [ ];
+	$results = [ ];
+	$mh = curl_multi_init();
+	foreach($ips as $ip) {
+		$curls[ $ip ] = curl_init();
+		curl_setopt($curls[ $ip ], CURLOPT_URL, "https://freegeoip.app/json/$ip");
+		curl_setopt($curls[ $ip ], CURLOPT_HEADER, 0);
+		curl_setopt($curls[ $ip ], CURLOPT_RETURNTRANSFER, 1);
+		curl_multi_add_handle($mh, $curls[ $ip ]);
+	}
+	$active = null;
+	do {
+	   curl_multi_select($mh);
+		$mrc = curl_multi_exec($mh, $active);
+	} while ($mrc == CURLM_CALL_MULTI_PERFORM);
+		// this bit here is mainly for php-related awkwardness and bugs
+	while ($active && $mrc == CURLM_OK) {
+        if (curl_multi_select($mh) != -1) {
+            do {
+                $mrc = curl_multi_exec($mh, $active);
+            } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+        }
+    }
+    	// get results
+    foreach($curls as $ip => $ch) {
+    	$results[ $ip ] = @json_decode(curl_multi_getcontent($ch), true);
+    	curl_multi_remove_handle($mh, $ch);
+    	curl_close($ch);
+    }
+    curl_multi_close($mh);
+
 	$locations = [];
-	foreach($ips as $ip):
-		$info = json_decode(`curl https://freegeoip.app/json/$ip`, true);
+	foreach($results as $ip => $info):
 		if (!$info['city']) {
 			$info = row("SELECT * FROM (
 		       SELECT country_name, city_name city, latitude, longitude, ip_to, ip_from
