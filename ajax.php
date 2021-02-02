@@ -245,7 +245,7 @@ switch($_POST['action']) {
 		]);
 		break;
 
-  // global verse search that pops up when you start typing
+	// global verse search that pops up when you start typing
 	case 'verse':
 		$q = strtolower($_POST['q']);
 		$ref_like = db_esc_like($q)."%";

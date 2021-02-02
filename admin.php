@@ -265,19 +265,24 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	$ips = array_keys($visitors_today);
 	$locations = [];
 	foreach($ips as $ip):
-		$func = "INET_ATON";
 		if (col("SELECT IS_IPV6('$ip')")) {
+			$ip_conv = "CONV(
+				HEX (
+					INET6_ATON('$ip')
+				), 16, 10
+			)";
+			$row = debug("SELECT * FROM (
+		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from
+		    	FROM ip2location.ip2location_db11_ipv6
+		    	WHERE ip_to >= $ip_conv LIMIT 1
+			) AS tmp WHERE ip_from <= $ip_conv");
+		}
+		else {
 			$row = row("SELECT * FROM (
 		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from
-		    	FROM ip2location.ip2location_db11
-		    	WHERE ip_to >= CAST(INET6_ATON('$ip') as CHAR) LIMIT 1
-			) AS tmp WHERE ip_from <= CAST(INET6_ATON('$ip') as CHAR)");
-		}
-		else { // ipv4
-			$row = row("SELECT * FROM (
-		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
+		    	FROM ip2location.ip2location_db11_ipv4
+		    	WHERE ip_to >= INET_ATON('$ip') LIMIT 1
 			) AS tmp WHERE ip_from <= INET_ATON('$ip')");
-
 		}
 		$locations[ $ip ] = [ $row['longitude'], $row['latitude'] ]; ?>
 		<tr>
