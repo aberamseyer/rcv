@@ -271,7 +271,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 					INET6_ATON('$ip')
 				), 16, 10
 			)";
-			$row = debug("SELECT * FROM (
+			$row = row("SELECT * FROM (
 		    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from
 		    	FROM ip2location.ip2location_db11_ipv6
 		    	WHERE ip_to >= $ip_conv LIMIT 1
