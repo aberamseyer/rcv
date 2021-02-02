@@ -254,6 +254,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		<tr>
 			<th>IP</th>
 			<th>Country</th>
+      <th>Region</th>
 			<th>City</th>
 			<th>Visits</th>
 		</tr>
@@ -300,7 +301,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	foreach($results as $ip => $info):
 		if (!$info['city']) {
 			$info = row("SELECT * FROM (
-		       SELECT country_name, city_name city, latitude, longitude, ip_to, ip_from
+		       SELECT country_name, city_name city, region_name, latitude, longitude, ip_to, ip_from
 		       FROM ip2location.ip2location_db11_ipv4
 		       WHERE ip_to >= INET_ATON('$ip') LIMIT 1
 	       ) AS tmp WHERE ip_from <= INET_ATON('$ip')");
@@ -309,6 +310,7 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $info['country_name'] ?: '&nbsp;' ?></td>
+      <td><?= $info['region_name'] ?: '&nbsp;' ?></td>
 			<td><?= $info['city'] ?: '&nbsp;' ?></td>
 			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
 		</tr>
