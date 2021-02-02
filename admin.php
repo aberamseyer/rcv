@@ -255,7 +255,6 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 			<th>IP</th>
 			<th>Country</th>
 			<th>City</th>
-			<th>Lat/Long</th>
 			<th>Visits</th>
 		</tr>
 	</thead>
@@ -267,14 +266,13 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	$locations = [];
 	foreach($ips as $ip):
 		$row = row("SELECT * FROM (
-	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET_ATON('$ip') LIMIT 1
-		) AS tmp WHERE ip_from <= INET_ATON('$ip')");
+	    	SELECT country_name, city_name, latitude, longitude, ip_to, ip_from FROM ip2location.ip2location_db11 WHERE ip_to >= INET6_ATON('$ip') LIMIT 1
+		) AS tmp WHERE ip_from <= INET6_ATON('$ip')");
 		$locations[ $ip ] = [ $row['longitude'], $row['latitude'] ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $row['country_name'] ?: '&nbsp;' ?></td>
 			<td><?= $row['city_name'] ?: '&nbsp;' ?></td>
-			<td><?= $row['latitude'] ?: '&nbsp;' ?> / <?= $row['longitude'] ?: '&nbsp;' ?></td>
 			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
 		</tr>
 <?php endforeach; ?>
