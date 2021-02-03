@@ -1,4 +1,4 @@
-Sitemap: https://rcv.ramseyer.dev/res/sitemap.txt
+Sitemap: https://rcv.ramseyer.dev/res/site/sitemap.txt
 
 User-agent: *
 Disallow: /login
