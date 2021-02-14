@@ -126,7 +126,6 @@
         $i = 1;
         foreach($contents as $id => $element) {
             if ((int)$element['number']) {
-                // debug($element);
                 echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
             }
         }
