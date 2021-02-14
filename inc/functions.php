@@ -274,7 +274,7 @@
 
 		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
 			($element['number'] ? "<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
-			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "")."$content</p>";
+			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "")."<span>$content</span></p>";
 	}
 
 	function format_note($note, $break = true) {
