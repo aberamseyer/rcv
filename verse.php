@@ -63,14 +63,15 @@ function copyToClip(copyText, element) {
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'>&#128203 link to verses</a> <br>
-							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'>&#128203 verse text</a>`;
+							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'>&#128203&nbsp;&nbsp;link to verses</a> <br>
+							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'>&#128203&nbsp;&nbsp;verse text</a>`;
 					}
 				}
 			}
 
 			clearTimeout(requestTimer);
-			requestTimer = setTimeout(() => request.send(formData), 200);
+			const lastInput = verseInput.value.split(';').pop().trim();
+			requestTimer = setTimeout(() => request.send(formData), /\d+[:\-]?$/.test(lastInput) ? 500 : 200);
 		}
 	}
 
