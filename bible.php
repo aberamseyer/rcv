@@ -172,6 +172,19 @@
             });   
         }
     }
+
+    document.querySelectorAll('.verse').forEach(v => {
+         v.addEventListener('click', () => {
+            document.querySelectorAll('.verse').forEach(el => {
+                if (!el.isEqualNode(v))
+                    el.classList.remove('highlight')
+            });
+            v.classList[
+                v.classList.contains('highlight')
+                ? 'remove' : 'add'
+            ]('highlight');
+        });
+    });
 </script>
 <?php
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";

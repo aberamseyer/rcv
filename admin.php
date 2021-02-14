@@ -126,7 +126,7 @@ $total_page_views = array_sum($page_views);
 	<tbody>
 <?php foreach($page_views as $url => $value): ?>
 		<tr>
-			<td><?= preg_replace('/bible\//', '', $url) ?: "&nbsp;" ?></td>
+			<td><?= str_replace('bible-', '', str_replace('/', '-', $url)) ?: "&nbsp;" ?></td>
 			<td><?= number_format($value) ?></td>
 			<td><?= number_format($value / $total_page_views * 100, 2) ?>%</td>
 		</tr>
