@@ -63,8 +63,8 @@ function copyToClip(copyText, element) {
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'>&#128203&nbsp;&nbsp;link to verses</a> <br>
-							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'>&#128203&nbsp;&nbsp;verse text</a>`;
+							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
+							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;verse text</a>`;
 					}
 				}
 			}

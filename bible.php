@@ -121,6 +121,17 @@
         }
     }
     else {
+        // list of verses
+        echo "<h6>Verses</h6><div class='justify'>";
+        $i = 1;
+        foreach($contents as $id => $element) {
+            if ((int)$element['number']) {
+                // debug($element);
+                echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
+            }
+        }
+        echo "</div>
+        <hr />";
 	    echo "<div id='chp-$chapter[id]'>";
         foreach($contents as $element) {
             if ($minimal_layout && $element['tier'])

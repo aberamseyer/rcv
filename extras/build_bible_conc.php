@@ -30,7 +30,7 @@ $verses = select("
 	FROM chapter_contents cc
 	JOIN chapters c ON c.id = cc.chapter_id
 	JOIN books b ON b.id = c.book_id
-	WHERE reference IS NOT NULL
+	WHERE number > 0
 	ORDER BY b.sort_order, cc.id, cc.sort_order");
 echo "done!\n";
 

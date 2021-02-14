@@ -77,7 +77,7 @@ if (!$_POST['action']) {
 		$verse = row("
 			SELECT id, number
 			FROM chapter_contents
-			WHERE chapter_id = $chapter[id] and reference IS NOT NULL
+			WHERE chapter_id = $chapter[id] and number > 0
 			ORDER BY RAND()
 			LIMIT 1");
 		redirect("/bible/".link_book($book['name'])."/$chapter[number]?verse=$verse[number]");

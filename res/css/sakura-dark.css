@@ -13,6 +13,9 @@
   --contrast-bg: #232323;
   /*--tooltip-bg: #545454;*/
 }
+.light .emoji {
+  filter: invert(1) hue-rotate(180deg);
+}
 
 /* $color-text: #dedce5; */
 /* Sakura.css v1.3.0
