@@ -26,7 +26,7 @@ if (!isset($_GET['no_cache']) && !LOCAL) {
 			$redis_client->expire("rcv.ramseyer.dev/cache/".$cachekey, 60 * 60); // cache pages for 1 hour in memory
 		}
 		echo $output;
-		echo "\n<!-- Cached copy $cachefile, generated ".date('Y-m-d H:g:i', filemtime($cachefile))." -->";
+		echo "<!-- Cached copy: ".array_pop(explode("/", $cachefile)).", generated ".date('Y-m-d H:g:i', filemtime($cachefile))." -->";
 		exit;
 	}
 
