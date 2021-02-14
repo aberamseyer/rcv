@@ -251,6 +251,3 @@ br {
 .serif .verse-line, .serif .footnote, .serif .result, .serif #verses {
     font-family: serif;
 }
-.serif .footnote a, .serif .result a, .serif #verses a {
-    font-family: sans-serif;
-}
