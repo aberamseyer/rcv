@@ -30,8 +30,7 @@ switch($_POST['action']) {
         ORDER BY b.sort_order, c.number, cc.sort_order");
     }
 
-		header("Content-type: application/json");
-		echo json_encode($rows);
+	print_json($rows);
     break;
   	// verse lookup page that parses a set of verses
 	case 'request':
@@ -238,8 +237,7 @@ switch($_POST['action']) {
 			}
 		}
 
-		header("Content-type: application/json");
-		echo json_encode([
+		print_json([
 			"q" => $q ?: '',
 			"results" => $final_verses ?: []
 		]);
@@ -271,8 +269,7 @@ switch($_POST['action']) {
 		}
 		unset($result);
 
-		header("Content-type: application/json");
-		echo json_encode([
+		print_json([
 			"q" => $_POST['q'],
 			"count" => $count,
 			"results" => $results
