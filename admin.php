@@ -281,7 +281,8 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 	   curl_multi_select($mh);
 		$mrc = curl_multi_exec($mh, $active);
 	} while ($mrc == CURLM_CALL_MULTI_PERFORM);
-		// this bit here is mainly for php-related awkwardness and bugs
+	
+	// this bit here is mainly for php-related awkwardness and bugs
 	while ($active && $mrc == CURLM_OK) {
         if (curl_multi_select($mh) != -1) {
             do {
@@ -289,7 +290,8 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
         }
     }
-    	// get results
+    
+	// get results
     foreach($curls as $ip => $ch) {
     	$results[ $ip ] = @json_decode(curl_multi_getcontent($ch), true);
     	curl_multi_remove_handle($mh, $ch);
@@ -306,13 +308,15 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		       WHERE ip_to >= INET_ATON('$ip') LIMIT 1
 	       ) AS tmp WHERE ip_from <= INET_ATON('$ip')");
 		}
-		$locations[ $ip ] = [ $info['longitude'], $info['latitude'] ]; ?>
+
+		$hits = number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip));
+		$locations[ $ip ] = [ $info['longitude'], $info['latitude'], $hits ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
 			<td><?= $info['country_name'] ?: '&nbsp;' ?></td>
       <td><?= $info['region_name'] ?: '&nbsp;' ?></td>
 			<td><?= $info['city'] ?: '&nbsp;' ?></td>
-			<td><?= number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip)) ?></td>
+			<td><?= $hits ?></td>
 		</tr>
 <?php endforeach; ?>
 	</tbody>
@@ -330,10 +334,10 @@ new Chart(document.getElementById('<?= $type ?>').getContext('2d'), {
 		zoom: 1
 	});
 	(Object.entries(<?= json_encode($locations) ?> || { }))
-		.forEach(([ ip, [ long, lat ] ]) => {
+		.forEach(([ ip, [ long, lat, hits ] ]) => {
 			if (parseInt(long) && parseInt(lat)) {
 				const label = new mapboxgl.Popup({ closeButton: false })
-			      .setText(ip)
+			      .setText(`${ip} - ${hits} views`)
 			      .addTo(map);
 				new mapboxgl.Marker()
 					.setLngLat([ long, lat ])
