@@ -2,7 +2,7 @@
 	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='noopener' href='https://www.lsm.org'>www.lsm.org</a></div>";
 	const verse_regex = '/(Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.) (\d+):(\d+)/';
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/inc/books.php";
+	require_once __DIR__."/../inc/books.php";
 
 	function valid_bible_page($book, $chapter = null) {
 		global $books; // inc/books.php
@@ -224,6 +224,12 @@
 		die;
 	}
 
+	function perm_redirect($url) {
+		header("HTTP/1.1 301 Moved Permanently");
+		header("Location: $url");
+		die;
+	}
+
 	function format_verse($element) {
 		global $book, $minimal_layout;
 
@@ -338,6 +344,10 @@
 		return "<nav id='nav-".($i++)."' class='justify'>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
 	}
 
-  function link_book($book) {
-    return str_replace(' ', '-', strtolower($book));
-  }
+	function not_found() {
+		redirect("/404?uri=https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+	}
+
+	function link_book($book) {
+		return str_replace(' ', '-', strtolower($book));
+	}

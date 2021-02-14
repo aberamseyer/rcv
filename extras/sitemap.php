@@ -16,7 +16,7 @@ $books = select("
   ORDER BY MAX(b.sort_order)");
 
 $fh = fopen('sitemap.txt', 'w');
-fputs($fh, "https://rcv.ramseyer.dev/concordance\nhttps://rcv.ramseyer.dev/search\nhttps://rcv.ramseyer.dev/help\nhttps://rcv.ramseyer.dev/verse\n");
+fputs($fh, "https://rcv.ramseyer.dev/concordance\nhttps://rcv.ramseyer.dev/search\nhttps://rcv.ramseyer.dev/help\nhttps://rcv.ramseyer.dev/verse\nhttps://rcv.ramseyer.dev/404\n");
 
 foreach($books as $book)
   foreach(range(1, $book['chps']) as $chp)
