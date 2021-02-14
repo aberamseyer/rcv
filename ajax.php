@@ -33,7 +33,7 @@ switch($_POST['action']) {
 		header("Content-type: application/json");
 		echo json_encode($rows);
     break;
-  // verse lookup page that parses a set of verses
+  	// verse lookup page that parses a set of verses
 	case 'request':
 		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
 			$single_books = ["Obad.","3 John","Jude","Philem.","2 John"];
@@ -222,7 +222,7 @@ switch($_POST['action']) {
 			// go get 'em
 			$raw_verses = !count($parsed_verses) ? [ ] : array_column(
 				select("
-					SELECT CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href, cc.reference, cc.content text
+					SELECT CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href, cc.reference, REPLACE(cc.content, '\n', ' / ') text
 					FROM chapter_contents cc
 					JOIN chapters c ON c.id = cc.chapter_id
 					JOIN books b ON b.id = c.book_id
