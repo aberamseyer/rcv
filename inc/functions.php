@@ -1,5 +1,5 @@
 <?php
-	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='noopener' href='https://www.lsm.org'>www.lsm.org</a></div>";
+	const copyright = "<div class='copy'>All content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='nofollow' href='https://www.lsm.org'>www.lsm.org</a></div>";
 	const verse_regex = '/(Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.) (\d+):(\d+)/';
 
 	require_once __DIR__."/../inc/books.php";
@@ -313,10 +313,10 @@
 				if ($chapter) {
 					// viewing chapter, nav arrows change chapter
 					if ($book['chapters'] > $chapter['number']) {
-						$next = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']+1)."'>&raquo;</a>";
+						$next = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']+1)."' rel='next'>&raquo;</a>";
 					}
 					if ($chapter['number'] > 1) {
-						$prev = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']-1)."'>&laquo;</a>";
+						$prev = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']-1)."' rel='prev'>&laquo;</a>";
 					}
 				}
 				else {

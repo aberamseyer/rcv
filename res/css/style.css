@@ -199,6 +199,9 @@ br {
 #menu.show ul {
     display: block;
 }
+#menu a {
+    padding-right: 7px;
+}
 
 /* global search */
 .verse-result {

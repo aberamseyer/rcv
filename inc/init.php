@@ -24,6 +24,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 session_start();
 if (!$_POST['action']) {
+	// theme
 	$light_theme = $_SESSION['theme'] == 'light';
 	if ($_GET['set_theme'] == 'light') {
 		$_SESSION['theme'] = 'light';
@@ -34,6 +35,7 @@ if (!$_POST['action']) {
 		$light_theme = false;
 	}
 
+	// show/hide notes
 	$minimal_layout = $_SESSION['minimal'] == 'true';
 	if ($_GET['set_minimal'] == 'true') {
 		$_SESSION['minimal'] = true;
@@ -44,6 +46,7 @@ if (!$_POST['action']) {
 		$minimal_layout = false;
 	}
 
+	// serif/sans font
 	$serif_text = $_SESSION['serif'] == 'true';
 	if ($_GET['set_serif'] == 'true') {
 		$_SESSION['serif'] = true;
@@ -56,7 +59,28 @@ if (!$_POST['action']) {
 	if (isset($_GET['set_serif']) || isset($_GET['set_minimal']) || isset($_GET['set_theme'])) {
 		// redirect to same page
 		redirect(strtok($_SERVER['REQUEST_URI'], '?'));
-		exit;
+	}
+
+	// random page
+	if (isset($_GET['random'])) {
+		$book = row("
+			SELECT id, name
+			FROM books
+			ORDER BY RAND()
+			LIMIT 1");
+		$chapter = row("
+			SELECT id, number
+			FROM chapters
+			WHERE book_id = $book[id]
+			ORDER BY RAND()
+			LIMIT 1");
+		$verse = row("
+			SELECT id, number
+			FROM chapter_contents
+			WHERE chapter_id = $chapter[id] and reference IS NOT NULL
+			ORDER BY RAND()
+			LIMIT 1");
+		redirect("/bible/".link_book($book['name'])."/$chapter[number]?verse=$verse[number]");
 	}
 
 	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);
