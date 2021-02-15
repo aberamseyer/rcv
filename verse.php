@@ -22,7 +22,7 @@ $permalink = $_GET['verses'];
 
 <div style="margin-top: 12px;" id='verses'></div>
 <noscript>This page only works with JavaScript enabled. You can search manually using the <a href='/search'>Search</a> page.</noscript>
-<script type='text/javascript'>
+<script>
 const verseContainer = document.getElementById('verses');
 function copyToClip(copyText, element) {
 	const html = element.innerHTML;

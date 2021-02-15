@@ -50,7 +50,7 @@
     transition: all 0.2s;
     display: flex;
 }
-.verse > span + span {
+.verse > span:nth-child(2) {
     flex-grow: 1;
 }
 

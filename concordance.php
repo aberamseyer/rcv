@@ -81,7 +81,7 @@ if ($letter) {
 }
 
 ?>
-<script type='text/javascript'>
+<script>
 function getRefs(id, details) {
   const container = details.querySelector('small');
   if (details.open && container.innerHTML === '') {

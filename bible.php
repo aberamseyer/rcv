@@ -168,7 +168,7 @@
         echo "<div style='height: 90vh;'></div>";
     }
 ?>
-<script type="text/javascript">
+<script>
     if (!window.location.hash) {
         const matches = window.location.search.match(/verse=(\d+)/);
         if (matches) {
