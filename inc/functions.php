@@ -277,7 +277,7 @@
 			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
 		$parts[] = "<span>$content</span>";
 		if ($element['number'])
-			$parts[] = "<a class='play' onclick='startReading($element[id])'>&#8227;</a>";
+			$parts[] = "<span><a class='play' onclick='startReading($element[id])'>&#8227;</a></span>";
 		$parts[] = "</p>";
 
 		return implode('', $parts);

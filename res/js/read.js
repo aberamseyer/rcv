@@ -1,6 +1,6 @@
 let menu, audio1, audio2, reading = false, thingsToSpeak,
 menuEL = document.createElement('li');
-menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a>`;
+menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a><div class='emoji'>🛑</div>`;
 
 window.addEventListener('load', function() {
   document.querySelector('body').classList.add('has-js');
