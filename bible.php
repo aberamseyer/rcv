@@ -195,6 +195,10 @@
             ]('highlight');
         });
     });
+    document.querySelectorAll('.tooltip').forEach(v => {
+         v.addEventListener('click', e =>
+            e.stopPropagation());
+    });
 </script>
 <?php
     echo "<script type='text/javascript'>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";

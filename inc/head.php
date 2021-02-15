@@ -27,7 +27,7 @@
         echo '<ul>';
             echo '<li><a rel="nofllow" href="?'. http_build_query($_GET) .'&set_theme='.($light_theme ? 'dark' : 'light').'">Switch to '.($light_theme ? 'dark' : 'light').' theme</a><div class="emoji">🌗</div></li>';
             echo '<li><a rel="nofllow" href="?'. http_build_query($_GET) .'&set_minimal='.($minimal_layout ? 'false' : 'true').'">'.($minimal_layout ? 'Show' : 'Hide').' notes</a><div class="emoji">📝</div></li>';
-            echo '<li><a rel="nofllow" href="?'. http_build_query($_GET) .'&set_serif='.($serif_text ? 'false' : 'true').'">Use '.($serif_text ? 'sans-' : '').'serif font</a><div class="emoji">🆎</div></li>';
+            echo '<li><a rel="nofllow" href="?'. http_build_query($_GET) .'&set_sans='.($serif_text ? 'true' : 'false').'">Use '.($serif_text ? 'sans-' : '').'serif font</a><div class="emoji">🆎</div></li>';
             echo '<li><a rel="nofllow" href="?random">Random Verse </a><div class="emoji">🎲</div></li>';
 	    echo '<li><a href="/help">Help</a><div class="emoji">🙋‍♂️</div></li>';
         echo '</ul>';

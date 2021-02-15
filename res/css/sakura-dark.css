@@ -37,7 +37,7 @@ body {
   background-color: var(--main-bg);
   padding: 0 1rem 3rem 1rem; }
 
-@media (max-width: 684px) {
+/*@media (max-width: 684px) {
   html {
     font-size: 0.8em; }
   body {
@@ -45,7 +45,7 @@ body {
 
 @media (max-width: 382px) {
   body {
-    font-size: 1.35rem; } }
+    font-size: 1.35rem; } }*/
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.1;

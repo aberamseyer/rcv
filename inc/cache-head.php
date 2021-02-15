@@ -1,4 +1,5 @@
 <?php
+
 $url = strtok(
 	substr(
 		strtolower($_SERVER['REQUEST_URI']), 1

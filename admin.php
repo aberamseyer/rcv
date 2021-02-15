@@ -422,7 +422,7 @@ function updateUniqueVisitors() {
 <script>
 	setTimeout(updateViews, 200);
 	setTimeout(updateIndividualViews, 400);
-	setTimeout(updateTotalViews, 6200);
+	setTimeout(updateTotalViews, 600);
 	setTimeout(updateUniqueVisitors, 800);
 	setTimeout(updateMap, 1200);
 	setInterval(updateViews, 1000 * 60 * 5);

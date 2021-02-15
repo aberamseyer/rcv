@@ -47,16 +47,16 @@ if (!$_POST['action']) {
 	}
 
 	// serif/sans font
-	$serif_text = $_SESSION['serif'] == 'true';
-	if ($_GET['set_serif'] == 'true') {
-		$_SESSION['serif'] = true;
-		$serif_text = true;
-	}
-	if ($_GET['set_serif'] == 'false') {
-		unset($_SESSION['serif']);
+	$serif_text = $_SESSION['sans'] != 'true';
+	if ($_GET['set_sans'] == 'true') {
+		$_SESSION['sans'] = true;
 		$serif_text = false;
 	}
-	if (isset($_GET['set_serif']) || isset($_GET['set_minimal']) || isset($_GET['set_theme'])) {
+	if ($_GET['set_sans'] == 'false') {
+		unset($_SESSION['sans']);
+		$serif_text = true;
+	}
+	if (isset($_GET['set_sans']) || isset($_GET['set_minimal']) || isset($_GET['set_theme'])) {
 		// redirect to same page
 		redirect(strtok($_SERVER['REQUEST_URI'], '?'));
 	}

@@ -50,6 +50,10 @@
     transition: all 0.2s;
     display: flex;
 }
+.verse > span + span {
+    flex-grow: 1;
+}
+
 [tabindex="-1"]:focus {
     outline: none;
 }
@@ -64,19 +68,15 @@
 }
 .play {
     user-select: none;
-    display: none;
-    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
     font-size: 4rem;
     cursor: pointer;
-    transform: translate(100%);
     line-height: 1;
-    right: 0;
 }
-.has-js .verse:focus .play {
-    display: inline-block;
-}
-.has-js .verse:hover .play {
-    display: inline-block;
+.has-js .verse:focus .play, .has-js .verse:hover .play {
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .verse-line {
@@ -137,7 +137,7 @@ br {
     position: absolute;
     z-index: 1;
     box-sizing: border-box;
-    box-shadow: 0 1px 8px rgba(174, 174, 174, 0.2);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
     display: none;
 }
 
@@ -241,6 +241,7 @@ br {
 
 #search-input-overlay > div {
     min-width: 300px;
+    padding: 0 1rem;
 }
 
 .no-select {

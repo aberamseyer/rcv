@@ -272,9 +272,15 @@
 		unset($el);
 		$content = implode('', $content);
 
-		return "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>".
-			($element['number'] ? "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>
-			    <a class='play' onclick='startReading($element[id])'>&#8227;</a>" : "")."<span>$content</span></p>";
+		$parts = [ "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>" ];
+		if ($element['number'])
+			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
+		$parts[] = "<span>$content</span>";
+		if ($element['number'])
+			$parts[] = "<a class='play' onclick='startReading($element[id])'>&#8227;</a>";
+		$parts[] = "</p>";
+
+		return implode('', $parts);
 	}
 
 	function format_note($note, $break = true) {
