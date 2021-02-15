@@ -234,7 +234,7 @@
 		global $book, $minimal_layout;
 
 		$content = $element['content'];
-		$arr = str_split($content);
+		$arr = str_split(str_replace("\r\n", "\n", $content));
 		$heading_class = 'verse';
 		if ($element['number'] == 0) {
 			if ($element['tier']) {
