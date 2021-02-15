@@ -1,12 +1,13 @@
 <?php
 /**
- * This file validates urls. If they're not valid, redirect back to /bible
+ * This file validates urls. If they're not valid, redirects to 404 page
  */
 
-// to keep things sane in redis, make all our urls lowercase
+// to keep permalinks normal, make all our urls lowercase and with '-'
+// this is for you, Google
 $uri = strtok($_SERVER['REQUEST_URI'], '?');
-if ($uri !== strtolower($uri)) {
-	perm_redirect(strtolower($uri));
+if ($uri !== strtolower($uri) || $uri !== str_replace('_', '-', $uri)) {
+	perm_redirect(str_replace('_', '-', strtolower($uri)));
 }
 
 $parts = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));

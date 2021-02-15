@@ -35,7 +35,7 @@ body {
   margin: auto;
   color: var(--main-text);
   background-color: var(--main-bg);
-  padding: 0 3rem 3rem 3rem; }
+  padding: 0 1rem 3rem 1rem; }
 
 @media (max-width: 684px) {
   html {
