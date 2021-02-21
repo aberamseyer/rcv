@@ -41,7 +41,7 @@ if ($q) {
 		JOIN chapters c ON c.id = cc.chapter_id
 		JOIN books b ON b.id = c.book_id
 		WHERE LOWER(content) LIKE $q_like
-		    AND number > 0
+		    AND cc.number > 0
 			AND ".($book ? "b.id = '$book[id]'" : 1)."
 			AND ".($only_old ? "b.testament = '0'" : 1)."
 			AND ".($only_new ? "b.testament = '1'" : 1)."
