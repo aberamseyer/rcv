@@ -91,16 +91,20 @@
         echo "</div>";
     }
     else if (!$chapter) {
-        // show chapter names to select
+        // book details
         echo "<p><small>";
-        foreach(explode("\n", str_replace("\n\n", "\n", $book['details'])) as $detail_line) {
+        $details = explode("\n", $book['details']);
+        foreach($details as $detail_line) {
             $parts = explode(": ", $detail_line);
-            echo count($parts) === 2
-                ? "<b>".html($parts[0]).": </b>".html($parts[1])."<br/>"
-                : "<b>".html($detail_line)."</b><br/>";
+            if (count($parts) === 2)
+                echo "<b>".html($parts[0]).": </b>".html($parts[1]);
+            else
+                echo html($detail_line);
+            echo "<br />";
         }
-        echo "</small></p>";
+        echo "</p></small>";
 
+        // show chapter names to select
         echo "<h6>Chapters</h6>";
         echo "<div class='justify'>";
         foreach($chapters as $chapter_option) {
@@ -108,6 +112,8 @@
         }
         echo "</div><hr />";
         echo nav_line(true);
+
+        // book outline
         echo "<h6>Outline</h6>";
         $outline = select("
     	  SELECT cc.*, c.number chapter
@@ -121,23 +127,24 @@
         }
     }
     else {
-        // list of verses
-        echo "<h6>Verses</h6><div class='justify'>";
+        // list of verses links
+        echo "<h6>Verses</h6><div class='justify' style='margin-bottom: 0.75rem;'>";
         $i = 1;
         foreach($contents as $id => $element) {
             if ((int)$element['number']) {
                 echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
             }
         }
-        echo "</div>
-        <hr />";
+        echo "</div>".nav_line(true)."<hr />";
 	    echo "<div id='chp-$chapter[id]'>";
+        // the actual content
         foreach($contents as $element) {
             if ($minimal_layout && $element['tier'])
                 continue;
             echo format_verse($element);
         }
 	   echo "</div>";
+       // the footnotes
         if ($footnotes && !$minimal_layout) {
             echo nav_line();
             echo "<hr/>";

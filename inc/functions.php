@@ -295,7 +295,6 @@
 
 	function nav_line($no_top = false) {
 		global $book, $chapter, $search, $concordance;
-		static $i;
 		$next = $prev = '';
 
 		$parts = [
@@ -347,7 +346,7 @@
 				}
 			}
 		}
-		return "<nav id='nav-".($i++)."' class='justify'>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
+		return "<nav class='justify'>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
 	}
 
 	function not_found() {
