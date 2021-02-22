@@ -51,7 +51,7 @@ function copyToClip(copyText, element) {
 
 			request.onloadend = () => {
 				if (request.status === 200) {
-					const { results, q } = JSON.parse(request.response);
+					const { results, q, requested } = JSON.parse(request.response);
 					verseContainer.innerHTML = results
 						.map(res => 
 							`<div>
@@ -59,7 +59,7 @@ function copyToClip(copyText, element) {
 								${res.text}
 							</div>`)
 						.join('');
-					recognizedVerses.innerText = results.map(res => res.reference).join('; ');
+					recognizedVerses.innerText = requested;
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>

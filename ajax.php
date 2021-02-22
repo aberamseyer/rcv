@@ -2,36 +2,60 @@
 $no_stats = true;
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
+function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "") {
+	global $requested_elements, $whole_chapter, $is_single_book;
+	static $prev_book;
+
+	$separator = "; ";
+	if ($book == $prev_book || !$book)
+		$book = "";
+	if ($prev_chapter == $chapter) {
+		$chapter = "";
+		$separator = ", ";
+	}
+	if ($is_single_book)
+		$chapter = "";
+	if ($verses && !$is_single_book && $chapter && !$whole_chapter)
+		$chapter .= ":";
+	if ($whole_chapter)
+		$verses = "";
+
+	$requested_elements .= ($requested_elements ? $separator : "").ltrim("$book ")."$chapter$verses";
+
+	$prev_book = $book ?: $prev_book;
+}
+
+
 switch($_POST['action']) {
   // concordance to request list of verses that contain a word
-  case 'conc':
-    $id = (int) $_POST['id']; // id we're looking up
-    $type = $_POST['type'] === 'foot' ? 'foot' : 'bible'; // bible concordance or footnote concordance
+	case 'conc':
+	    $id = (int) $_POST['id']; // id we're looking up
+	    $type = $_POST['type'] === 'foot' ? 'foot' : 'bible'; // bible concordance or footnote concordance
 
-    if ($type === 'bible') {
-      $rows = select("
-        SELECT cc.reference, 0 number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
-        FROM bible_concordance_to_chapter_contents c2cc
-        JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
-        JOIN chapters c ON cc.chapter_id = c.id
-        JOIN books b ON b.id = c.book_id
-        WHERE c2cc.concordance_id = $id
-        ORDER BY b.sort_order, c.number, cc.sort_order");
-    }
-    else { // $type === 'foot'
-      $rows = select("
-        SELECT cc.reference, f.number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#fn-', f.id) href
-        FROM footnote_concordance_to_footnotes fc2f
-        JOIN footnotes f ON f.id = fc2f.footnotes_id
-        JOIN chapter_contents cc ON cc.id = f.verse_id
-        JOIN chapters c ON cc.chapter_id = c.id
-        JOIN books b ON b.id = c.book_id
-        WHERE fc2f.footnote_concordance_id = $id
-        ORDER BY b.sort_order, c.number, cc.sort_order");
-    }
+	    if ($type === 'bible') {
+	      $rows = select("
+	        SELECT cc.reference, 0 number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
+	        FROM bible_concordance_to_chapter_contents c2cc
+	        JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
+	        JOIN chapters c ON cc.chapter_id = c.id
+	        JOIN books b ON b.id = c.book_id
+	        WHERE c2cc.concordance_id = $id
+	        ORDER BY b.sort_order, c.number, cc.sort_order");
+	    }
+	    else { // $type === 'foot'
+	      $rows = select("
+	        SELECT cc.reference, f.number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#fn-', f.id) href
+	        FROM footnote_concordance_to_footnotes fc2f
+	        JOIN footnotes f ON f.id = fc2f.footnotes_id
+	        JOIN chapter_contents cc ON cc.id = f.verse_id
+	        JOIN chapters c ON cc.chapter_id = c.id
+	        JOIN books b ON b.id = c.book_id
+	        WHERE fc2f.footnote_concordance_id = $id
+	        ORDER BY b.sort_order, c.number, cc.sort_order");
+	    }
 
-	print_json($rows);
-    break;
+		print_json($rows);
+	    break;
   	// verse lookup page that parses a set of verses
 	case 'request':
 		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
@@ -108,7 +132,7 @@ switch($_POST['action']) {
 			$books_by_name = array_column($books, 'abbreviation', 'name');
 			$books_by_abbr = array_column($books, 'abbreviation', 'abbreviation');
 
-			$parsed_verses = [ ]; $ordered_verses = [ ];
+			$parsed_verses = [ ]; $ordered_verses = [ ]; $requested_elements = "";
 
 			// split into separate books/verses
 			$prev_book = null;
@@ -150,6 +174,7 @@ switch($_POST['action']) {
 				// split into separate ranges of verses within a chapter
 				foreach($sections as $section) {
 				    $section = trim($section);
+				    $whole_chapter = false;
 
 				    list( $chapter, $verse ) = explode(':', $section);
 				    if ($chapter && $verse) {
@@ -175,8 +200,10 @@ switch($_POST['action']) {
 				        				FROM chapters c
 				        				JOIN books b ON b.id = c.book_id
 				        				WHERE number = ".intval($chapter)." AND b.abbreviation = '$book'")
-				        		)
+				        		) {
+				        			$whole_chapter = true;
 				        			$verse = '1-'.$verses_in_chapter;
+				        		}
 				        	}
 				    	}
 				    }
@@ -200,6 +227,8 @@ switch($_POST['action']) {
 				    	if ($low >= $high || $high - $low > 176)
 				    		continue;
 
+						adjust_requested_elements($book, $chapter, $prev_chapter, "$low-$high");
+
 				    	while ($low <= $high) {
 				    		$v = db_esc("$book ".($is_single_book ? '' : $chapter.":").$low++);
 				    		$parsed_verses[] = "'$v'";
@@ -210,8 +239,9 @@ switch($_POST['action']) {
 				    	$v = db_esc("$book ".($is_single_book ? '' : (int)$chapter.":").(int)$verse);
 				    	$parsed_verses[] = "'$v'";
 				    	$ordered_verses[] = $v;
+				    	adjust_requested_elements($book, $chapter, $prev_chapter, $verse);
 				    }
-				    		
+				    
 				    $prev_chapter = $chapter;
 				}
 
@@ -239,6 +269,7 @@ switch($_POST['action']) {
 
 		print_json([
 			"q" => $q ?: '',
+			"requested" => $requested_elements,
 			"results" => $final_verses ?: []
 		]);
 		break;
