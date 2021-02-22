@@ -179,6 +179,11 @@ br {
     background: var(--contrast-bg);
     padding: 0.5rem;
     z-index: 1;
+    transition: 0.3s opacity;
+}
+#menu.hide:not(.show) {
+    opacity: 0;
+    pointer-events: none;
 }
 #menu span {
     font-size: 1.5rem;
@@ -256,6 +261,6 @@ br {
     font-family: serif;
 }
 
-.serif #verses div a {
+.serif #verses div a, .serif .result a {
     font-family: sans-serif;
 }
