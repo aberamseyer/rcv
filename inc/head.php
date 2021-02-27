@@ -19,6 +19,16 @@
   <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml"> 
   <link rel="stylesheet" href="/res/css/sakura-dark.css" type="text/css">
   <link rel="stylesheet" href="/res/css/style.css" type="text/css">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6CVJDRB1F"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-Z6CVJDRB1F');
+  </script>
 </head>
 <body id="top" class="<?= $serif_text ? 'serif' : '' ?>">
 <?php
