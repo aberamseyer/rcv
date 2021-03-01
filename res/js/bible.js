@@ -2,30 +2,29 @@ let menu, audio1, audio2, reading = false, thingsToSpeak,
 menuEL = document.createElement('li');
 menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a><div class='emoji'>🛑</div>`;
 
-window.addEventListener('load', function() {
-  document.querySelector('body').classList.add('has-js');
+// audio reading and functions
+window.addEventListener('load', () => {
   menu = document.getElementById('menu');
   audio1 = document.createElement('audio');
   audio2 = document.createElement('audio');
   document.body.appendChild(audio1);
   document.body.appendChild(audio2);
 });
-
 function playAudio(src, nextSrc) {
-  return new Promise(function(resolve) {
+  return new Promise(resolve => {
     reading = true;
     audio1.src = src;
     audio2.src = nextSrc;
 
-    const unload = function() {
+    const unload = () => {
       audio1.pause();
-      [audio1, audio2].forEach(function(el) {
+      [audio1, audio2].forEach(el => {
         el.src = '';
         el.load();
       });
     };
 
-    const preloadNextVerse = function() {
+    const preloadNextVerse = () => {
       audio2.src = nextSrc;
       audio2.load();
     };
@@ -41,10 +40,10 @@ function playAudio(src, nextSrc) {
       }
       audio1.src = src;
       audio1.load();
-      audio1.play().then(function() {
+      audio1.play().then(() => {
         reading = true;
         preloadNextVerse();
-        audio1.addEventListener("ended", function() {
+        audio1.addEventListener("ended", () => {
           reading = false;
           resolve();
         }, { capture: false, once: true });
@@ -56,7 +55,6 @@ function playAudio(src, nextSrc) {
     }
   });
 }
-
 function startReading(id) {
   stopReading();
   const verseEl = document.getElementById(`verse-${id}`);
@@ -70,11 +68,11 @@ function startReading(id) {
       }&book=${
       window.book.replace(/(\d) /, '$1')
     }&chapter_num=${window.chapter}`)
-    .then(function(response) {
+    .then(response => {
       return response.json();
     })
-    .then(function(obj) {
-      thingsToSpeak = obj.data.versesArr.slice(verseNum - 1).map(function(verse, i) {
+    .then(obj => {
+      thingsToSpeak = obj.data.versesArr.slice(verseNum - 1).map((verse, i) => {
         return {
           id: verse.id,
           number: verseNum + i,
@@ -87,14 +85,14 @@ function startReading(id) {
       menu.classList.add('show');
 
       for (let i = 0, p = Promise.resolve(); i < thingsToSpeak.length; i++) {
-        p = p.then(function() {
-          return new Promise(function(resolve) {
+        p = p.then(() => {
+          return new Promise(resolve => {
             const el = document.querySelectorAll('.verse')[ thingsToSpeak[i].number - 1 ];
             el.classList.add('highlight');
             el.scrollIntoView({ behavior: "smooth", block: "center" });
             playAudio(thingsToSpeak[i].src,
                 thingsToSpeak.length[i+1] ? thingsToSpeak[i+1].src : ''
-            ).then(function() {
+            ).then(() => {
               el.classList.remove('highlight');
               resolve();
               if (i === thingsToSpeak.length - 1) {
@@ -108,13 +106,45 @@ function startReading(id) {
     });
   }
 }
-
 function stopReading() {
   thingsToSpeak = [ ];
-  document.querySelectorAll('.verse').forEach(function(x) {
+  document.querySelectorAll('.verse').forEach(x => {
     x.classList.remove('highlight');
   });
   this.playAudio('');
   menuEL.remove();
   menu.classList.remove('show');
 }
+
+// scroll to verse
+if (!window.location.hash) {
+    const matches = window.location.search.match(/verse=(\d+)/);
+    if (matches) {
+        window.addEventListener('load', () => {
+          setTimeout(()  => {
+            const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
+            el.classList.add('highlight');
+            el.scrollIntoView();
+            setTimeout(() => el.classList.remove('highlight'), 1000);
+          }, 250);
+        });   
+    }
+}
+
+// click verse highlight on click
+document.querySelectorAll('.verse').forEach(v => {
+     v.addEventListener('click', () => {
+        document.querySelectorAll('.verse').forEach(el => {
+            if (!el.isEqualNode(v))
+                el.classList.remove('highlight')
+        });
+        v.classList[
+            v.classList.contains('highlight')
+            ? 'remove' : 'add'
+        ]('highlight');
+    });
+});
+document.querySelectorAll('.tooltip').forEach(v => {
+     v.addEventListener('click', e =>
+        e.stopPropagation());
+});

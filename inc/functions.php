@@ -231,7 +231,7 @@
 	}
 
 	function format_verse($element) {
-		global $book, $minimal_layout;
+		global $book;
 
 		$content = $element['content'];
 		$arr = str_split(str_replace("\r\n", "\n", $content));
@@ -245,7 +245,7 @@
 			}
 		}
 
-		if (!$minimal_layout && $element['notes']) {
+		if ($element['notes']) {
 			foreach($element['notes']['cr'] as $i => $note) {
 				$pos = $note['position'];
 				foreach(explode(',', $note['position']) as $pos) {
@@ -266,7 +266,7 @@
 		foreach($content as &$el) {
 			$style = "";
 			if ($element['tier'])
-				$style = "style='padding-left: ".max(0, $element['tier'])."rem;'";
+				$style = "data-note style='padding-left: ".max(0, $element['tier'])."rem;'";
 			$el = "<span class='verse-line' $style>".$el."</span>";
 		}
 		unset($el);
@@ -293,7 +293,7 @@
 		return $break ? nl2br($content) : $content;
 	}
 
-	function nav_line($no_top = false) {
+	function nav_line($no_top = false, $attr = "") {
 		global $book, $chapter, $search, $concordance;
 		$next = $prev = '';
 
@@ -346,7 +346,7 @@
 				}
 			}
 		}
-		return "<nav class='justify'>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
+		return "<nav class='justify' $attr>$prev <div>".implode(" | ", $parts)."</div> $next</nav>";
 	}
 
 	function not_found() {

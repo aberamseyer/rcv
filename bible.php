@@ -123,7 +123,7 @@
     	  ORDER BY outline_order");
         foreach($outline as $outline_point) {
 	       if (strpos($outline_point['content'], "cont'd") === false)
-                echo "<a href='/bible/".link_book($book['name'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
+                echo "<a data-show href='/bible/".link_book($book['name'])."/$outline_point[chapter]#verse-$outline_point[id]'>".format_verse($outline_point)."</a>";
         }
     }
     else {
@@ -139,24 +139,20 @@
 	    echo "<div id='chp-$chapter[id]'>";
         // the actual content
         foreach($contents as $element) {
-            if ($minimal_layout && $element['tier'])
-                continue;
             echo format_verse($element);
         }
 	   echo "</div>";
        // the footnotes
-        if ($footnotes && !$minimal_layout) {
-            echo nav_line();
-            echo "<hr/>";
+        if ($footnotes) {
+            echo nav_line(null, "data-note");
+            echo "<hr data-note />";
         }
-        if (!$minimal_layout) {
-            foreach($contents as $content) {
-                foreach($content['notes']['fn'] as $i => $note) {
-                    echo "<small id='fn-$note[id]' class='footnote'>";
-                    echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup></a>&nbsp;";
-                    echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'>↩</a>";
-                    echo "</small>";
-                }
+        foreach($contents as $content) {
+            foreach($content['notes']['fn'] as $i => $note) {
+                echo "<small id='fn-$note[id]' class='footnote'>";
+                echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup></a>&nbsp;";
+                echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'>↩</a>";
+                echo "</small>";
             }
         }
     }
@@ -172,42 +168,8 @@
     }
     // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
     echo "<div style='height: 90vh;'></div>";
-?>
-<script>
-    if (!window.location.hash) {
-        const matches = window.location.search.match(/verse=(\d+)/);
-        if (matches) {
-            window.addEventListener('load', function() {
-              setTimeout(()  => {
-                const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
-                el.classList.add('highlight');
-                el.scrollIntoView({ block: "center" });
-                setTimeout(() => el.classList.remove('highlight'), 1000);
-              }, 250);
-            });   
-        }
-    }
-
-    document.querySelectorAll('.verse').forEach(v => {
-         v.addEventListener('click', () => {
-            document.querySelectorAll('.verse').forEach(el => {
-                if (!el.isEqualNode(v))
-                    el.classList.remove('highlight')
-            });
-            v.classList[
-                v.classList.contains('highlight')
-                ? 'remove' : 'add'
-            ]('highlight');
-        });
-    });
-    document.querySelectorAll('.tooltip').forEach(v => {
-         v.addEventListener('click', e =>
-            e.stopPropagation());
-    });
-</script>
-<?php
     echo "<script>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
-    echo '<script src="/res/js/read.js"></script>';
+    echo '<script src="/res/js/bible.js"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
     require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
 ?>
