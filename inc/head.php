@@ -85,6 +85,5 @@
           <span data-toggle='help'>Help</span>
           <?= $emoji[4] ?>
         </li>
-        <li>
       </ul>
   </div>

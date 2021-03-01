@@ -10,7 +10,7 @@
         <!--
 	    This is solely a personal project.
             If you have questions, concerns, or find a mistake, please email me: abe(at)ramseyer(dot)dev.
-            Page load in <?= number_format(microtime(true) - $time, 4) ?> seconds
+            Page load in <?= number_format(microtime(true) - $time, 4) ?> sec
         -->
     </body>
 </html>
