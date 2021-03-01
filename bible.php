@@ -22,7 +22,7 @@
             'id'
         );
         $verse_ids = array_column($contents, 'id');
-        $notes = select("SELECT * FROM footnotes WHERE verse_id IN(".implode(',', $verse_ids).") ORDER BY number");
+        $notes = select("SELECT * FROM footnotes WHERE verse_id IN(".implode(',', $verse_ids).") ORDER BY CAST(number AS UNSIGNED)");
 
         $footnotes = $cross_refs = [];
         foreach($contents as &$content) {
@@ -170,10 +170,8 @@
     else {
         echo "<div class='copy'><a href='/login'>You</a> can email me any questions, comments, or concerns <a href='mailto:%61%62%65%40%72%61%6d%73%65%79%65%72%2e%64%65%76'>here</a>.</div>";
     }
-    if ($footnotes) {
-        // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
-        echo "<div style='height: 90vh;'></div>";
-    }
+    // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
+    echo "<div style='height: 90vh;'></div>";
 ?>
 <script>
     if (!window.location.hash) {

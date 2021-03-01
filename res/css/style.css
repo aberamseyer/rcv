@@ -65,6 +65,8 @@
     user-select: none;
     font-weight: bold;
     display: inline;
+    position: relative;
+    top: 1px;
 }
 .play {
     user-select: none;
@@ -72,7 +74,9 @@
     pointer-events: none;
     font-size: 4rem;
     cursor: pointer;
-    line-height: 1;
+    line-height: 1rem;
+    position: relative;
+    top: 0.25rem;
 }
 .has-js .verse:focus .play, .has-js .verse:hover .play {
     visibility: visible;

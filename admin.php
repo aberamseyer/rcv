@@ -116,25 +116,40 @@ if (isset($_GET['unique_visitors'])) {
 
 if (isset($_GET['map'])) {
 	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'));
-	arsort($visitors_today); // sort by visits descending
+	asort($visitors_today); // sort by visits ascending
 	$ips = array_keys($visitors_today);
 
 	// fetch from freegeoip.app in parallel
 	$curls = [ ];
 	$results = [ ];
 	$mh = curl_multi_init();
-	foreach($ips as $ip) {
-		$curls[ $ip ] = curl_init();
-		curl_setopt($curls[ $ip ], CURLOPT_URL, "https://freegeoip.app/json/$ip");
-		curl_setopt($curls[ $ip ], CURLOPT_HEADER, 0);
-		curl_setopt($curls[ $ip ], CURLOPT_RETURNTRANSFER, 1);
-		curl_multi_add_handle($mh, $curls[ $ip ]);
+	$batches = [ ];
+	for($i = 0; $i < 15 && $ips; $i++) { // rate limit is 15 req/min
+		$batch = [ ]; // holds ips we'll be requesting
+		for($j < 0; $j < 100 && $ips; $j++) { // put 100 ips in the batch
+			$batch[] = array_pop($ips); // adds ips in order of visits descending
+		}
+		$batches[]= $batch;
+	}
+
+	// https://ip-api.com/docs/api:batch
+	foreach($batches as $i => $batch) {
+		$curls[ $i ] = curl_init();
+
+		curl_setopt($curls[ $i ], CURLOPT_URL, "http://ip-api.com/batch?fields=country,regionName,city,lat,lon,query");
+		curl_setopt($curls[ $i ], CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($curls[ $i ], CURLOPT_HEADER, 0);
+		curl_setopt($curls[ $i ], CURLOPT_POSTFIELDS, json_encode($batch));
+		curl_setopt($curls[ $i ], CURLOPT_HTTPHEADER, [ "Content-type: application/json" ] );
+		curl_setopt($curls[ $i ], CURLOPT_RETURNTRANSFER, 1);
+		curl_multi_add_handle($mh, $curls[ $i ]);
 	}
 	$active = null;
 	do {
 	   curl_multi_select($mh);
 		$mrc = curl_multi_exec($mh, $active);
 	} while ($mrc == CURLM_CALL_MULTI_PERFORM);
+	
 	
 	// this bit here is mainly for php-related awkwardness and bugs
 	while ($active && $mrc == CURLM_OK) {
@@ -146,10 +161,22 @@ if (isset($_GET['map'])) {
     }
     
 	// get results
-    foreach($curls as $ip => $ch) {
-    	$results[ $ip ] = @json_decode(curl_multi_getcontent($ch), true);
+    foreach($curls as $ch) {
+    	$batch = @json_decode(curl_multi_getcontent($ch), true);
     	curl_multi_remove_handle($mh, $ch);
     	curl_close($ch);
+    	foreach($batch as $info) {
+    		if (count($info) !== 6) {
+    			// error for this ip, add it to un-fetched ip list
+    			$ips[] = $info['query'];
+    			continue;
+    		}
+    		// re-key to get common field names
+    		$results[ $info["query"] ] = array_combine(
+    			['country_name', 'region_name', 'city', 'latitude', 'longitude', 'query'],
+    			array_values($info)
+    		);
+    	}
     }
     curl_multi_close($mh);
 
@@ -177,7 +204,8 @@ if (isset($_GET['map'])) {
 
 	print_json([
 		'table' => ob_get_clean(),
-		'locations' => $locations
+		'locations' => $locations,
+		'extra_ips' => $ips
 	]);
 	die;
 }
@@ -386,6 +414,7 @@ function updateUniqueVisitors() {
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css" rel="stylesheet" />
 <div id='map' style="height: 400px; margin-top: 2rem;"></div>
+<small id='extra-ips'></small> 
 <script>
 	function updateMap() {
 		fetch(`/admin${window.location.search || `?`}&map`)
@@ -411,6 +440,16 @@ function updateUniqueVisitors() {
 								.addTo(map);
 						}
 					});
+
+				// error IPs
+				const extraIpsEl = document.getElementById('extra-ips');
+				if (json.extra_ips.length) {
+					extraIpsEl.classList.remove('hidden');
+					extraIpsEl.innerHTML = `Unmatched IPs: ${json.extra_ips.join(', ')}`
+				}
+				else {
+					extraIpsEl.classList.add('hidden');
+				}
 			});
 	}
 	
