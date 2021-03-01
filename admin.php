@@ -24,10 +24,16 @@ if ($_GET['start_date'])
 if ($_GET['end_date'])
 	$end_date = new DateTime($_GET['end_date']) ?: $end_date;
 
+if ($_GET['spoof_date'])
+	$date_today = (new DateTime($_GET['spoof_date']))->format('Y-m-d');
+else
+	$date_today = date('Y-m-d');
+
+
 // ajax get data
 if (isset($_GET['get_views'])) {
 	print_json([
-		'views' => $redis_client->get("rcv.ramseyer.dev/stats/daily-views/".date('Y-m-d'))
+		'views' => $redis_client->get("rcv.ramseyer.dev/stats/daily-views/".$date_today)
 	]);
 }
 
@@ -115,7 +121,7 @@ if (isset($_GET['unique_visitors'])) {
 }
 
 if (isset($_GET['map'])) {
-	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'));
+	$visitors_today = $redis_client->hgetall("rcv.ramseyer.dev/stats/daily-unique/".$date_today);
 	asort($visitors_today); // sort by visits ascending
 	$ips = array_keys($visitors_today);
 
@@ -191,7 +197,7 @@ if (isset($_GET['map'])) {
 	       ) AS tmp WHERE ip_from <= INET_ATON('$ip')");
 		}
 
-		$hits = number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".date('Y-m-d'), $ip));
+		$hits = number_format($redis_client->hget("rcv.ramseyer.dev/stats/daily-unique/".$date_today, $ip));
 		$locations[ $ip ] = [ $info['longitude'], $info['latitude'], $hits ]; ?>
 		<tr>
 			<td><?= $ip ?></td>
@@ -272,7 +278,11 @@ $page_views = $redis_client->hgetall("rcv.ramseyer.dev/page-views");
 arsort($page_views); // sort by value high -> low
 $total_page_views = array_sum($page_views);
 ?>
-<h6>Page Views Today: <span id='number'>0</span></h6>
+<h3>Page Views Today: <span id='number'>0</span></h3>
+<form method='get'>
+	From date: <input type='date' name='spoof_date' value='<?= $date_today ?>'>
+	<small>Affects page views and visitor table</small> <button>Go</button>
+</form>
 <noscript>
 	You're gonna want js for this page :/
 </noscript>
