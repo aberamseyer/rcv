@@ -78,7 +78,7 @@
     position: relative;
     top: 0.25rem;
 }
-.has-js .verse:focus .play, .has-js .verse:hover .play {
+.has-js .verse.highlight .play {
     visibility: visible;
     pointer-events: auto;
 }
