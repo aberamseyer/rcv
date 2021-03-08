@@ -1,7 +1,7 @@
         <div id='search-input-overlay' class='hidden'>
             <div>
                 <h5>Look up a verse:</h5>
-                <h6 id='search-input'></h6>
+                <b id='search-input'></b>
                 <div id='search-results'></div>
             </div>
         </div>
@@ -10,7 +10,7 @@
         <!--
 	    This is solely a personal project.
             If you have questions, concerns, or find a mistake, please email me: abe(at)ramseyer(dot)dev.
-            Page load in <?= number_format(microtime(true) - $time, 4) ?> sec
+            Page generated in <?= number_format(microtime(true) - $time, 4) ?> sec
         -->
     </body>
 </html>

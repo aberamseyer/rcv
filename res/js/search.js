@@ -72,6 +72,8 @@
 						searchResults.innerHTML += `<div class='verse-result'><a href='/search?q=${q}'>
 							<small>...and ${count - results.length} more</small>
 						</a></div>`;
+					if (results.length === 0)
+						searchResults.innerHTML = `<small><em>No results</em></small>`;
 				}
 			}
 

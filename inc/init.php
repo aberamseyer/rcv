@@ -64,23 +64,13 @@ if (!$_POST['action']) {
 	// random page
 	if (isset($_GET['random'])) {
 		$book = row("
-			SELECT id, name
-			FROM books
-			ORDER BY RAND()
+			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19 /* psalms */, 1.08, 1) * RAND() weight
+			FROM books b
+			ORDER BY weight DESC
 			LIMIT 1");
-		$chapter = row("
-			SELECT id, number
-			FROM chapters
-			WHERE book_id = $book[id]
-			ORDER BY RAND()
-			LIMIT 1");
-		$verse = row("
-			SELECT id, number
-			FROM chapter_contents
-			WHERE chapter_id = $chapter[id] and number > 0
-			ORDER BY RAND()
-			LIMIT 1");
-		redirect("/bible/".link_book($book['name'])."/$chapter[number]?verse=$verse[number]");
+		$chapter = row("SELECT number, id FROM chapters WHERE book_id = $book[id] ORDER BY RAND() LIMIT 1");
+		$verse = row("SELECT id FROM chapter_contents WHERE chapter_id = $chapter[id] AND number ORDER BY RAND() LIMIT 1");
+		redirect("/bible/".link_book($book['name'])."/$chapter[number]#verse-$verse[id]");
 	}
 
 	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);

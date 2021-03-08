@@ -233,9 +233,12 @@
 	function format_verse($element) {
 		global $book;
 
+		// split verse into individual characters
 		$content = $element['content'];
 		$arr = str_split(str_replace("\r\n", "\n", $content));
 		$heading_class = 'verse';
+
+		// adding a heading class to outline points
 		if ($element['number'] == 0) {
 			if ($element['tier']) {
 				$heading_class = 'h'.$element['tier'];
@@ -245,6 +248,7 @@
 			}
 		}
 
+		// splice in footnotes and CFs
 		if ($element['notes']) {
 			foreach($element['notes']['cr'] as $i => $note) {
 				$pos = $note['position'];
@@ -262,16 +266,18 @@
 				}
 			}
 		}
+		// 'verse-line' creates separate lines in the verse
 		$content = explode("\n", implode('', $arr));
 		foreach($content as &$el) {
-			$style = "";
+			$attr = "";
 			if ($element['tier'])
-				$style = "data-note style='padding-left: ".max(0, $element['tier'])."rem;'";
-			$el = "<span class='verse-line' $style>".$el."</span>";
+				$attr = "data-note";
+			$el = "<span class='verse-line' $attr>".$el."</span>";
 		}
 		unset($el);
 		$content = implode('', $content);
 
+		// on regular verses, add a verse number and play button
 		$parts = [ "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>" ];
 		if ($element['number'])
 			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
@@ -280,7 +286,17 @@
 			$parts[] = "<span><a class='play' onclick='startReading($element[id])'>&#8227;</a></span>";
 		$parts[] = "</p>";
 
-		return implode('', $parts);
+		// right-align "Selah"s, including the footnotes attached to them
+		$with_right_aligned_selahs = preg_replace_callback('/(<sup>.*<\/sup>)?Selah/i', function($matches) {
+			return "<span style='float: right;'>".$matches[0]."</span>";
+		}, implode('', $parts));
+
+		// wrap words with a matching footnote/cf in a span to prevent line wrapping
+		$with_no_breaks = preg_replace_callback('/<sup.*?<\/sup>[a-zA-Z]+(?:[.,;:!?\'"^])?/i', function($matches) {
+			return "<span class='no-break'>".$matches[0]."</span>";
+		}, $with_right_aligned_selahs);
+
+		return $with_no_breaks;
 	}
 
 	function format_note($note, $break = true) {
@@ -304,10 +320,8 @@
 		if (!$no_top) {
 			$parts[] = "<a href='#top'>Top</a>";
 		}
-		// if (!$book && !$concordance) {
-			$parts[] = "<a href='/concordance'>Concordance</a>";
-		  $parts[] = "<a href='/verse'>Verse Lookup</a>";
-		// }
+		$parts[] = "<a href='/concordance'>Concordance</a>";
+	  	$parts[] = "<a href='/verse'>Verse Lookup</a>";
 		$parts[] = "<a href='/help'>Help</a>";
 		if ($book) {
 			if ($chapter) {

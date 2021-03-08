@@ -7,6 +7,10 @@
     color: var(--main-text);
 }
 
+.no-break {
+    white-space: nowrap;
+}
+
 .hidden {
     display: none;
 }
@@ -108,10 +112,16 @@ small {
     text-align: justify;
 }
 
-.h-1, .h1, .h2, .h3, .h4, .h5, .h6 {
+.h1, .h2, .h3, .h4, .h5, .h6 {
     font-size: 1.2rem;
     margin-bottom: 0.75rem;
 }
+.h1 { padding-left: 1rem; }
+.h2 { padding-left: 2rem; }
+.h3 { padding-left: 3rem; }
+.h4 { padding-left: 4rem; }
+.h5 { padding-left: 5rem; }
+.h6 { padding-left: 6rem; }
 h1 {
     margin-bottom: 1rem;
 }
@@ -264,7 +274,7 @@ br {
 }
 
 #search-input-overlay > div {
-    min-width: 300px;
+    min-width: 38em; /* from sakura */
     padding: 0 1rem;
 }
 
