@@ -274,8 +274,13 @@ br {
 }
 
 #search-input-overlay > div {
-    min-width: 38em; /* from sakura */
+    width: 95vw;
     padding: 0 1rem;
+}
+@media(min-width: 38em) {
+    #search-input-overlay > div {
+        width: 38em;  /*from sakura */
+    }
 }
 
 .no-select {

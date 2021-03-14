@@ -22,6 +22,7 @@
         }
     });
 
+    // menu changing settings
     let settings;
     const html = document.getElementsByTagName(`HTML`)[0];
     const jsMenuEls = document.querySelectorAll('#menu-js span');
@@ -77,6 +78,7 @@
     setNotes(settings.notes);
     setFont(settings.serif);
 
+    // js menu at top right
     document.querySelectorAll(`[data-toggle]`).forEach(el => {
     	el.addEventListener('click', () => {
     		const toggle = el.dataset.toggle;

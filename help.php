@@ -18,6 +18,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
 <ol>
   <li>Use your browser's "Back" and "Forward" navigation to jump between footnotes and pages that you have visited</li>
+  <li>Use the ← and → arrow keys to navigate between chapters and books</li>
   <li>Click the title of any page to go back to the list of books</li>
   <li>Click a verse number to go to the list of chapters for the current book</li>
   <li>Type anywhere to begin searching for a verse by reference or keyword

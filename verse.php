@@ -18,7 +18,7 @@ $permalink = $_GET['verses'];
 
 <input id='verse-input' name='q' type='text' maxlength='2000' style='width: 100%;' placeholder='e.g., Gen. 1:26; John 1:1, 14; 2 Cor. 3:18; Jude 20-21' value='<?= $permalink ?: ''?>' title='You can request a maximum of 200 verses at a time'>
 <small>Recognized verses: <span id='recognized-verses' style="display: inline"></span></small>
-<hr />
+<hr id='hr' />
 
 <div style="margin-top: 12px;" id='verses'></div>
 <noscript>This page only works with JavaScript enabled. You can search manually using the <a href='/search'>Search</a> page.</noscript>
@@ -35,6 +35,7 @@ function copyToClip(copyText, element) {
 	const recognizedVerses = document.getElementById('recognized-verses');
 	const exceededMax = document.getElementById('exceeded-max');
 	const verseInput = document.getElementById('verse-input');
+	const hr = document.getElementById('hr');
 
 	let requestTimer = 0;
 	verseInput.onkeyup = e => {
@@ -66,6 +67,7 @@ function copyToClip(copyText, element) {
 							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
 							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;verse text</a>`;
 					}
+					hr.classList[results.length === 0 ? 'add' : 'remove']('hidden'); // hide <hr> if no results
 				}
 			}
 

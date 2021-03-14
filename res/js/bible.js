@@ -131,7 +131,7 @@ if (!window.location.hash) {
     }
 }
 
-// click verse highlight on click
+// verse highlight on click
 document.querySelectorAll('.verse').forEach(v => {
      v.addEventListener('click', () => {
         document.querySelectorAll('.verse').forEach(el => {
@@ -144,7 +144,36 @@ document.querySelectorAll('.verse').forEach(v => {
         ]('highlight');
     });
 });
+// deselect verse on outside click
+const htmlNode = document.querySelector('html');
+htmlNode.addEventListener('click', e => {
+  if (e.target.isEqualNode(htmlNode)) {
+    document.querySelectorAll('.verse').forEach(el => {
+      el.classList.remove('highlight');
+    });
+  }
+});
 document.querySelectorAll('.tooltip').forEach(v => {
      v.addEventListener('click', e =>
         e.stopPropagation());
 });
+
+// navigate using ← and →
+const leftArrow = document.querySelector(`a[rel=prev]`);
+const rightArrow = document.querySelector(`a[rel=next]`);
+
+htmlNode.addEventListener('keyup', e => {
+  const checkReferrer = href => {
+    if (document.referrer.includes(href))
+      window.history.back();
+  }
+
+  if (leftArrow && event.key === `ArrowLeft`) {
+    checkReferrer(leftArrow.getAttribute('href'));
+    window.location = leftArrow.getAttribute('href');
+  }
+  else if (rightArrow && event.key === `ArrowRight`) {
+    checkReferrer(rightArrow.getAttribute('href'));
+    window.location = rightArrow.getAttribute('href');
+  }
+})
