@@ -14,11 +14,11 @@
   <meta charset="utf-8">
   <meta name="description" content="<?= $meta_description ?>">
   <link rel="canonical" href="<?= $meta_canonical ?>">
-  <link rel="shortcut icon" type="image/png" href="/res/site/favicon.png">
-  <link rel="manifest" href="/res/site/manifest.json">
-  <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml"> 
-  <link rel="stylesheet" href="/res/css/sakura-dark.css" type="text/css">
-  <link rel="stylesheet" href="/res/css/style.css" type="text/css">
+  <link rel="shortcut icon" type="image/png" href="/res/site/favicon.png?v=<?= COMMIT_HASH ?>">
+  <link rel="manifest" href="/res/site/manifest.json?v=<?= COMMIT_HASH ?>">
+  <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml?v=<?= COMMIT_HASH ?>"> 
+  <link rel="stylesheet" href="/res/css/sakura-dark.css?v=<?= COMMIT_HASH ?>" type="text/css">
+  <link rel="stylesheet" href="/res/css/style.css?v=<?= COMMIT_HASH ?>" type="text/css">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6CVJDRB1F"></script>

@@ -5,8 +5,8 @@
                 <div id='search-results'></div>
             </div>
         </div>
-        <script src='/res/js/search.js'></script>
-        <script src='/res/js/global.js'></script>
+        <script src='/res/js/search.js?v=<?= COMMIT_HASH ?>'></script>
+        <script src='/res/js/global.js?v=<?= COMMIT_HASH ?>'></script>
         <!--
 	    This is solely a personal project.
             If you have questions, concerns, or find a mistake, please email me: abe(at)ramseyer(dot)dev.

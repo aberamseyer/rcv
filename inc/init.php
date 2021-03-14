@@ -13,6 +13,7 @@ ini_set('upload_max_filesize', '512K');
 $time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
 define("STATS", !$no_stats && !isset($_GET['no_track']));
+define("COMMIT_HASH", `git log -1 --pretty=format:%h`);
 
 $db = LOCAL || isset($_GET['abe'])
 	? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')
@@ -63,8 +64,14 @@ if (!$_POST['action']) {
 
 	// random page
 	if (isset($_GET['random'])) {
+		/*
+		 * select a book at 'random':
+		 *   1. weight NT books + Psalms a little higher
+		 *   2. pick random chapter
+		 *   3. pick random verse
+		 */
 		$book = row("
-			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19 /* psalms */, 1.08, 1) * RAND() weight
+			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19, 1.08, 1) * RAND() weight
 			FROM books b
 			ORDER BY weight DESC
 			LIMIT 1");

@@ -292,7 +292,7 @@
 		}, implode('', $parts));
 
 		// wrap words with a matching footnote/cf in a span to prevent line wrapping
-		$with_no_breaks = preg_replace_callback('/<sup.*?<\/sup>[a-zA-Z]+(?:[.,;:!?\'"^])?/i', function($matches) {
+		$with_no_breaks = preg_replace_callback('/<sup.*?<\/sup>[a-zA-Z"\'(]+(?:[.,;:!?\'"()])?/i', function($matches) {
 			return "<span class='no-break'>".$matches[0]."</span>";
 		}, $with_right_aligned_selahs);
 
