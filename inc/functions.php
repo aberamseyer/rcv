@@ -1,6 +1,32 @@
 <?php
 	const copyright = "<div class='copy'><a rel='nofollow' href='/login'>All</a> content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='nofollow' href='https://www.lsm.org'>www.lsm.org</a></div>";
-	const verse_regex = '/(Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.) (\d+):(\d+)/';
+
+	define('books', str_replace(' ', '[ ]', 'Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.'));
+	define('book_re', 
+	'/
+	(?<book>'.books.')?        # book name
+	(?:
+	  [ \xA0]?      # semi-colon separating chapter\verse fields or a space\nbsp
+	  (?<chapter>\d+): # non-optional chapter number
+	  (?:
+	    (?<vStart>\d+)[a-z]*      # verse start
+	    (?:-(?<vEnd>\d+)[a-z]*)?     # verse end
+	    (?:,[ \xA0]+)?      # comma
+	  )+
+	)+
+	/ix');
+	define('s_book_re', 
+	'/
+	(?<book>vv\.|Obad\.|3[ ]John|Jude|Philem\.|2[ ]John) # book name
+	(?:
+	  [ \xA0]?      # semi-colon separating chapter\verse fields or a space\nbsp
+	  (?:	# no chapter ":" here
+	    (?<vStart>\d+)[a-z]*      # verse start
+		(?:-(?<vEnd>\d+)[a-z]*)?     # verse end
+		(?:,[ \xA0]+)?      # comma
+	  )+
+	)+
+	/ix');
 
 	require_once __DIR__."/../inc/books.php";
 
@@ -287,11 +313,11 @@
 		$parts[] = "</p>";
 
 		// right-align "Selah"s, including the footnotes attached to them
-		$with_right_aligned_selahs = preg_replace_callback('/(<sup>.*<\/sup>)?Selah/i', function($matches) {
+		$with_right_aligned_selahs = preg_replace_callback('/(?:<sup>.*<\/sup>)?Selah/i', function($matches) {
 			return "<span style='float: right;'>".$matches[0]."</span>";
 		}, implode('', $parts));
 
-		// wrap words with a matching footnote/cf in a span to prevent line wrapping
+		// wrap words with a matching footnote/cf in a span to keep words attached to their superscript
 		$with_no_breaks = preg_replace_callback('/<sup.*?<\/sup>[a-zA-Z"\'(]+(?:[.,;:!?\'"()])?/i', function($matches) {
 			return "<span class='no-break'>".$matches[0]."</span>";
 		}, $with_right_aligned_selahs);
@@ -300,13 +326,105 @@
 	}
 
 	function format_note($note, $break = true) {
-		global $books_by_abbr; // inc/books.php
-
 		$note = html($note);
-		$content = preg_replace_callback(verse_regex, function($matches) use ($books_by_abbr) {
-			return "<a href='/bible/".link_book($books_by_abbr[ $matches[1] ])."/$matches[2]?verse=$matches[3]'>$matches[0]</a>";
-		}, $note);
+		$content = add_links($note);
+
 		return $break ? nl2br($content) : $content;
+	}
+
+	function add_links($note) {
+		global $book, $chapter, $books_by_abbr /* inc/books.php */;
+		$prev_book = $book['name'];
+		$prev_chp = $chapter['number'];
+
+		$work = []; // holds all the matches we find
+
+		preg_match_all(book_re, $note, $book_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
+		preg_match_all(s_book_re, $note, $s_book_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
+		$book_matches = array_merge($book_matches, $s_book_matches);
+		usort($book_matches, fn($a, $b) => $a[0][1] <=> $b[0][1]); // sort by position in the note ascending 
+		foreach($book_matches as $book_match) {
+			$book_str_with_chp_and_verses = $book_match[0][0];
+			preg_match('/(?<book>'.books.').*/i', $book_str_with_chp_and_verses, $capture_book_match);
+			if (!$capture_book_match) {
+				if ($book_match['book'][0] == 'vv.') // special case here with vv.
+					$curr_book = $book['name'];
+				else
+					$curr_book = $prev_book;
+			}
+			else {
+				$curr_book = $books_by_abbr[ $capture_book_match['book'] ];
+			}
+			$prev_book = $curr_book;
+			$book_offset = $book_match[0][1];
+
+			preg_match_all(
+				'/
+				(?:
+				  (?:'.books.')
+				  [ \xA0]+
+				)?
+				(?:
+					(?<chp>\d+):|
+					(?<sngl>\d+)|vv\.)
+					(?<verses>[^;\n]*
+				)
+				/ix', $book_str_with_chp_and_verses, $chp_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
+			foreach($chp_matches as $chapter_match) {
+				$curr_chapter = $chapter_match['chp'][0];
+				$chp_offset = $chapter_match['chp'][1] + strlen($curr_chapter);
+				$verse_str = $chapter_match['verses'][0];
+
+				if ($chapter_match['sngl'][0]) {
+					$curr_chapter = 1;
+					$verse_str = $chapter_match['sngl'][0];
+					$chp_offset = $chapter_match['sngl'][1];
+				}
+				else {
+					$chp_offset++; // accounts for ':' or a -1 offset
+				}
+				if (!$curr_chapter) {
+					if ($book_match['book'][0] == 'vv.') // special case here with vv.
+						$curr_chapter = $chapter['number'];
+					else
+						$curr_chapter = $prev_chp;
+				}
+				$prev_chp = $curr_chapter;
+
+				preg_match_all('/(?<start>\d+)(?:-(?<end>\d+))?/', $verse_str, $verse_range_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
+				foreach($verse_range_matches as $verse_match) {
+					$rough_offset = $book_offset + $chp_offset + $verse_match[0][1];
+					$offset = strpos($note, $verse_match[0][0], $rough_offset);
+					$text = $verse_match[0][0];
+					$work[] = [
+						'offset' => $offset,
+						'text' => $text,
+						'link' => "<a href='/bible/".link_book($curr_book)."/".$curr_chapter."?verse=".$verse_match['start'][0]."'>".$text."</a>",
+					];
+				}
+			}
+		}
+
+		// work backward to maintiain offsets
+		foreach(array_reverse($work) as $item) {
+			$note = substr_replace($note, $item['link'], $item['offset'], strlen($item['text']));
+		}
+
+		
+		global $contents, $book, $chapter;
+		if ($contents && $book && $chapter) {
+			$note = preg_replace_callback( // replaces query-string verse={number} with the #verse-{id} if it's on the same page
+				'/(?<link>\/bible\/'.link_book($book['name']).'\/'.$chapter['number'].')\?verse=(?<number>\d+)/i',
+				function($matches) use ($contents) {
+					foreach($contents as $element) {
+						if ($element['number'] == $matches['number'])
+							return $matches['link']."#verse-".$element['id'];
+					}
+					return $matches[0]; // default to no replacement
+				}, $note);
+		}
+
+		return $note;
 	}
 
 	function nav_line($no_top = false, $attr = "") {
