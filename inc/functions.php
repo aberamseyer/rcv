@@ -17,7 +17,7 @@
 	/ix');
 	define('s_book_re', 
 	'/
-	(?<book>vv\.|Obad\.|3[ ]John|Jude|Philem\.|2[ ]John) # book name
+	(?<book>\bv\.|\bvv\.|Obad\.|3[ ]John|Jude|Philem\.|2[ ]John) # book name
 	(?:
 	  [ \xA0]?      # semi-colon separating chapter\verse fields or a space\nbsp
 	  (?:	# no chapter ":" here
@@ -344,10 +344,13 @@
 		$book_matches = array_merge($book_matches, $s_book_matches);
 		usort($book_matches, fn($a, $b) => $a[0][1] <=> $b[0][1]); // sort by position in the note ascending 
 		foreach($book_matches as $book_match) {
+			$prev_book = $book['name'];
+			$prev_chp = $chapter['number'];
+	
 			$book_str_with_chp_and_verses = $book_match[0][0];
 			preg_match('/(?<book>'.books.').*/i', $book_str_with_chp_and_verses, $capture_book_match);
 			if (!$capture_book_match) {
-				if ($book_match['book'][0] == 'vv.') // special case here with vv.
+				if (in_array($book_match['book'][0], ['vv.', 'v.'], true)) // special case here with vv. and v.
 					$curr_book = $book['name'];
 				else
 					$curr_book = $prev_book;
@@ -384,7 +387,7 @@
 					$chp_offset++; // accounts for ':' or a -1 offset
 				}
 				if (!$curr_chapter) {
-					if ($book_match['book'][0] == 'vv.') // special case here with vv.
+					if (in_array($book_match['book'][0], ['vv.', 'v.'], true)) // special case here with vv. and v.
 						$curr_chapter = $chapter['number'];
 					else
 						$curr_chapter = $prev_chp;
@@ -409,20 +412,19 @@
 		foreach(array_reverse($work) as $item) {
 			$note = substr_replace($note, $item['link'], $item['offset'], strlen($item['text']));
 		}
-
 		
-		global $contents, $book, $chapter;
-		if ($contents && $book && $chapter) {
-			$note = preg_replace_callback( // replaces query-string verse={number} with the #verse-{id} if it's on the same page
-				'/(?<link>\/bible\/'.link_book($book['name']).'\/'.$chapter['number'].')\?verse=(?<number>\d+)/i',
-				function($matches) use ($contents) {
-					foreach($contents as $element) {
-						if ($element['number'] == $matches['number'])
-							return $matches['link']."#verse-".$element['id'];
-					}
-					return $matches[0]; // default to no replacement
-				}, $note);
+		static $href_id_map;
+		if (!$href_id_map) {
+			$href_id_map = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/href_id_map.json"), true);
 		}
+		$note = preg_replace_callback( // replaces query-string ?verse={number} with the #verse-{id}
+			'/[\'"](?<href>\/bible\/(?:\d-)?[a-z\-]+\/\d+)\?verse=\d+[\'"]/i',
+			function($matches) use ($href_id_map) {
+				if ($id = $href_id_map[ preg_replace('/[\'"]/', '', $matches[0]) ])
+					return "'".$matches['href'].'#verse-'.$id."' verse-hover ";
+				else
+					return $matches[0]; // default to no replacement (should never happen)
+			}, $note);
 
 		return $note;
 	}

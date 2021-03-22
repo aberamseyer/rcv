@@ -127,16 +127,33 @@
         }
     }
     else {
-        // list of verses links
-        echo "<h6>Verses</h6><div class='justify' style='margin-bottom: 0.75rem;'>";
-        $i = 1;
-        foreach($contents as $id => $element) {
-            if ((int)$element['number']) {
-                echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
-            }
-        }
-        echo "</div>".nav_line(true)."<hr />";
-	    echo "<div id='chp-$chapter[id]'>";
+        // show chapter names and verse links
+        ?>
+        <details>
+            <summary><h6>Chapters</h6></summary>
+            <div class='justify'>
+            <?php foreach($chapters as $chapter_option): ?>
+                <a class='button' href='/bible/<?= link_book($book['name']) ?>/<?= $chapter_option['number'] ?>'><?= $chapter_option['number'] ?></a>
+            <?php endforeach ?>
+            </div>
+        </details>
+        <details open>
+            <summary><h6>Verses</h6></summary>
+            <div class='justify'>
+                <?php
+                    $i = 1;
+                    foreach($contents as $id => $element) {
+                        if ((int)$element['number']) {
+                            echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
+                        }
+                    }
+                ?>
+            </div>
+        </details>
+        <?= nav_line(true) ?>
+        <hr>
+        <?php
+	    echo "<div id='chapter' data-num='$chapter[id]'>";
         // the actual content
         foreach($contents as $element) {
             echo format_verse($element);

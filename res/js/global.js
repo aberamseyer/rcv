@@ -18,7 +18,7 @@
 
             scrollPos = rect.top;
             throttle = true;
-            setTimeout(() => throttle = false, 500);
+            setTimeout(() => throttle = false, 250);
         }
     });
 

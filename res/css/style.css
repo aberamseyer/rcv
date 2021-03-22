@@ -257,7 +257,7 @@ br {
 }
 
 #search-input-overlay {
-    z-index: 2;
+    z-index: 3;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -279,7 +279,7 @@ br {
 }
 @media(min-width: 38em) {
     #search-input-overlay > div {
-        width: 38em;  /*from sakura */
+        width: 33em;  /*from sakura */
     }
 }
 
@@ -306,3 +306,24 @@ br {
 .hide-notes [data-show] [data-note] {
     display: block;
 }
+
+details h6 {
+    display: inline-block;
+    margin: 1rem;
+}
+
+.hover-verse {
+    position: absolute;
+    background-color: var(--tooltip-bg);
+    z-index: 2;
+    max-height: 200px;
+    overflow: scroll;;
+    box-shadow: 0 0 16px 8px rgba(0, 0, 0, 0.3);
+    padding: 7px;
+    font-size: 1.2rem;
+    white-space: normal;
+    width: 250px;
+}
+.hover-verse span span { color: var(--main-text); }
+
+summary { outline: none; }
