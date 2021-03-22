@@ -325,5 +325,6 @@ details h6 {
     width: 250px;
 }
 .hover-verse span span { color: var(--main-text); }
+[verse-hover] { position: relative; }
 
 summary { outline: none; }
