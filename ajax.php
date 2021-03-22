@@ -277,21 +277,21 @@ switch($_POST['action']) {
 	// hover a-tag link
 	case 'a-verse':
 		$id = (int) $_POST['id'];
-		$chp_id = (int) $_POST['chp_id'];
 		$start = $_POST['range'];
 		$ids = [ $id ];
 		if (preg_match('/\d+-\d+/', $_POST['range'])) {
 			$numbers = range(...explode('-', $_POST['range']));
+			$chp_id = col("SELECT chapter_id FROM chapter_contents WHERE id = ".$id);
 			$ids = cols("SELECT id FROM chapter_contents WHERE chapter_id = ".$chp_id." AND number IN(".implode(',', $numbers).")");
 		}
 
 		$csl = implode(',', $ids);
-		print_json(select("
+		print_json($ids ? select("
 			SELECT REPLACE(cc.content, '\n', ' / ') content, cc.reference, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
 			FROM chapter_contents cc
 			JOIN chapters c ON c.id = cc.chapter_id
 			JOIN books b ON b.id = c.book_id
-			WHERE cc.id IN($csl) ORDER BY c.number"));
+			WHERE cc.id IN($csl) ORDER BY c.number") : [ ]);
 		break;
 	// global verse search that pops up when you start typing
 	case 'verse':

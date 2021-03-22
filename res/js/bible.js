@@ -180,49 +180,49 @@ htmlNode.addEventListener('keyup', e => {
 
 // verse popup for a-tags
 document.querySelectorAll('[verse-hover]').forEach(aEl => {
-  const chpId = document.getElementById('chapter').dataset.num;
   let newEl = document.createElement('div');
   // aEl.addEventListener('mouseleave', () => newEl.remove());
   const handleHover = e => {
-    const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/)
-    const verseRange = aEl.innerText;
-    if (matches.length) {
-      const formData = new FormData();
-      formData.append('action', 'a-verse');
-      formData.append('range', verseRange);
-      formData.append('chp_id', chpId);
-      formData.append('id', +matches[1]); 
+    if (aEl.querySelectorAll('.hover-verse').length === 0) {
+      const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/)
+      const verseRange = aEl.innerText;
+      if (matches.length) {
+        const formData = new FormData();
+        formData.append('action', 'a-verse');
+        formData.append('range', verseRange);
+        formData.append('id', +matches[1]); 
 
-      const request = new XMLHttpRequest();
-      request.open("POST", "/ajax");
+        const request = new XMLHttpRequest();
+        request.open("POST", "/ajax");
 
-      request.onloadend = () => {
-        if (request.status === 200) {
-          const results = JSON.parse(request.response);
+        request.onloadend = () => {
+          if (request.status === 200) {
+            const results = JSON.parse(request.response);
 
-          if (results.length) {
-            newEl.innerHTML = results.map(res => 
-              `<p>
-                <span class='verse-line'>
-                  <b>
-                    <a target='_blank' href='${res.href}'>${res.reference}</a>
-                  </b>
-                  &nbsp;&nbsp;
-                  <span>${res.content}</span>
-                </span>
-              </p>`
-            ).join('');
-            document.querySelectorAll('.hover-verse').forEach(el => el.remove());
-            newEl.classList.add('hover-verse');
-            if (e.clientX > document.documentElement.clientWidth / 2)
-              newEl.style.right = `0px`;
-            else
-              newEl.style.left = `0px`;
-            aEl.appendChild(newEl);
+            if (results.length) {
+              newEl.innerHTML = results.map(res => 
+                `<p>
+                  <span class='verse-line'>
+                    <b>
+                      <a target='_blank' href='${res.href}'>${res.reference}</a>
+                    </b>
+                    &nbsp;&nbsp;
+                    <span>${res.content}</span>
+                  </span>
+                </p>`
+              ).join('');
+              document.querySelectorAll('.hover-verse').forEach(el => el.remove());
+              newEl.classList.add('hover-verse');
+              if (e.clientX > document.documentElement.clientWidth / 2)
+                newEl.style.right = `0px`;
+              else
+                newEl.style.left = `0px`;
+              aEl.appendChild(newEl);
+            }
           }
         }
+        request.send(formData);
       }
-      request.send(formData);
     }
   };
   aEl.addEventListener('click', e => {
