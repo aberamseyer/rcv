@@ -1,5 +1,5 @@
 <?php
-	const copyright = "<div class='copy'><a rel='nofollow' href='/login'>All</a> content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='nofollow' href='https://www.lsm.org'>www.lsm.org</a></div>";
+	const copyright = "<div class='copy'><a rel='nofollow' href='/login' tabindex='-1'>All</a> content accessed from the Holy Bible Recovery Version &copy; 2003 Living Stream Ministry <a target='_blank' rel='nofollow' href='https://www.lsm.org'>www.lsm.org</a></div>";
 
 	define('books', str_replace(' ', '[ ]', 'Gen\.|Exo\.|Num\.|Lev\.|Deut\.|Judg\.|Ruth|1 Sam\.|2 Sam\.|Josh\.|1 Kings|2 Kings|1 Chron\.|2 Chron\.|Ezra|Neh\.|Job|Esth\.|Psa\.|Prov\.|Eccl\.|S\.S\.|Isa\.|Jer\.|Lam\.|Ezek\.|Hosea|Dan\.|Joel|Obad\.|Zeph\.|Jonah|Amos|Micah|Hab\.|Hag\.|Nahum|Zech\.|Mal\.|Matt\.|Mark|Luke|John|1 Cor\.|2 Cor\.|Rom\.|Acts|Gal\.|Col\.|1 Thes\.|Eph\.|Phil\.|2 Tim\.|James|2 Thes\.|1 Tim\.|3 John|Titus|1 Pet\.|2 Pet\.|Jude|Rev\.|Philem\.|2 John|1 John|Heb\.'));
 	define('book_re', 
@@ -10,7 +10,10 @@
 	  (?<chapter>\d+): # non-optional chapter number
 	  (?:
 	    (?<vStart>\d+)[a-z]*      # verse start
-	    (?:-(?<vEnd>\d+)[a-z]*)?     # verse end
+	    (?:-
+			(?<vEnd>\d+)[a-z]* # verse end
+			(?!\d*:)			# dont match the next chapter in "11:2-12:3"
+		)?
 	    (?:,[ \xA0]+)?      # comma
 	  )+
 	)+
@@ -22,7 +25,10 @@
 	  [ \xA0]?      # semi-colon separating chapter\verse fields or a space\nbsp
 	  (?:	# no chapter ":" here
 	    (?<vStart>\d+)[a-z]*      # verse start
-		(?:-(?<vEnd>\d+)[a-z]*)?     # verse end
+		(?:-
+			(?<vEnd>\d+)[a-z]* # verse end
+			(?!\d*:)			# dont match the next chapter in "11:2-12:3"
+		)?
 		(?:,[ \xA0]+)?      # comma
 	  )+
 	)+
@@ -338,15 +344,26 @@
 		$prev_chp = $chapter['number'];
 
 		$work = []; // holds all the matches we find
-
 		preg_match_all(book_re, $note, $book_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
 		preg_match_all(s_book_re, $note, $s_book_matches, PREG_SET_ORDER|PREG_OFFSET_CAPTURE);
 		$book_matches = array_merge($book_matches, $s_book_matches);
 		usort($book_matches, fn($a, $b) => $a[0][1] <=> $b[0][1]); // sort by position in the note ascending 
-		foreach($book_matches as $book_match) {
-			$prev_book = $book['name'];
-			$prev_chp = $chapter['number'];
-	
+		foreach($book_matches as $i => $book_match) {
+			if ($i && 
+				!preg_match('/^[ ;\xA0,]+$/', 
+					substr($note,
+						$pos = (
+							$book_matches[$i-1][0][1] + strlen($book_matches[$i-1][0][0]) // position at end of prev match
+						),
+						$book_match[0][1] - $pos // length of characters in between curr and prev match
+					)
+				)
+			) {
+				// aka "if not the characters in between the matches are not strictly whitespace or certain punctuation"
+				// then we should not default back to the page's book and chapter number
+				$prev_book = $book['name'];
+				$prev_chp = $chapter['number'];
+			}
 			$book_str_with_chp_and_verses = $book_match[0][0];
 			preg_match('/(?<book>'.books.').*/i', $book_str_with_chp_and_verses, $capture_book_match);
 			if (!$capture_book_match) {
@@ -379,7 +396,12 @@
 				$verse_str = $chapter_match['verses'][0];
 
 				if ($chapter_match['sngl'][0]) {
-					$curr_chapter = 1;
+					if (in_array($book_match['book'][0], ['vv.', 'v.'], true)) { // special case here with vv. and v.
+						$curr_chapter = $chapter['number'];
+					}
+					else {
+						$curr_chapter = 1;
+					}
 					$verse_str = $chapter_match['sngl'][0];
 					$chp_offset = $chapter_match['sngl'][1];
 				}
@@ -387,10 +409,7 @@
 					$chp_offset++; // accounts for ':' or a -1 offset
 				}
 				if (!$curr_chapter) {
-					if (in_array($book_match['book'][0], ['vv.', 'v.'], true)) // special case here with vv. and v.
-						$curr_chapter = $chapter['number'];
-					else
-						$curr_chapter = $prev_chp;
+					$curr_chapter = $prev_chp;
 				}
 				$prev_chp = $curr_chapter;
 
@@ -402,7 +421,7 @@
 					$work[] = [
 						'offset' => $offset,
 						'text' => $text,
-						'link' => "<a href='/bible/".link_book($curr_book)."/".$curr_chapter."?verse=".$verse_match['start'][0]."'>".$text."</a>",
+						'link' => "<a target='_blank' href='/bible/".link_book($curr_book)."/".$curr_chapter."?verse=".$verse_match['start'][0]."'>".$text."</a>",
 					];
 				}
 			}

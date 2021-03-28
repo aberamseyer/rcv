@@ -53,11 +53,10 @@
 
 		if (searchInput.innerHTML.length > 1) {
 			const formData = new FormData();
-			formData.append('action', 'verse');
 			formData.append('q', searchInput.innerHTML);
 
 			const request = new XMLHttpRequest();
-			request.open("POST", "/ajax");
+			request.open("POST", "/ajax?action=verse");
 
 			request.onloadend = () => {
 				if (request.status === 200) {

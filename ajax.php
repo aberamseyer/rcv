@@ -26,7 +26,7 @@ function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "")
 }
 
 
-switch($_POST['action']) {
+switch($_REQUEST['action']) {
   // concordance to request list of verses that contain a word
 	case 'conc':
 	    $id = (int) $_POST['id']; // id we're looking up

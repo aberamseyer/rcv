@@ -44,11 +44,10 @@ function copyToClip(copyText, element) {
 
 		if (verseInput.value.length > 3 && /^[\w:;\-,\.]$/.test(key) || [ 'Control', 'Meta', 'Backspace', 'Unidentified' ].includes(key)) {
 			const formData = new FormData();
-			formData.append('action', 'request');
 			formData.append('q', verseInput.value.trim());
 
 			const request = new XMLHttpRequest();
-			request.open("POST", "/ajax");
+			request.open("POST", "/ajax?action=request");
 
 			request.onloadend = () => {
 				if (request.status === 200) {

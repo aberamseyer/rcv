@@ -188,12 +188,11 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
       const verseRange = aEl.innerText;
       if (matches.length) {
         const formData = new FormData();
-        formData.append('action', 'a-verse');
         formData.append('range', verseRange);
         formData.append('id', +matches[1]); 
 
         const request = new XMLHttpRequest();
-        request.open("POST", "/ajax");
+        request.open("POST", "/ajax?action=a-verse");
 
         request.onloadend = () => {
           if (request.status === 200) {
@@ -201,23 +200,23 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
 
             if (results.length) {
               newEl.innerHTML = results.map(res => 
-                `<p>
+                `<div>
                   <span class='verse-line'>
-                    <b>
-                      <a target='_blank' href='${res.href}'>${res.reference}</a>
-                    </b>
+                    <b><a>${res.reference}</a></b>
                     &nbsp;&nbsp;
                     <span>${res.content}</span>
                   </span>
-                </p>`
+                </div>`
               ).join('');
               document.querySelectorAll('.hover-verse').forEach(el => el.remove());
               newEl.classList.add('hover-verse');
-              if (e.clientX > document.documentElement.clientWidth / 2)
-                newEl.style.right = `0px`;
-              else
-                newEl.style.left = `0px`;
+              newEl.style[
+                e.clientX > document.documentElement.clientWidth / 2
+                ? 'right'
+                : 'left'
+              ] = `0px`;
               aEl.appendChild(newEl);
+              // aEl.onclick = e => e.stopPropagation();
             }
           }
         }
@@ -226,6 +225,7 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
     }
   };
   aEl.addEventListener('click', e => {
+    e.stopPropagation();
     if (e.target.isSameNode(aEl))
       e.preventDefault();
   });

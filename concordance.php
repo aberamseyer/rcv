@@ -86,12 +86,11 @@ function getRefs(id, details) {
   const container = details.querySelector('small');
   if (details.open && container.innerHTML === '') {
 	  const formData = new FormData();
-	  formData.append('action', 'conc');
     formData.append('type', '<?= $q_conc ?>');
 	  formData.append('id', id); 
 
 	  const request = new XMLHttpRequest();
-	  request.open("POST", "/ajax");
+	  request.open("POST", "/ajax?action=conc");
 
 	  request.onloadend = () => {
 	  	if (request.status === 200) {
