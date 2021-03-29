@@ -181,7 +181,6 @@ htmlNode.addEventListener('keyup', e => {
 // verse popup for a-tags
 document.querySelectorAll('[verse-hover]').forEach(aEl => {
   let newEl = document.createElement('div');
-  // aEl.addEventListener('mouseleave', () => newEl.remove());
   const handleHover = e => {
     if (aEl.querySelectorAll('.hover-verse').length === 0) {
       const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/)
@@ -201,22 +200,20 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
             if (results.length) {
               newEl.innerHTML = results.map(res => 
                 `<div>
-                  <span class='verse-line'>
-                    <b><a>${res.reference}</a></b>
-                    &nbsp;&nbsp;
-                    <span>${res.content}</span>
-                  </span>
+                  <b><a>${res.reference}</a></b>
+                  &nbsp;&nbsp;
+                  <span>${res.content}</span>
                 </div>`
               ).join('');
               document.querySelectorAll('.hover-verse').forEach(el => el.remove());
               newEl.classList.add('hover-verse');
-              newEl.style[
-                e.clientX > document.documentElement.clientWidth / 2
-                ? 'right'
-                : 'left'
-              ] = `0px`;
+              
+              // if the verse container can't fit in the space to the right of the link, push it left
+              const aElOffset = aEl.getBoundingClientRect().left;
+              const parentRect = aEl.closest('.verse, .footnote').getBoundingClientRect();
+              newEl.style.left = `${Math.min(0, parentRect.left + parentRect.width - aElOffset - 250)}px`;
+              
               aEl.appendChild(newEl);
-              // aEl.onclick = e => e.stopPropagation();
             }
           }
         }

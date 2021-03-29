@@ -3,17 +3,11 @@
     margin-top: 0.5rem;
     text-align: center;
 }
-.copy a {
-    color: var(--main-text);
-}
+.copy a { color: var(--main-text); }
 
-.no-break {
-    white-space: nowrap;
-}
+.no-break { white-space: nowrap; }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
 .button {
     margin: 0 6px 6px 0;
@@ -37,7 +31,6 @@
     align-items: center;
 }
 
-
 .title {
     font-size: 1.1rem;
     margin-bottom: 0.75rem;
@@ -54,13 +47,10 @@
     transition: all 0.2s;
     display: flex;
 }
-.verse > span:nth-child(2) {
-    flex-grow: 1;
-}
+.verse > span:nth-child(2) { flex-grow: 1; }
 
-[tabindex="-1"]:focus {
-    outline: none;
-}
+[tabindex="-1"]:focus { outline: none; }
+
 .verse.highlight {
     color: var(--main-text);
     background: var(--contrast-bg);
@@ -87,19 +77,11 @@
     pointer-events: auto;
 }
 
-.verse-line {
-    display: block;
-}
-.verse-line:nth-of-type(2n+1) {
-    padding-left: 0.6rem;
-}
-.verse-line:nth-of-type(2n) {
-    padding-left: 2rem;
-}
+.verse-line { display: block; }
+.verse-line:nth-of-type(2n+1) { padding-left: 0.6rem; }
+.verse-line:nth-of-type(2n) { padding-left: 2rem; }
 
-nav {
-    font-size: 1.2rem;
-}
+nav { font-size: 1.2rem; }
 .nav-arr {
     font-size: 18px;
     line-height: 1rem;
@@ -122,13 +104,9 @@ small {
 .h4 { padding-left: 4rem; }
 .h5 { padding-left: 5rem; }
 .h6 { padding-left: 6rem; }
-h1 {
-    margin-bottom: 1rem;
-}
+h1 { margin-bottom: 1rem; }
 
-br {
-   user-select: none;
-}
+br { user-select: none; }
 
 .tooltip {
     position:relative;
@@ -155,12 +133,8 @@ br {
     display: none;
 }
 
-.tooltip:focus {
-    outline: none;
-}
-.tooltip:hover .right, .tooltip:focus .right {
-    display:block;
-}
+.tooltip:focus { outline: none; }
+.tooltip:hover .right, .tooltip:focus .right { display:block; }
 
 .tooltip .right i {
     position:absolute;
@@ -184,15 +158,9 @@ br {
     box-shadow:0 1px 8px rgba(0,0,0,0.5);
 }
 
-#menu:hover ul#menu-js {
-    display: none;
-}
-.has-js #menu-href {
-    display: none;
-}
-.has-js #menu:hover ul#menu-js {
-    display: block;
-}
+#menu:hover ul#menu-js { display: none; }
+.has-js #menu-href { display: none; }
+.has-js #menu:hover ul#menu-js { display: block; }
 #menu {
     position: fixed;
     top: 1rem;
@@ -218,24 +186,16 @@ br {
     padding-left: 0;
     margin-bottom: 0;
 }
-#menu:hover ul {
-    display: block;
-}
-#menu.show ul {
-    display: block;
-}
+#menu:hover ul { display: block; }
+#menu.show ul { display: block; }
 #menu a, #menu span:not(.dots) {
     padding-right: 7px;
     cursor: pointer;
     color: var(--white);
 }
-#menu span:hover {
-    text-decoration: underline;
-}
+#menu span:hover { text-decoration: underline; }
 
-.emoji {
-    display: inline-block;
-}
+.emoji { display: inline-block; }
 
 /* global search */
 .verse-result {
@@ -269,43 +229,27 @@ br {
     justify-content: center;
 }
 
-#search-input-overlay.hidden {
-    display: none;
-}
+#search-input-overlay.hidden { display: none; }
 
 #search-input-overlay > div {
     width: 95vw;
     padding: 0 1rem;
 }
 @media(min-width: 38em) {
-    #search-input-overlay > div {
-        width: 33em;  /*from sakura */
-    }
+    #search-input-overlay > div { width: 33em;  /*from sakura */ }
 }
 
-.no-select {
-    user-select: none;
-}
-[data-content]:before {
-    content: attr(data-content); /* this lets Ctrl+F to work over superscripts */
-}
+.no-select { user-select: none; }
+[data-content]:before { content: attr(data-content); /* this lets Ctrl+F to work over superscripts */ }
 
 /* serif font selectors */
-.serif .verse-line, .serif .footnote, .serif .result, .serif #verses {
-    font-family: serif;
-}
+.serif .verse-line, .serif .footnote, .serif .result, .serif #verses { font-family: serif; }
 
-.serif #verses div a, .serif .result a {
-    font-family: sans-serif;
-}
+.serif #verses div a, .serif .result a { font-family: sans-serif; }
 
 /* footnotes, cfs, and outline headings */
-.hide-notes [data-note], .hide-notes [data-content], .hide-notes .footnote {
-    display: none;
-}
-.hide-notes [data-show] [data-note] {
-    display: block;
-}
+.hide-notes [data-note], .hide-notes [data-content], .hide-notes .footnote { display: none; }
+.hide-notes [data-show] [data-note] { display: block; }
 
 details h6 {
     display: inline-block;
@@ -323,6 +267,7 @@ details h6 {
     font-size: 1.2rem;
     white-space: normal;
     width: 250px;
+    box-sizing: border-box;
 }
 .hover-verse span span { color: var(--main-text); }
 [verse-hover] { position: relative; white-space: nowrap; }
