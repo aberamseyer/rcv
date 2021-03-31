@@ -8,7 +8,7 @@
     // menu show/hide on scroll
     const menu = document.getElementById('menu');
     let scrollPos = 0, throttle = false;
-    window.addEventListener('scroll', () => {
+    window.addEventListener('wheel', () => {
         if (!throttle) {
             const rect = document.body.getBoundingClientRect();
             if (rect.top > scrollPos)

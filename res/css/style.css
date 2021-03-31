@@ -125,7 +125,7 @@ br { user-select: none; }
     background-color: var(--tooltip-bg);
     font-weight:normal;
     font-size:1.3rem;
-    border-radius:8px;
+    /* border-radius:8px; */
     position: absolute;
     z-index: 1;
     box-sizing: border-box;
@@ -171,6 +171,7 @@ br { user-select: none; }
     padding: 0.5rem;
     z-index: 1;
     transition: 0.3s opacity;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.2);
 }
 #menu.hide:not(.show) {
     opacity: 0;
