@@ -211,6 +211,8 @@ br { user-select: none; }
 .verse-result small {
 	text-overflow: ellipsis;
 	overflow: hidden;
+    margin-bottom: 0;
+    padding-bottom: 0.5rem;
 }
 
 .verse-result .match {
