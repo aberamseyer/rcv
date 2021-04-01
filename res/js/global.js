@@ -7,19 +7,17 @@
 
     // menu show/hide on scroll
     const menu = document.getElementById('menu');
-    let scrollPos = 0, throttle = false;
-    window.addEventListener('wheel', () => {
-        if (!throttle) {
-            const rect = document.body.getBoundingClientRect();
-            if (rect.top > scrollPos)
-                menu.classList.remove('hide');
-            else
-                menu.classList.add('hide');
-
-            scrollPos = rect.top;
-            throttle = true;
-            setTimeout(() => throttle = false, 250);
-        }
+    let scrollPos = 0;
+	window.addEventListener("ontouchstart" in window
+        ? 'touchmove'
+        : 'wheel',
+    () => {
+        const top = document.documentElement.scrollTop;
+        if (top < scrollPos)
+            menu.classList.remove('hide');
+        else
+            menu.classList.add('hide');
+        scrollPos = top;
     });
 
     // menu changing settings

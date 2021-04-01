@@ -421,7 +421,7 @@
 					$work[] = [
 						'offset' => $offset,
 						'text' => $text,
-						'link' => "<a target='_blank' href='/bible/".link_book($curr_book)."/".$curr_chapter."?verse=".$verse_match['start'][0]."'>".$text."</a>",
+						'link' => "<a href='/bible/".link_book($curr_book)."/".$curr_chapter."?verse=".$verse_match['start'][0]."'>".$text."</a>",
 					];
 				}
 			}

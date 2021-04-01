@@ -181,7 +181,7 @@ htmlNode.addEventListener('keyup', e => {
 // verse popup for a-tags
 document.querySelectorAll('[verse-hover]').forEach(aEl => {
   let newEl = document.createElement('div');
-  const handleHover = e => {
+  const handleMouseEnter = e => {
     if (aEl.querySelectorAll('.hover-verse').length === 0) {
       const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/)
       const verseRange = aEl.innerText;
@@ -200,7 +200,7 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
             if (results.length) {
               newEl.innerHTML = results.map(res => 
                 `<div>
-                  <b><a>${res.reference}</a></b>
+                  <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
                   &nbsp;&nbsp;
                   <span>${res.content}</span>
                 </div>`
@@ -226,5 +226,5 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
     if (e.target.isSameNode(aEl))
       e.preventDefault();
   });
-  aEl.addEventListener('mouseenter', handleHover);
+  aEl.addEventListener('mouseenter', handleMouseEnter);
 });

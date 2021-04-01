@@ -254,6 +254,7 @@ br { user-select: none; }
 .hide-notes [data-note], .hide-notes [data-content], .hide-notes .footnote { display: none; }
 .hide-notes [data-show] [data-note] { display: block; }
 
+details { user-select: none; }
 details h6 {
     display: inline-block;
     margin: 1rem;
