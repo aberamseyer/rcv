@@ -259,6 +259,7 @@ details h6 {
     display: inline-block;
     margin: 1rem;
 }
+details small a { white-space: nowrap; }
 
 .hover-verse {
     position: absolute;
@@ -272,6 +273,13 @@ details h6 {
     white-space: normal;
     width: 250px;
     box-sizing: border-box;
+    /* hide scrollbar */
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hover-verse::-webkit-scrollbar {
+    display: none;
 }
 .hover-verse span span { color: var(--main-text); }
 [verse-hover] { position: relative; white-space: nowrap; }
@@ -281,6 +289,6 @@ summary { outline: none; }
 @media print {
     * { color: black !important; }
     html, body { background-color: white; }
-    details, nav, #verse-input, #verse-input + small 
+    details, nav, #verse-input, #verse-input + small, #menu
     { display: none !important; }
 }
