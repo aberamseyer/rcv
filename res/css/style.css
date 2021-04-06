@@ -261,6 +261,7 @@ details h6 {
     margin: 1rem;
 }
 details small a { white-space: nowrap; }
+#verse-nav { margin-bottom: 3px; }
 
 .hover-verse {
     position: absolute;

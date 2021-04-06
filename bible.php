@@ -137,7 +137,7 @@
             <?php endforeach ?>
             </div>
         </details>
-        <details open>
+        <details open id='verse-nav'>
             <summary><h6>Verses</h6></summary>
             <div class='justify'>
                 <?php
