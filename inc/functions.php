@@ -470,12 +470,12 @@
 			if (!$search) {
 				if ($chapter) {
 					// viewing chapter, nav arrows change chapter
-					if ($book['chapters'] > $chapter['number']) {
-						$next = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']+1)."' rel='next'>&raquo;</a>";
-					}
-					if ($chapter['number'] > 1) {
-						$prev = "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']-1)."' rel='prev'>&laquo;</a>";
-					}
+					$next = $book['chapters'] > $chapter['number']
+						? "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']+1)."' rel='next'>&raquo;</a>"
+						: "<div></div>";
+					$prev = $chapter['number'] > 1
+						? "<a class='nav-arr' href='/bible/".link_book($book['name'])."/".($chapter['number']-1)."' rel='prev'>&laquo;</a>"
+						: "<div></div>";
 				}
 				else {
 					list($prev_book, $next_book) = select("
@@ -487,9 +487,11 @@
 						// genesis or revelation
 						if ($book['name'] == 'Genesis') {
 							$next = "<a class='nav-arr' href='/bible/".link_book($prev_book['name'])."' rel='next'>&raquo;</a>";
+							$prev = "<div></div>";
 						}
 						else {
 							$prev = "<a class='nav-arr' href='/bible/".link_book($prev_book['name'])."' rel='prev'>&laquo;</a>";
+							$next = "<div></div>";
 						}
 					}
 					else {
