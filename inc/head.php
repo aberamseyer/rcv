@@ -20,15 +20,8 @@
   <link rel="stylesheet" href="/res/css/sakura-dark.css?v=<?= COMMIT_HASH ?>" type="text/css">
   <link rel="stylesheet" href="/res/css/style.css?v=<?= COMMIT_HASH ?>" type="text/css">
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6CVJDRB1F"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  
-    gtag('config', 'G-Z6CVJDRB1F');
-  </script>
+  <!-- Plausible Analytics -->
+  <script async defer data-domain="rcv.ramseyer.dev" src="https://analytics.ramseyer.dev/js/plausible.js"></script>
 </head>
 <body id="top">
   <div id="menu">
