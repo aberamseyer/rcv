@@ -15,9 +15,15 @@ define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
 define("STATS", !$no_stats && !isset($_GET['no_track']));
 define("COMMIT_HASH", `git log -1 --pretty=format:%h`);
 
-$db = LOCAL || isset($_GET['abe'])
-	? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')
-	: mysqli_connect('127.0.0.1',  'rcv_app', '0XgOQnAKU6Mz6ja6', 'rcv');
+function db() {
+    static $db;
+    if (!$db) {
+		$db = LOCAL || isset($_GET['abe'])
+			? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')
+			: mysqli_connect('127.0.0.1',  'rcv_app', '0XgOQnAKU6Mz6ja6', 'rcv');
+    }
+    return $db;
+}
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 

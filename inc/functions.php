@@ -57,7 +57,7 @@
 	}
 	
 	function query ($query, $return = "") {
-		global $db;
+		$db = db();
 		$result = mysqli_query($db, $query);
 		if (!$result) {
 			echo "<p><b>Warning:</b> A mysqli error occurred: <b>" . mysqli_error($db) . "</b></p>";
@@ -239,7 +239,7 @@
 	}
 
 	function db_esc ($string) {
-		global $db;
+		$db = db();
 		return mysqli_real_escape_string($db, $string);
 	}
 
