@@ -85,7 +85,9 @@ p {
   margin-top: 0px;
   margin-bottom: 2.5rem; }
 
-small, sub, sup {
+small, sub {
+  font-size: 65%; }
+sup {
   font-size: 65%; }
 
 hr {
