@@ -100,7 +100,7 @@ function getRefs(id, details) {
           container.innerHTML = 
             results.map(ref => 
               `<a target='_blank' href='${ref.href}'>${ref.reference}${+ref.number ? '<sup>' + ref.number + '</sup>' : ''}</a>`
-            ).join(`&nbsp;&nbsp;&nbsp;`);
+            ).join(`&nbsp; &nbsp;`);
         }
 	  	}
     }
