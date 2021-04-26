@@ -91,4 +91,4 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/url.php";
 
 // load redis after the customization and url.php so we don't track simple state changes and invalid url redirects
 require "vendor/autoload.php";
-$redis_client = new Predis\Client([ 'host' => 'redis' ]);
+$redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);
