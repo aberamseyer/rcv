@@ -18,9 +18,7 @@ define("COMMIT_HASH", `git log -1 --pretty=format:%h`);
 function db() {
     static $db;
     if (!$db) {
-		$db = LOCAL || isset($_GET['abe'])
-			? mysqli_connect('database', 'docker', 'docker', $_GET['db'] ?: 'rcv', '3306')
-			: mysqli_connect('127.0.0.1',  'rcv_app', '0XgOQnAKU6Mz6ja6', 'rcv');
+		$db = new SQLite3($_SERVER['DOCUMENT_ROOT']."/extras/sqlite3/rcv.db");
     }
     return $db;
 }

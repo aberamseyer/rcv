@@ -58,23 +58,22 @@
 	
 	function query ($query, $return = "") {
 		$db = db();
-		$result = mysqli_query($db, $query);
+		$result = $db->query($query);
 		if (!$result) {
-			echo "<p><b>Warning:</b> A mysqli error occurred: <b>" . mysqli_error($db) . "</b></p>";
+			echo "<p><b>Warning:</b> A sqlite3 error occurred: <b>" . $db->lastErrorMsg() . "</b></p>";
 			debug($query);
 		}
 		if ($return == "insert_id")
-			return mysqli_insert_id($db);
+			return $db->lastInsertRowID();
 		if ($return == "num_rows")
-			return mysqli_affected_rows($db);
+			return $db->changes();
 		return $result;
 	}
 
 	function select ($query) {
 		$rows = query($query);
-		for ($result = []; $row = mysqli_fetch_assoc($rows); $result[] = $row);
+		for ($result = []; $row = $rows->fetchArray(SQLITE3_ASSOC); $result[] = $row);
 		return $result;
-
 	}
 
 	function row ($query) {
@@ -83,7 +82,7 @@
 	}
 
 	function col ($query) {
-		$row = mysqli_fetch_row(query($query));
+		$row = query($query)->fetchArray(SQLITE3_ASSOC);
 		return $row ? $row[0] : null;
 	}
 
@@ -91,7 +90,7 @@
 		$rows = query($query);
 		if ($rows) {
 			$results = [];
-			while ($row = mysqli_fetch_array($rows))
+			while ($row = $rows->fetchArray(SQLITE3_ASSOC))
 				$results[] = $row[0];
 			return $results;
 		}
@@ -185,7 +184,11 @@
 	}
 
 	function num_rows ($query) {
-		return mysqli_num_rows(query($query));
+		$i = 0;
+		$res = query($query);
+		while ($res->fetchArray(SQLITE3_ASSOC))
+			$i++;
+		return $i;
 	}
 
 	function html ($str, $lang_flag = ENT_HTML5) {
@@ -240,7 +243,7 @@
 
 	function db_esc ($string) {
 		$db = db();
-		return mysqli_real_escape_string($db, $string);
+		return $db->escapeString($string);
 	}
 
 	function db_esc_like ($string) {

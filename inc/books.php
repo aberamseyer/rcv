@@ -1,5 +1,5 @@
 <?php
-/* SELECT id, REPLACE(LOWER(name), ' ', '-') name, chapters FROM rcv.books ORDER BY sort_order; */
+/* SELECT id, REPLACE(LOWER(name), ' ', '-') name, chapters FROM books ORDER BY sort_order; */
 $books = [
   ['id' => '1','name' => 'genesis','chapters' => '50'],
   ['id' => '2','name' => 'exodus','chapters' => '40'],

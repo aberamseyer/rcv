@@ -6,12 +6,6 @@ $url = strtok(
 	), '?'
 );
 
-// track individual page views.
-// these keys will be valid urls bc the urls are validated in url.php, included at the end of init.php
-if (STATS) {
-	$redis_client->hincrby("rcv.ramseyer.dev/page-views", str_replace("-", "/", $url), 1);
-}
-
 if (!isset($_GET['no_cache']) && !LOCAL) {
 	$cachekey = str_replace('/', '-', $url)."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0).".html";
 	$cachefile = $_SERVER['DOCUMENT_ROOT']."/extras/cache/".$cachekey;

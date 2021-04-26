@@ -34,7 +34,7 @@ switch($_REQUEST['action']) {
 
 	    if ($type === 'bible') {
 	      $rows = select("
-	        SELECT cc.reference, 0 number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
+	        SELECT cc.reference, 0 number, '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number ||'#verse-' || cc.id href
 	        FROM bible_concordance_to_chapter_contents c2cc
 	        JOIN chapter_contents cc ON cc.id = c2cc.chapter_contents_id
 	        JOIN chapters c ON cc.chapter_id = c.id
@@ -44,7 +44,7 @@ switch($_REQUEST['action']) {
 	    }
 	    else { // $type === 'foot'
 	      $rows = select("
-	        SELECT cc.reference, f.number, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#fn-', f.id) href
+	        SELECT cc.reference, f.number, || '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#fn-' || f.id href
 	        FROM footnote_concordance_to_footnotes fc2f
 	        JOIN footnotes f ON f.id = fc2f.footnotes_id
 	        JOIN chapter_contents cc ON cc.id = f.verse_id
@@ -251,7 +251,7 @@ switch($_REQUEST['action']) {
 			// go get 'em
 			$raw_verses = !count($parsed_verses) ? [ ] : array_column(
 				select("
-					SELECT CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href, cc.reference, REPLACE(cc.content, '\n', ' / ') text
+					SELECT '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#verse-' || cc.id href, cc.reference, REPLACE(cc.content, '\n', ' / ') text
 					FROM chapter_contents cc
 					JOIN chapters c ON c.id = cc.chapter_id
 					JOIN books b ON b.id = c.book_id
@@ -287,7 +287,7 @@ switch($_REQUEST['action']) {
 
 		$csl = implode(',', $ids);
 		print_json($ids ? select("
-			SELECT REPLACE(cc.content, '\n', ' / ') content, cc.reference, CONCAT('/bible/', LOWER(REPLACE(b.name, ' ', '-')), '/', c.number, '#verse-', cc.id) href
+			SELECT REPLACE(cc.content, '\n', ' / ') content, cc.reference, '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#verse-' || cc.id href
 			FROM chapter_contents cc
 			JOIN chapters c ON c.id = cc.chapter_id
 			JOIN books b ON b.id = c.book_id
@@ -299,10 +299,10 @@ switch($_REQUEST['action']) {
 		$ref_like = db_esc_like($q)."%";
 
 		$results = select("
-			SELECT b.abbreviation abbr, LOWER(REPLACE(b.name, ' ', '-')) book, c.number chapter, cc.number verse, cc.content text
-			FROM rcv.chapter_contents cc
-			JOIN rcv.chapters c ON c.id = cc.chapter_id
-			JOIN rcv.books b ON b.id = c.book_id
+			SELECT b.abbreviation abbr, LOWER(REPLACE(b.name, ' ', '-')) book, c.number chapter, cc.number verse, cc.content as text
+			FROM chapter_contents cc
+			JOIN chapters c ON c.id = cc.chapter_id
+			JOIN books b ON b.id = c.book_id
 			WHERE cc.number != 0 AND (
 				cc.reference LIKE '$ref_like' OR 
 				REPLACE(cc.reference, '.', '') LIKE '$ref_like' OR
