@@ -13,7 +13,7 @@ if ($uri !== strtolower($uri) || $uri !== str_replace('_', '-', $uri)) {
 $parts = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
 if (!in_array(
 	$parts[1],
-	[ 'ajax', 'bible', 'search', 'admin', 'login', 'help', 'verse', 'concordance', '404' ], true)
+	[ 'ajax', 'bible', 'search', 'login', 'help', 'verse', 'concordance', '404' ], true)
 ) {
 	not_found();
 }

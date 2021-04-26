@@ -1,5 +1,1 @@
 Sitemap: https://rcv.ramseyer.dev/res/site/sitemap.txt
-
-User-agent: *
-Disallow: /login
-Disallow: /admin
