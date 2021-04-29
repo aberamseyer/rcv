@@ -82,7 +82,7 @@
 	}
 
 	function col ($query) {
-		$row = query($query)->fetchArray(SQLITE3_ASSOC);
+		$row = query($query)->fetchArray(SQLITE3_NUM);
 		return $row ? $row[0] : null;
 	}
 
@@ -90,7 +90,7 @@
 		$rows = query($query);
 		if ($rows) {
 			$results = [];
-			while ($row = $rows->fetchArray(SQLITE3_ASSOC))
+			while ($row = $rows->fetchArray(SQLITE3_NUM))
 				$results[] = $row[0];
 			return $results;
 		}
