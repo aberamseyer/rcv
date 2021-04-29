@@ -72,7 +72,7 @@
 
 	function select ($query) {
 		$rows = query($query);
-		for ($result = []; $row = $rows->fetchArray(SQLITE3_ASSOC); $result[] = $row);
+		for ($result = []; $row = $rows->fetchArray(); $result[] = $row);
 		return $result;
 	}
 
@@ -82,7 +82,7 @@
 	}
 
 	function col ($query) {
-		$row = query($query)->fetchArray(SQLITE3_NUM);
+		$row = query($query)->fetchArray();
 		return $row ? $row[0] : null;
 	}
 
@@ -186,7 +186,7 @@
 	function num_rows ($query) {
 		$i = 0;
 		$res = query($query);
-		while ($res->fetchArray(SQLITE3_ASSOC))
+		while ($res->fetchArray(SQLITE3_NUM))
 			$i++;
 		return $i;
 	}
