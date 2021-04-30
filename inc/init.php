@@ -70,16 +70,17 @@ if (!$_POST['action']) {
 		/*
 		 * select a book at 'random':
 		 *   1. weight NT books + Psalms a little higher
-		 *   2. pick random chapter
-		 *   3. pick random verse
+		 *   2. pick random chapter from book in step 1
+		 *   3. pick random verse from chapter in step 2
+		 * result: verses in shorter books have a much higher chance of getting selected, but whatever
 		 */
 		$book = row("
-			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19, 1.08, 1) * RAND() weight
+			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19, 1.08, 1) * RANDOM() weight
 			FROM books b
 			ORDER BY weight DESC
 			LIMIT 1");
-		$chapter = row("SELECT number, id FROM chapters WHERE book_id = $book[id] ORDER BY RAND() LIMIT 1");
-		$verse = row("SELECT id FROM chapter_contents WHERE chapter_id = $chapter[id] AND number ORDER BY RAND() LIMIT 1");
+		$chapter = row("SELECT number, id FROM chapters WHERE book_id = $book[id] ORDER BY RANDOM() LIMIT 1");
+		$verse = row("SELECT id FROM chapter_contents WHERE chapter_id = $chapter[id] AND number ORDER BY RANDOM() LIMIT 1");
 		redirect("/bible/".link_book($book['name'])."/$chapter[number]#verse-$verse[id]");
 	}
 
@@ -88,7 +89,3 @@ if (!$_POST['action']) {
 }
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/url.php";
-
-// load redis after the customization and url.php so we don't track simple state changes and invalid url redirects
-require "vendor/autoload.php";
-$redis_client = new Predis\Client([ 'host' => LOCAL ? 'redis' : '127.0.0.1' ]);

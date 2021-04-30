@@ -7,7 +7,7 @@ $url = strtok(
 );
 
 if (!isset($_GET['no_cache']) && !LOCAL) {
-	$cachekey = str_replace('/', '-', $url)."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0).".html";
+	$cachekey = str_replace('/', '-', $url)."_".($serif_text ? 1 : 0)."-".($light_theme ? 1 : 0)."-".($minimal_layout ? 1 : 0)."-".COMMIT_HASH.".html";
 	$cachefile = $_SERVER['DOCUMENT_ROOT']."/extras/cache/".$cachekey;
 
 	if (
@@ -17,7 +17,9 @@ if (!isset($_GET['no_cache']) && !LOCAL) {
 		if (!$output) {
 			// file exists, cache it in redis
 			$output = file_get_contents($cachefile);
-			$redis_client->set("rcv.ramseyer.dev/cache/".$cachekey, $output);
+			if (!$redis_client->exists("rcv.ramseyer.dev/cache/".$cachekey)) {
+				$redis_client->set("rcv.ramseyer.dev/cache/".$cachekey, $output);
+			}
 		}
 		$redis_client->expire("rcv.ramseyer.dev/cache/".$cachekey, 60 * 60); // cache pages for 1 hour in memory
 		echo $output;

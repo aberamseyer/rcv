@@ -59,9 +59,6 @@
 .verse-number {
     user-select: none;
     font-weight: bold;
-    display: inline;
-    position: relative;
-    top: 1px;
 }
 .play {
     user-select: none;

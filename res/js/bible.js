@@ -91,7 +91,7 @@ function startReading(id) {
             el.classList.add('highlight');
             el.scrollIntoView({ behavior: "smooth", block: "center" });
             playAudio(thingsToSpeak[i].src,
-                thingsToSpeak.length[i+1] ? thingsToSpeak[i+1].src : ''
+                thingsToSpeak[i+1] ? thingsToSpeak[i+1].src : ''
             ).then(() => {
               el.classList.remove('highlight');
               resolve();
