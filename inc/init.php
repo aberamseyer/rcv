@@ -75,7 +75,8 @@ if (!$_POST['action']) {
 		 * result: verses in shorter books have a much higher chance of getting selected, but whatever
 		 */
 		$book = row("
-			SELECT id, b.name, IF(b.testament = 1 OR b.id = 19, 1.08, 1) * RANDOM() weight
+			SELECT id, b.name, 
+				CASE WHEN b.testament = 1 OR b.id = 19 THEN 1.08 ELSE 1 END * RANDOM() weight
 			FROM books b
 			ORDER BY weight DESC
 			LIMIT 1");
