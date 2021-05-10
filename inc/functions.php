@@ -318,7 +318,7 @@
 			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
 		$parts[] = "<span>$content</span>";
 		if ($element['number'])
-			$parts[] = "<span><a class='play' onclick='startReading($element[id])'>&#8227;</a></span>";
+			$parts[] = "<span><a class='play' onclick='startReading(event, $element[id])'>&#8227;</a></span>";
 		$parts[] = "</p>";
 
 		// right-align "Selah"s, including the footnotes attached to them

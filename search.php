@@ -137,14 +137,16 @@ echo "<h1><a href='/bible'>Search".($q ? ": '".html($q)."'" : '')."</a></h1>";
 		}
 		echo "</optgroup>";
 ?></select> chapter <input name='chapter' placeholder="Any Chapter" type="number" min="1" value="<?= $chapter['number'] ?>"> for
-	<input type="text" name="q" minlength="3" maxlength="2000" placeholder="this phrase..." value="<?= htmlentities($q, ENT_HTML5) ?>">
-	<h5 style="margin-top: 0">Also Search</h5>
-	<ul style="list-style:none;">
-		<li><label><input name="also[fn]" type="checkbox" value="true" <?= $also['fn'] ? 'checked' : '' ?>> Footnotes</label></li>
-		<li><label><input name="also[cr]" type="checkbox" value="true" <?= $also['cr'] ? 'checked' : ''?>> Cross References</label></li>
-		<li><label><input name="also[out]" type="checkbox" value="true" <?= $also['out'] ? 'checked' : ''?>> Outline headings</label></li>
-		<li><label><input name="also[subj]" type="checkbox" value="true" <?= $also['subj'] ? 'checked' : ''?>> Book Details</label></li>
-	</ul>
+	<input type="search" name="q" minlength="3" maxlength="2000" placeholder="this phrase..." value="<?= htmlentities($q, ENT_HTML5) ?>">
+	<fieldset>
+		<legend>Also search in</legend>
+		<ul style="list-style:none;">
+			<li><label><input name="also[fn]" type="checkbox" value="true" <?= $also['fn'] ? 'checked' : '' ?>> Footnotes</label></li>
+			<li><label><input name="also[cr]" type="checkbox" value="true" <?= $also['cr'] ? 'checked' : ''?>> Cross References</label></li>
+			<li><label><input name="also[out]" type="checkbox" value="true" <?= $also['out'] ? 'checked' : ''?>> Outline headings</label></li>
+			<li><label><input name="also[subj]" type="checkbox" value="true" <?= $also['subj'] ? 'checked' : ''?>> Book Details</label></li>
+		</ul>		
+	</fieldset>
 	<button type="submit">Search</button>
 	<hr />
 </form>

@@ -291,3 +291,17 @@ summary { outline: none; }
     details, nav, #verse-input, #verse-input + small, #menu
     { display: none !important; }
 }
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 1em;
+  width: 1em;
+  background: url(/res/img/times-circle.svg) no-repeat 50% 50%;
+  background-size: contain;
+  opacity: 0.5;
+  filter: invert(1);
+}
+
+@media(min-width: 768px) {
+    .mobile { display: none; }
+}

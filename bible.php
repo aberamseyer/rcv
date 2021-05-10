@@ -190,7 +190,7 @@
     }
     // allows scrolling past the last footnote so the links can always focus a footnote at the top of the screen
     echo "<div style='height: 90vh;'></div>";
-    echo "<script>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; </script>";
+    echo "<script>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; window.verses = '".$chapter['verses']."'; </script>";
     echo '<script src="/res/js/bible.js?v='.COMMIT_HASH.'"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
     require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";

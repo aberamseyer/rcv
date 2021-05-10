@@ -1,4 +1,4 @@
-let menu, audio1, audio2, reading = false, thingsToSpeak,
+let menu, audio1, audio2, thingsToSpeak,
 menuEL = document.createElement('li');
 menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a><div class='emoji'>🛑</div>`;
 
@@ -12,21 +12,15 @@ window.addEventListener('load', () => {
 });
 function playAudio(src, nextSrc) {
   return new Promise(resolve => {
-    reading = true;
     audio1.src = src;
     audio2.src = nextSrc;
 
     const unload = () => {
       audio1.pause();
-      [audio1, audio2].forEach(el => {
+      [ audio1, audio2 ].forEach(el => {
         el.src = '';
         el.load();
       });
-    };
-
-    const preloadNextVerse = () => {
-      audio2.src = nextSrc;
-      audio2.load();
     };
 
     if (!src)  {
@@ -39,59 +33,41 @@ function playAudio(src, nextSrc) {
         unload();
       }
       audio1.src = src;
-      audio1.load();
       audio1.play().then(() => {
-        reading = true;
-        preloadNextVerse();
         audio1.addEventListener("ended", () => {
-          reading = false;
           resolve();
         }, { capture: false, once: true });
       }).catch(err => {
-        reading = false;
         resolve();
         console.log('playback error: ' + err);
       });
     }
   });
 }
-function startReading(id) {
-  stopReading();
-  const verseEl = document.getElementById(`verse-${id}`);
-  const ref = verseEl.getAttribute('data-ref');
-  const matches = ref.match(/.+ (?:\d+:)?(\d+)/);
-  const verseNum = parseInt(matches[1]);
-  if (verseNum) {
-    // translate this verse into an id that file.ramseyer.dev can match
-    fetch(`https://bible-api.ramseyer.dev/v2/chapter.php?key=${
-        encodeURIComponent('rcv.ramseyer.dev')
-      }&book=${
-      window.book.replace(/(\d) /, '$1')
-    }&chapter_num=${window.chapter}`)
-    .then(response => {
-      return response.json();
-    })
-    .then(obj => {
-      thingsToSpeak = obj.data.versesArr.slice(verseNum - 1).map((verse, i) => {
-        return {
-          id: verse.id,
-          number: verseNum + i,
-          src: `https://files.ramseyer.dev/tts/rcv/${verse.id}.ogg`
-        };
-      });
-
+function startReading(event, id) {
+  event.stopPropagation();
+  stopReading().then(() => {
+    const verseEl = document.getElementById(`verse-${id}`);
+    const ref = verseEl.getAttribute('data-ref');
+    const matches = ref.match(/.+ (?:\d+:)?(\d+)/);
+    const verseNum = parseInt(matches[1]);
+    if (verseNum) {
+      // translate this verse into an id that files.ramseyer.dev can match
+        thingsToSpeak = [ ...Array(window.verses - verseNum + 1).keys() ].map(i =>
+          `https://files.ramseyer.dev/tts/rcv-ref/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.ogg`);
+  
       // play each track synchronously
       menu.querySelector('ul').prepend(menuEL);
       menu.classList.add('show');
-
+  
       for (let i = 0, p = Promise.resolve(); i < thingsToSpeak.length; i++) {
         p = p.then(() => {
           return new Promise(resolve => {
-            const el = document.querySelectorAll('.verse')[ thingsToSpeak[i].number - 1 ];
+            const el = Array.from(document.querySelectorAll('.verse')).slice(verseNum - 1)[ i ];
             el.classList.add('highlight');
             el.scrollIntoView({ behavior: "smooth", block: "center" });
-            playAudio(thingsToSpeak[i].src,
-                thingsToSpeak[i+1] ? thingsToSpeak[i+1].src : ''
+            playAudio(thingsToSpeak[i],
+                thingsToSpeak[i+1] ? thingsToSpeak[i+1] : ''
             ).then(() => {
               el.classList.remove('highlight');
               resolve();
@@ -103,47 +79,58 @@ function startReading(id) {
           });
         });
       }
-    });
-  }
+    }
+  });
 }
 function stopReading() {
-  thingsToSpeak = [ ];
-  document.querySelectorAll('.verse').forEach(x => {
-    x.classList.remove('highlight');
+  return new Promise(res => {
+    thingsToSpeak = [ ];
+    
+    this.playAudio('')
+    .then(() => {
+      document.querySelectorAll('.verse').forEach(x => {
+        x.classList.remove('highlight');
+      });
+      menuEL.remove();
+      menu.classList.remove('show');
+      res();
+    });
   });
-  this.playAudio('');
-  menuEL.remove();
-  menu.classList.remove('show');
 }
 
 // scroll to verse
 if (!window.location.hash) {
-    const matches = window.location.search.match(/verse=(\d+)/);
-    if (matches) {
-        window.addEventListener('load', () => {
-          setTimeout(()  => {
-            const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
-            el.classList.add('highlight');
-            el.scrollIntoView();
-            setTimeout(() => el.classList.remove('highlight'), 1000);
-          }, 250);
-        });   
-    }
+  const matches = window.location.search.match(/verse=(\d+)/);
+  if (matches) {
+    window.addEventListener('load', () => {
+      setTimeout(()  => {
+        const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
+        el.classList.add('highlight');
+        el.scrollIntoView();
+        setTimeout(() => el.classList.remove('highlight'), 1000);
+      }, 250);
+    });
+  }
+} else {
+  const id = window.location.hash.replace('#verse-', '');
+  const el = document.getElementById(`verse-${id}`)
+  el.classList.add('highlight');
+  setTimeout(() => el.classList.remove('highlight'), 1000);
 }
 
 // verse highlight on click
 document.querySelectorAll('.verse').forEach(v => {
-     v.addEventListener('click', e => {
-        document.querySelectorAll('.verse').forEach(el => {
-            if (!el.isEqualNode(v))
-                el.classList.remove('highlight')
-        });
-        v.classList[
-            v.classList.contains('highlight')
-            ? 'remove' : 'add'
-        ]('highlight');
-        e.stopPropagation();
+  v.addEventListener('click', e => {
+    document.querySelectorAll('.verse').forEach(el => {
+      if (!el.isEqualNode(v))
+        el.classList.remove('highlight')
     });
+    v.classList[
+      v.classList.contains('highlight')
+        ? 'remove' : 'add'
+    ]('highlight');
+    e.stopPropagation();
+  });
 });
 // deselect verse on outside click
 const htmlNode = document.querySelector('html');
@@ -154,8 +141,8 @@ htmlNode.addEventListener('click', e => {
   document.querySelectorAll('.hover-verse').forEach(el => el.remove());
 });
 document.querySelectorAll('.tooltip').forEach(v => {
-     v.addEventListener('click', e =>
-        e.stopPropagation());
+  v.addEventListener('click', e =>
+    e.stopPropagation());
 });
 
 // navigate using ← and →
@@ -168,11 +155,11 @@ htmlNode.addEventListener('keyup', e => {
       window.history.back();
   }
 
-  if (leftArrow && event.key === `ArrowLeft`) {
+  if (leftArrow && e.key === `ArrowLeft`) {
     checkReferrer(leftArrow.getAttribute('href'));
     window.location = leftArrow.getAttribute('href');
   }
-  else if (rightArrow && event.key === `ArrowRight`) {
+  else if (rightArrow && e.key === `ArrowRight`) {
     checkReferrer(rightArrow.getAttribute('href'));
     window.location = rightArrow.getAttribute('href');
   }
