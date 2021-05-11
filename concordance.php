@@ -44,7 +44,7 @@ if ($letter) {
   // get our entries from the bible or footnote tables
 	if ($q_conc === 'bible') {
     $rows = select("
-      SELECT bc.id, bc.word, COUNT(*) refs #, cc.reference, '/bible/' || b.name || '/' || c.number || '#verse-' || cc.id href
+      SELECT bc.id, bc.word, COUNT(*) refs
       FROM bible_concordance bc
       JOIN bible_concordance_to_chapter_contents c2cc ON bc.id = c2cc.concordance_id
       WHERE SUBSTR(bc.word, 1, 1) = '$letter' AND bc.status = 1
