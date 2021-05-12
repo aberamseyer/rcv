@@ -44,7 +44,7 @@ switch($_REQUEST['action']) {
 	    }
 	    else { // $type === 'foot'
 	      $rows = select("
-	        SELECT cc.reference, f.number, || '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#fn-' || f.id href
+	        SELECT cc.reference, f.number, '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#fn-' || f.id href
 	        FROM footnote_concordance_to_footnotes fc2f
 	        JOIN footnotes f ON f.id = fc2f.footnotes_id
 	        JOIN chapter_contents cc ON cc.id = f.verse_id
