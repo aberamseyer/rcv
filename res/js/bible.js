@@ -112,10 +112,11 @@ if (!window.location.hash) {
     });
   }
 } else {
-  const id = window.location.hash.replace('#verse-', '');
-  const el = document.getElementById(`verse-${id}`)
-  el.classList.add('highlight');
-  setTimeout(() => el.classList.remove('highlight'), 1000);
+  const el = document.getElementById(`verse-${window.location.hash.replace('#verse-', '')}`);
+  if (el) {
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 1000);
+  }
 }
 
 // verse highlight on click
