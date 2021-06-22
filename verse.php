@@ -16,7 +16,7 @@ $permalink = htmlentities($_GET['verses'], ENT_HTML5);
 ?>
 <h1><a href='/bible'>Verse Lookup</a></h1>
 
-<input id='verse-input' name='q' type='search' maxlength='2000' style='width: 100%' placeholder='e.g., Gen. 1:26; John 1:1, 14; 2 Cor. 3:18; Jude 20-21' value='<?= $permalink ?: ''?>' title='You can request a maximum of 200 verses at a time'>
+<input id='verse-input' name='q' type='search' maxlength='2000' style='width: 100%' placeholder='e.g., Gen. 1:26; John 1:1, 14; 2 Cor. 3:18; Jude 20-21' value='<?= $permalink ?: ''?>' title='You can request a maximum of 200 unique verses at a time'>
 <details class="mobile">
 	<summary><small style='display: inline;'>Quick add:</small></summary>
 	<style>

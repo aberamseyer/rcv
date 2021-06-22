@@ -29,7 +29,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Pressing 'Esc' or clicking off a verse will dismiss the search tool</li>
     </ul>
   </li>
-  <li>The 'Play' button that appears when hovering over each verse to the right will begin playing audio of the chapter from that verse until the end of the chapter
+  <li>The 'Play' button that appears to the right of a highlighted verse will begin playing audio of the chapter from that verse until the end of the chapter
     <ul>
       <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
