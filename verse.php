@@ -8,7 +8,7 @@
 
 $title = "Verse Lookup";
 $meta_description = "Request sets of verses in the Holy Bible Recovery Version.";
-$meta_canonical = "https://rcv.ramseyer.dev/verse";
+$meta_canonical = "https://".DOMAIN."/verse";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 
@@ -99,7 +99,7 @@ function copyToClip(copyText, element) {
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip("https://rcv.ramseyer.dev/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
+							<a href='' onclick='copyToClip("https://<?= DOMAIN ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
 							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;verse text</a>`;
 					}
 					hr.classList[results.length === 0 ? 'add' : 'remove']('hidden'); // hide <hr> if no results

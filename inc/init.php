@@ -11,7 +11,8 @@ ini_set('post_max_size', '512K');
 ini_set('upload_max_filesize', '512K');
 
 $time = microtime(true);
-define("LOCAL", $_SERVER['HTTP_HOST'] !== 'rcv.ramseyer.dev');
+define("DOMAIN", "https://rcv-eba.herokuapp.com/");
+define("LOCAL", $_SERVER['HTTP_HOST'] !== DOMAIN);
 define("STATS", !$no_stats && !isset($_GET['no_track']));
 define("COMMIT_HASH", `git log -1 --pretty=format:%h`);
 

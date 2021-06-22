@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22050090cec8ca5de73b74d03fb8c0d8",
+    "content-hash": "3f4a987e4b0d56e76a096a8ba3a30db3",
     "packages": [
         {
             "name": "predis/predis",
@@ -131,7 +131,9 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-sqlite3": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"
 }

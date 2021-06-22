@@ -19,9 +19,6 @@
   <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml?v=<?= COMMIT_HASH ?>">
   <link rel="stylesheet" href="/res/css/sakura-dark.css?v=<?= COMMIT_HASH ?>" type="text/css">
   <link rel="stylesheet" href="/res/css/style.css?v=<?= COMMIT_HASH ?>" type="text/css">
-
-  <!-- Plausible Analytics -->
-  <script async defer data-domain="rcv.ramseyer.dev" src="https://analytics.ramseyer.dev/js/plausible.js"></script>
 </head>
 <body id="top">
   <div id="menu">
