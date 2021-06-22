@@ -55,13 +55,13 @@
 
 
     $meta_description = "Read the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
-    $meta_canonical = "https://".DOMAIN."/bible";
+    $meta_canonical = "https://".getenv("DOMAIN")."/bible";
     if ($book) {
         $meta_description = "Read $book[name] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
-        $meta_canonical = "https://".DOMAIN."/bible/".link_book($book['name']);
+        $meta_canonical = "https://".getenv("DOMAIN")."/bible/".link_book($book['name']);
         if ($chapter) {
             $meta_description = "Read $book[name] chapter $chapter[number] from the Holy Bible Recovery Version complete with outlines, footnotes, cross-references, and book details.";
-            $meta_canonical = "https://".DOMAIN."/bible/".link_book($book['name'])."/".$chapter['number'];
+            $meta_canonical = "https://".getenv("DOMAIN")."/bible/".link_book($book['name'])."/".$chapter['number'];
         }
     }
     require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";

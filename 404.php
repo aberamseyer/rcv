@@ -10,7 +10,7 @@ http_response_code(404); // must be sent before other output
 
 $title = "Not Found";
 $meta_description = "The page you are looking for does not exist on this website";
-$meta_canonical = "https://".DOMAIN."/404";
+$meta_canonical = "https://".getenv("DOMAIN")."/404";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 

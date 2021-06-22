@@ -9,7 +9,7 @@
 $search = true;
 $title = "Search";
 $meta_description = "Search in the Holy Bible Recovery Version for text, footnotes, cross-references, and outline points.";
-$meta_canonical = "https://".DOMAIN."/search";
+$meta_canonical = "https://".getenv("DOMAIN")."/search";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 

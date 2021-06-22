@@ -8,7 +8,7 @@
 
 $title = "Help";
 $meta_description = "Get help for navigating the website and using all of its features.";
-$meta_canonical = "https://".DOMAIN."/help";
+$meta_canonical = "https://".getenv("DOMAIN")."/help";
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 ?>
@@ -34,12 +34,12 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
   </li>
-  <li>You can link to this website, directly to a verse using the format: <pre>https://<?= DOMAIN ?>/bible/{BOOK NAME}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
+  <li>You can link to this website, directly to a verse using the format: <pre>https://<?= getenv("DOMAIN") ?>/bible/{BOOK NAME}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
     <ul>
       <li>Ommit the verse number or chapter number if you want to link to a book or chapter</li>
-      <li>John 1:1 <pre>https://<?= DOMAIN ?>/bible/john/1?verse=1</pre></li>
-      <li>2 Corinthians 4 - note that spaces should be replaced with a '-' <pre>https://<?= DOMAIN ?>/bible/2-corinthians/4</pre></li>
-      <li>Philemon<pre>https://<?= DOMAIN ?>/bible/philemon</pre></li>
+      <li>John 1:1 <pre>https://<?= getenv("DOMAIN") ?>/bible/john/1?verse=1</pre></li>
+      <li>2 Corinthians 4 - note that spaces should be replaced with a '-' <pre>https://<?= getenv("DOMAIN") ?>/bible/2-corinthians/4</pre></li>
+      <li>Philemon<pre>https://<?= getenv("DOMAIN") ?>/bible/philemon</pre></li>
     </ul>
   </li>
   <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
