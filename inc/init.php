@@ -13,7 +13,9 @@ ini_set('upload_max_filesize', '512K');
 $time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== getenv("DOMAIN"));
 define("STATS", !$no_stats && !isset($_GET['no_track']));
-define("COMMIT_HASH", `git log -1 --pretty=format:%h`);
+define("COMMIT_HASH", strpos(getenv("DOMAIN"), "heroku") === false
+	? `git log -1 --pretty=format:%h`
+	: "");
 
 function db() {
     static $db;
