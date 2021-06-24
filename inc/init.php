@@ -29,6 +29,11 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 
 ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 session_start();
+
+if (!$_SESSION['user'] && !$login) {
+	redirect('/login');
+}
+
 if (!$_POST['action']) {
 	// theme
 	$light_theme = $_SESSION['theme'] == 'light';
@@ -88,7 +93,9 @@ if (!$_POST['action']) {
 	}
 
 	unset($_GET['set_theme'], $_GET['set_serif'], $_GET['set_minimal']);
-	session_write_close();
+
+	if (!$login)
+		session_write_close();
 }
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/url.php";
