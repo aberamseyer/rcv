@@ -6,12 +6,13 @@
  * Time: 12:35
  */
 
+$login = true;
+
+require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
+
 if ($_SESSION['user']) {
     redirect("/bible");
 }
-
-$login = true;
-require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 if ($_POST['user'] && $_POST['password']) {
     $user_row = row("SELECT * FROM users WHERE user = '".db_esc($_POST['user'])."'");
@@ -23,23 +24,27 @@ if ($_POST['user'] && $_POST['password']) {
         }
     }
 }
-
-
-$title = "Login";
-$meta_description = "Login to the admin portal.";
-$meta_canonical = "https://".getenv("DOMAIN")."/login";
-require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
-?>
-<h1>Login</h1>
-<form action='' method='post'>
-<p>
-    <input name='user' type='text' maxlength="32" placeholder="Username">
-</p>
-<p>
-    <input name='password' type='password' placeholder="Password" maxlength="32">
-</p>
-<button type="submit">Submit</button>
-</form>
-<?php
-
-require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
+?><!doctype html>
+<html lang="en-US">
+<head>
+  <title>Login - Recovery Version</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta charset="utf-8">
+  <link rel="shortcut icon" type="image/png" href="/res/site/favicon.png?v=<?= COMMIT_HASH ?>">
+  <link rel="manifest" href="/res/site/manifest.json?v=<?= COMMIT_HASH ?>">
+  <link rel="stylesheet" href="/res/css/sakura-dark.css?v=<?= COMMIT_HASH ?>" type="text/css">
+  <link rel="stylesheet" href="/res/css/style.css?v=<?= COMMIT_HASH ?>" type="text/css">
+</head>
+<body>
+    <h1>Login</h1>
+    <form action='' method='post'>
+    <p>
+        <input name='user' type='text' maxlength="32" placeholder="Username">
+    </p>
+    <p>
+        <input name='password' type='password' placeholder="Password" maxlength="32">
+    </p>
+    <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

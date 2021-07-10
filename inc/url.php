@@ -13,7 +13,7 @@ if ($uri !== strtolower($uri) || $uri !== str_replace('_', '-', $uri)) {
 $parts = explode('/', strtok($_SERVER['REQUEST_URI'], '?'));
 if (!in_array(
 	$parts[1],
-	[ 'ajax', 'bible', 'search', 'login', 'help', 'verse', 'concordance', '404' ], true)
+	[ '', 'ajax', 'bible', 'search', 'login', 'help', 'verse', 'concordance', '404' ], true)
 ) {
 	not_found();
 }
@@ -30,7 +30,10 @@ else if ($parts[1] === 'bible') {
 		not_found();
 	}
 
-	// now you have $page[ 'book' => book_name, 'chapter' => chapter_if_it_exists ]
+	// now you have $bible_page[ 'book' => book_name, 'chapter' => chapter_if_it_exists ]
+}
+else if ($parts[1] === '') {
+	perm_redirect('/bible');
 }
 
 // ..otherwise we're good
