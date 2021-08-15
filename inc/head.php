@@ -34,23 +34,23 @@
     <span class='dots'>&#8942;</span>
       <ul id='menu-href'>
         <li>
-          <a rel="nofllow" href="?<?= http_build_query($_GET) ?>&set_theme=<?= $light_theme ? 'dark' : 'light' ?>">Switch to <?= $light_theme ? 'dark' : 'light' ?> theme</a>
+          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_theme=<?= $light_theme ? 'dark' : 'light' ?>">Switch to <?= $light_theme ? 'dark' : 'light' ?> theme</a>
           <?= $emoji[0] ?>
         </li>
         <li>
-          <a rel="nofllow" href="?<?= http_build_query($_GET) ?>&set_minimal=<?= $minimal_layout ? 'false' : 'true' ?>"><?= $minimal_layout ? 'Show' : 'Hide' ?> notes</a>
+          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_minimal=<?= $minimal_layout ? 'false' : 'true' ?>"><?= $minimal_layout ? 'Show' : 'Hide' ?> notes</a>
           <?= $emoji[1] ?>
         </li>
         <li>
-          <a rel="nofllow" href="?<?= http_build_query($_GET) ?>&set_sans=<?= $serif_text ? 'true' : 'false' ?>">Use <?= $serif_text ? 'sans-' : ''?>serif font</a>
+          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_sans=<?= $serif_text ? 'true' : 'false' ?>">Use <?= $serif_text ? 'sans-' : ''?>serif font</a>
           <?= $emoji[2] ?>
         </li>
         <li>
-          <a rel="nofllow" href="?random">Random Verse </a>
+          <a rel="nofllow" tabindex="-1" href="?random">Random Verse </a>
           <?= $emoji[3] ?>
         </li>
         <li>
-          <a href="/help">Help</a>
+          <a href="/help" tabindex="-1">Help</a>
           <?= $emoji[4] ?>
         </li>
       </ul>

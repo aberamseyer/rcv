@@ -112,6 +112,15 @@ function copyToClip(copyText, element) {
 		}
 	}
 
+	// focus verse bar on left bracket press
+	document.querySelector('body').onkeyup = e => {
+		const { key } = e;
+
+		if (key === "[") {
+			verseInput.focus();
+		}
+	}
+
 	// init
 	if (verseInput.value.length)
 		verseInput.onkeyup({ key: 'a' }); // manually trigger on load

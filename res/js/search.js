@@ -62,13 +62,13 @@
 				if (request.status === 200) {
 					const { results, count, q } = JSON.parse(request.response);
 					searchResults.innerHTML = results
-						.map(res => 
-							`<div class='verse-result'><a href='/bible/${res.book}/${res.chapter}?verse=${res.verse}'>
+						.map((res, i) => 
+							`<div class='verse-result'><a href='/bible/${res.book}/${res.chapter}?verse=${res.verse}' tabindex='${i+1}'>
 								<small><b>${res.abbr} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
 							</div>`)
 						.join('');
 					if (count > results.length)
-						searchResults.innerHTML += `<div class='verse-result'><a href='/search?q=${q}'>
+						searchResults.innerHTML += `<div class='verse-result'><a href='/search?q=${q}' tabindex='21'>
 							<small>...and ${count - results.length} more</small>
 						</a></div>`;
 					if (results.length === 0)
