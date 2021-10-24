@@ -93,12 +93,12 @@
     }
     else if (!$chapter) {
         // book details
-        echo "<p><small>";
+        echo "<p><small class='smaller'>";
         $details = explode("\n", $book['details']);
         foreach($details as $detail_line) {
             $parts = explode(": ", $detail_line);
             if (count($parts) === 2)
-                echo "<b>".html($parts[0]).": </b>".html($parts[1]);
+                echo "<b class='sans-text'>".html($parts[0]).": </b><span class='serif-text'>".html($parts[1])."</span>";
             else
                 echo html($detail_line);
             echo "<br />";

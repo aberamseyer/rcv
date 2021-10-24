@@ -1,3 +1,6 @@
+.serif-text { font-family: serif; }
+.sans-text { font-family: sans-serif; }
+.smaller { font-size: 75%; }
 .copy {
     font-size: 0.8rem;
     margin-top: 0.5rem;
@@ -60,19 +63,20 @@
     user-select: none;
     font-weight: bold;
 }
-.play {
-    user-select: none;
-    visibility: hidden;
-    pointer-events: none;
-    font-size: 4rem;
-    cursor: pointer;
-    line-height: 1rem;
-    position: relative;
-    top: 0.25rem;
+.verse-end {
+    display: flex;
+    flex-direction:  column;
 }
-.has-js .verse.highlight .play {
-    visibility: visible;
-    pointer-events: auto;
+.play, .inter {
+    visibility:  hidden;
+    user-select: none;
+    cursor: pointer;
+}
+.play { display:  none; }
+.has-js .verse.highlight .play,
+.has-js .verse.highlight .inter { 
+    visibility:  visible;
+    display: inline;
 }
 
 .verse-line { display: block; }
@@ -93,7 +97,7 @@ small {
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     margin-bottom: 0.75rem;
 }
 .h1 { padding-left: 1rem; }
@@ -241,6 +245,8 @@ br { user-select: none; }
 
 .no-select { user-select: none; }
 [data-content]:before { content: attr(data-content); /* this lets Ctrl+F to work over superscripts */ }
+
+.footnote { line-height: 2.2rem; }
 
 /* serif font selectors */
 .serif .verse-line, .serif .footnote, .serif .result, .serif #verses { font-family: serif; }

@@ -265,6 +265,16 @@
 		die;
 	}
 
+	// https://biblehub.com/interlinear/genesis/1-1.htm
+	function biblehub_interlinear_href($element) {
+		global $book, $chapter;
+		if (!$element['number'])
+			return '';
+
+		$href_book = str_replace(' ', '_', strtolower($book['name']));
+		return "https://biblehub.com/interlinear/$href_book/$chapter[number]-$element[number].htm";
+	}
+
 	function format_verse($element) {
 		global $book;
 
@@ -317,8 +327,13 @@
 		if ($element['number'])
 			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
 		$parts[] = "<span>$content</span>";
-		if ($element['number'])
-			$parts[] = "<span><a class='play' onclick='startReading(event, $element[id])'>&#8227;</a></span>";
+		if ($element['number']) {
+			$parts[] = "
+			<span class='verse-end'>
+				<a class='play' onclick='startReading(event, $element[id])'>&#9658;</a>
+				<a class='inter' target='_blank' href='".biblehub_interlinear_href($element)."'>".($book['testament'] ? "&Omega;" : "&#1513;")."</a>
+			</span>";
+		}
 		$parts[] = "</p>";
 
 		// right-align "Selah"s, including the footnotes attached to them
