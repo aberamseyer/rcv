@@ -93,4 +93,12 @@
     		saveSettings();
     	});
     });
+
+    // global shortcut to verse lookup page
+    document.querySelector('body').addEventListener('keydown', e => {
+    	if (e.key === 'e' && (e.metaKey || e.ctrlKey)) {
+    		if (window.location.pathname != '/verse')
+    			window.location = '/verse';
+    	}
+    });
 })();

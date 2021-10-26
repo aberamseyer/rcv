@@ -24,7 +24,12 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
   <li>Type anywhere to begin searching for a verse by reference or keyword
     <ul>
       <li>Click any verse to open it</li>
-      <li>Pressing 'Enter' from the quick search will navigate to the advanced search page</li>
+      <li>Use the mouse, arrow keys up/down, or tab/shift+tab to select a verse in the list
+        <ul>
+          <li>With a verse selected, 'Enter' will open that verse</li>
+          <li>Otherwise, pressing 'Enter' from the quick search will navigate to the advanced search page</li>
+        </ul>
+      </li>
       <li>Typing a ';' will insert a ':' to make entering references faster</li>
       <li>Pressing 'Esc' or clicking off a verse will dismiss the search tool</li>
     </ul>
@@ -42,7 +47,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Philemon<pre>https://<?= getenv("DOMAIN") ?>/bible/philemon</pre></li>
     </ul>
   </li>
-  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> page to find a set list of verses.
+  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> (Cmd/Ctrl+e) page to find a set list of verses.
     <ul>
       <li>Separate verses with a semicolon: Gen. 1:26; 2:14</li>
       <li>verses can have a range: Dan. 2:4-7</li>

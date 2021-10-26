@@ -40,11 +40,6 @@
 				window.location = `/search?q=${searchInput.innerHTML}`;
 			return;
 		}
-		else if (searchInput.innerHTML.length && (key === 'ArrowLeft' || key === 'ArrowRight')) {
-			e.stopImmediatePropagation();
-			e.preventDefault();
-			return;
-		}
 		else if (searchInput.innerHTML.length && (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey))) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
@@ -64,6 +59,8 @@
 			return;
 		}
 		else if (!e.metaKey && !e.ctrlKey && key.match(/^[0-9a-zA-Z \.\,:"'!\-\?]$/)) {
+			if (key === ' ' && !searchInput.innerHTML.length) // allows scrolling with spacebar when overlay is not shown
+				return;
 			searchInput.innerHTML += key;
 			if (key === ' ')
 				e.preventDefault();

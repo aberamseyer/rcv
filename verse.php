@@ -99,7 +99,7 @@ function copyToClip(copyText, element) {
 
 					if (results.length) {
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip("https://<?= getenv("DOMAIN") ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
+							<a href='' onclick='copyToClip("<?= $_SERVER['REQUEST_SCHEME'] ?>://<?= getenv("DOMAIN") ?: $_SERVER['HTTP_HOST'] ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a> <br>
 							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;verse text</a>`;
 					}
 					hr.classList[results.length === 0 ? 'add' : 'remove']('hidden'); // hide <hr> if no results
