@@ -271,7 +271,9 @@
 		if (!$element['number'])
 			return '';
 
-		$href_book = str_replace(' ', '_', strtolower($book['name']));
+		$href_book = $book['name'] == 'Song of Songs'
+			? 'songs'
+			: str_replace(' ', '_', strtolower($book['name']));
 		return "https://biblehub.com/interlinear/$href_book/$chapter[number]-$element[number].htm";
 	}
 
