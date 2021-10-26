@@ -39,7 +39,12 @@
 				window.location = `/search?q=${searchInput.innerHTML}`;
 			return;
 		}
-		else if (key === 'ArrowUp') {
+		else if (key === 'ArrowLeft' || key === 'ArrowRight') {
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			return;
+		}
+		else if (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey)) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.max(selectedIndex - 1, -1);
@@ -48,12 +53,7 @@
 			e.preventDefault();
 			return;
 		}
-		else if (key === 'ArrowLeft' || key === 'ArrowRight') {
-			e.stopImmediatePropagation();
-			e.preventDefault();
-			return;
-		}
-		else if (key === 'ArrowDown') {
+		else if (key === 'ArrowDown' || (key === 'Tab' && !e.shiftKey)) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.min(selectedIndex + 1, searchResults.childElementCount - 1);
@@ -89,7 +89,7 @@
 					const { results, count, q } = JSON.parse(request.response);
 					searchResults.innerHTML = results
 						.map((res, i) => 
-							`<div class='verse-result'><a href='/bible/${res.book}/${res.chapter}?verse=${res.verse}' tabindex='${i+1}'>
+							`<div class='verse-result'><a href='/bible/${res.book}/${res.chapter}#verse-${res.verse_id}' tabindex='${i+1}'>
 								<small><b>${res.abbr} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
 							</div>`)
 						.join('');

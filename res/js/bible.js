@@ -192,9 +192,11 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
 
             if (results.length) {
               newEl.innerHTML = results.map(res => 
-                `<b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
-                  &nbsp;&nbsp;
-                  <span>${res.content}</span>`
+                `<div>
+                  <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
+                    &nbsp;&nbsp;
+                    <span>${res.content}</span>
+                  </div>`
               ).join('');
               document.querySelectorAll('.hover-verse').forEach(el => el.remove());
               newEl.classList.add('hover-verse');
