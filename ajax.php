@@ -1,5 +1,4 @@
 <?php
-$no_stats = true;
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "") {

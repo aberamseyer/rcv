@@ -12,6 +12,7 @@
 	searchResults.onlclick = e => e.stopPropagation();
 
 	let timer = 0;
+	let selectedIndex = -1;
 	document.querySelector('body').onkeydown = e => {
 		const { key, target } = e;
 
@@ -32,8 +33,33 @@
 				.join('');
 		}
 		else if (key === 'Enter') {
-			if (searchInput.innerHTML.length > 2)
+			if (~selectedIndex && !(e.metaKey || e.ctrlKey))
+				window.location = searchResults.children[selectedIndex].firstChild.href;
+			else if (searchInput.innerHTML.length > 2)
 				window.location = `/search?q=${searchInput.innerHTML}`;
+			return;
+		}
+		else if (key === 'ArrowUp') {
+			if (~selectedIndex)
+				searchResults.children[selectedIndex].classList.remove('selected');
+			selectedIndex = Math.max(selectedIndex - 1, -1);
+			if (~selectedIndex)
+				searchResults.children[selectedIndex].classList.add('selected');
+			e.preventDefault();
+			return;
+		}
+		else if (key === 'ArrowLeft' || key === 'ArrowRight') {
+			e.stopImmediatePropagation();
+			e.preventDefault();
+			return;
+		}
+		else if (key === 'ArrowDown') {
+			if (~selectedIndex)
+				searchResults.children[selectedIndex].classList.remove('selected');
+			selectedIndex = Math.min(selectedIndex + 1, searchResults.childElementCount - 1);
+			if (~selectedIndex)
+				searchResults.children[selectedIndex].classList.add('selected');
+			e.preventDefault();
 			return;
 		}
 		else if (!e.metaKey && !e.ctrlKey && key.match(/^[0-9a-zA-Z \.\,:"'!\-\?]$/)) {
@@ -73,6 +99,8 @@
 						</a></div>`;
 					if (results.length === 0)
 						searchResults.innerHTML = `<small><em>No results</em></small>`;
+
+					selectedIndex = -1;
 				}
 			}
 

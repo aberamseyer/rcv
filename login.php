@@ -20,7 +20,10 @@ if ($_POST['user'] && $_POST['password']) {
         if (password_verify($_POST['password'], $user_row['password'])) {
             $_SESSION['user'] = $user_row;
             session_write_close();
-            redirect("/bible");
+            if ($_REQUEST['thru'])
+                redirect($_REQUEST['thru']);
+            else
+                redirect("/bible");
         }
     }
 }

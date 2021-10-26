@@ -205,8 +205,11 @@ br { user-select: none; }
     white-space: nowrap;
 }
 
-.verse-result:hover {
+/*.verse-result:hover {
+}*/
+.verse-result.selected a, .verse-result:hover a {
     font-weight: bold;
+    color: var(--main-text);    
 }
 
 .verse-result small {

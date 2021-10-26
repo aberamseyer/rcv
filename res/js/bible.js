@@ -120,6 +120,9 @@ if (!window.location.hash) {
 }
 
 // verse highlight on click
+function removeAllPopups() {
+  document.querySelectorAll('.hover-verse').forEach(el => el.remove());
+}
 document.querySelectorAll('.verse').forEach(v => {
   v.addEventListener('click', e => {
     document.querySelectorAll('.verse').forEach(el => {
@@ -131,6 +134,8 @@ document.querySelectorAll('.verse').forEach(v => {
         ? 'remove' : 'add'
     ]('highlight');
     e.stopPropagation();
+
+    removeAllPopups();
   });
 });
 // deselect verse on outside click
@@ -139,7 +144,7 @@ htmlNode.addEventListener('click', e => {
   document.querySelectorAll('.verse').forEach(el => {
     el.classList.remove('highlight');
   });
-  document.querySelectorAll('.hover-verse').forEach(el => el.remove());
+  removeAllPopups();
 });
 document.querySelectorAll('.tooltip').forEach(v => {
   v.addEventListener('click', e =>
@@ -187,11 +192,9 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
 
             if (results.length) {
               newEl.innerHTML = results.map(res => 
-                `<div>
-                  <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
+                `<b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
                   &nbsp;&nbsp;
-                  <span>${res.content}</span>
-                </div>`
+                  <span>${res.content}</span>`
               ).join('');
               document.querySelectorAll('.hover-verse').forEach(el => el.remove());
               newEl.classList.add('hover-verse');

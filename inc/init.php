@@ -7,12 +7,9 @@
  */
 
 error_reporting(E_ALL^E_NOTICE);
-ini_set('post_max_size', '512K');
-ini_set('upload_max_filesize', '512K');
 
 $time = microtime(true);
 define("LOCAL", $_SERVER['HTTP_HOST'] !== getenv("DOMAIN"));
-define("STATS", !$no_stats && !isset($_GET['no_track']));
 define("COMMIT_HASH", strpos(getenv("DOMAIN"), "heroku") === false
 	? `git log -1 --pretty=format:%h`
 	: "");
@@ -31,7 +28,7 @@ ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 session_start();
 
 if (!$_SESSION['user'] && !$login) {
-	redirect('/login');
+	redirect('/login?thru='.urlencode($_SERVER['REQUEST_URI']));
 }
 
 if (!$_POST['action']) {
