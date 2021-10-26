@@ -33,18 +33,19 @@
 				.join('');
 		}
 		else if (key === 'Enter') {
-			if (~selectedIndex && !(e.metaKey || e.ctrlKey))
+			// searchInput.innerHTML.length restricts keystrokes in the following conditions to only when the overlay is visible
+			if (searchInput.innerHTML.length && (~selectedIndex && !(e.metaKey || e.ctrlKey)))
 				window.location = searchResults.children[selectedIndex].firstChild.href;
 			else if (searchInput.innerHTML.length > 2)
 				window.location = `/search?q=${searchInput.innerHTML}`;
 			return;
 		}
-		else if (key === 'ArrowLeft' || key === 'ArrowRight') {
+		else if (searchInput.innerHTML.length && (key === 'ArrowLeft' || key === 'ArrowRight')) {
 			e.stopImmediatePropagation();
 			e.preventDefault();
 			return;
 		}
-		else if (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey)) {
+		else if (searchInput.innerHTML.length && (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey))) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.max(selectedIndex - 1, -1);
@@ -53,7 +54,7 @@
 			e.preventDefault();
 			return;
 		}
-		else if (key === 'ArrowDown' || (key === 'Tab' && !e.shiftKey)) {
+		else if (searchInput.innerHTML.length && (key === 'ArrowDown' || (key === 'Tab' && !e.shiftKey))) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.min(selectedIndex + 1, searchResults.childElementCount - 1);
