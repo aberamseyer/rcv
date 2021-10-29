@@ -39,6 +39,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Stop the speaking using the option in the menu at the top-right of the page</li>
     </ul>
   </li>
+  <li>The symbol below the play button will open a link to the interlinear text on <a href='https://biblehub.com'>BibleHub.com</a></li>
   <li>You can link to this website, directly to a verse using the format: <pre>https://<?= getenv("DOMAIN") ?>/bible/{BOOK NAME}/{CHAPTER NUMBER}?verse={VERSE NUMBER}</pre>
     <ul>
       <li>Ommit the verse number or chapter number if you want to link to a book or chapter</li>
@@ -47,12 +48,18 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Philemon<pre>https://<?= getenv("DOMAIN") ?>/bible/philemon</pre></li>
     </ul>
   </li>
-  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> (Cmd/Ctrl+e) page to find a set list of verses.
+  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> (Cmd/Ctrl+e anywhere) page to find a set list of verses.
     <ul>
       <li>Separate verses with a semicolon: Gen. 1:26; 2:14</li>
       <li>verses can have a range: Dan. 2:4-7</li>
       <li>Separate verses in the same chapter with a comma: Rom. 8:2, 6, 10</li>
-      <li>Two links appear below the set of returned verses. The first copies a <em>link</em> to that set of verses to your clipboard and the second copies <em>the text of the verses</em> to your clipboard.</li>
+      <li>Three links appear below the set of returned verses.
+        <ul>
+          <li>The first link copies <em>the text of the verses with references</em> to your clipboard.</li>
+          <li>The second link copies <em>the text of all the verses joined together</em> with a single reference at the end.</li>
+          <li>The third link copies a <em>link</em> to that set of verses to your clipboard.</li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ol> 

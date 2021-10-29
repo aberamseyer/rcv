@@ -54,7 +54,7 @@ switch($_REQUEST['action']) {
 	    }
 
 		print_json($rows);
-	    break;
+    break;
   	// verse lookup page that parses a set of verses
 	case 'request':
 		if ($q = ucwords(strtolower(trim($_POST['q'])))) {
