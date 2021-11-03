@@ -27,7 +27,9 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Use the mouse, arrow keys up/down, or tab/shift+tab to select a verse in the list
         <ul>
           <li>With a verse selected, 'Enter' will open that verse</li>
-          <li>Otherwise, pressing 'Enter' from the quick search will navigate to the advanced search page</li>
+          <li>Ctrl/Cmd+Enter will open the advanced search page</li>
+          <li>Shift+Enter will copy the verse text to your clipboard</li>
+          <li>Without a selected verse, pressing 'Enter' from the quick search will open the advanced search page</li>
         </ul>
       </li>
       <li>Typing a ';' will insert a ':' to make entering references faster</li>

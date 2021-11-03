@@ -1,3 +1,10 @@
+function copyToClip(copyText, element) {
+	const html = element.innerHTML;
+	element.innerText = `Copied!`;
+	navigator.clipboard.writeText(copyText);
+	setTimeout(() => element.innerHTML = html, 1500);
+}
+
 (() => {
 	// init menu
 	window.addEventListener('load', () => {

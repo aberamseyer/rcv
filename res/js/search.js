@@ -34,7 +34,9 @@ const searchInput = document.getElementById('search-input');
 		}
 		else if (key === 'Enter') {
 			// searchInput.innerHTML.length restricts keystrokes in the following conditions to only when the overlay is visible
-			if (searchInput.innerHTML.length && (~selectedIndex && !(e.metaKey || e.ctrlKey)))
+			if (searchInput.innerHTML.length && ~selectedIndex && e.shiftKey)
+				copyToClip(searchResults.children[selectedIndex].firstChild.text.trim(), searchResults.children[selectedIndex].firstChild);
+			else if (searchInput.innerHTML.length && (~selectedIndex && !(e.metaKey || e.ctrlKey)))
 				window.location = searchResults.children[selectedIndex].firstChild.href;
 			else if (searchInput.innerHTML.length > 2)
 				window.location = `/search?q=${searchInput.innerHTML}`;
@@ -88,7 +90,11 @@ const searchInput = document.getElementById('search-input');
 					searchResults.innerHTML = results
 						.map((res, i) => 
 							`<div class='verse-result'><a href='/bible/${res.book}/${res.chapter}#verse-${res.verse_id}' tabindex='${i+1}'>
-								<small><b>${res.abbr} ${res.chapter}:${res.verse}</b>: ${res.text}</small></a>
+								<small><b>${res.abbr} ${
+									["Obad.","3 John","Jude","Philem.","2 John"].includes(res.abbr)
+									? res.verse
+									: `${res.chapter}:${res.verse}`
+								}</b> ${res.text}</small></a>
 							</div>`)
 						.join('');
 					if (count > results.length)

@@ -18,7 +18,7 @@ $permalink = htmlentities($_GET['verses'], ENT_HTML5);
 
 <input id='verse-input' name='q' type='search' maxlength='2000' style='width: 100%' placeholder='e.g., Gen. 1:26; John 1:1, 14; 2 Cor. 3:18; Jude 20-21' value='<?= $permalink ?: ''?>' title='You can request a maximum of 200 unique verses at a time'>
 <details class="mobile">
-	<summary><small style='display: inline;'>Quick add:</small></summary>
+	<summary><small class='smaller' style='display: inline;'>Quick add:</small></summary>
 	<style>
 		.button {
 			width: 15%;
@@ -43,19 +43,13 @@ $permalink = htmlentities($_GET['verses'], ENT_HTML5);
 		<?php endforeach; ?>
 	</div>
 </details>
-<small>Recognized verses: <span id='recognized-verses'></span></small>
+<small class='smaller'>Recognized verses: <span id='recognized-verses'></span></small>
 <hr id='hr' class='hidden' />
 
 <div style="margin-top: 12px;" id='verses'></div>
 <noscript>This page only works with JavaScript enabled. You can search manually using the <a href='/search'>Search</a> page.</noscript>
 <script>
 const verseContainer = document.getElementById('verses');
-function copyToClip(copyText, element) {
-	const html = element.innerHTML;
-	element.innerText = `Copied!`;
-	navigator.clipboard.writeText(copyText);
-	setTimeout(() => element.innerHTML = html, 1500);
-}
 
 (() => {
 	const recognizedVerses = document.getElementById('recognized-verses');
