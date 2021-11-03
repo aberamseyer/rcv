@@ -82,11 +82,9 @@ const searchInput = document.getElementById('search-input');
 			const formData = new FormData();
 			formData.append('q', searchInput.innerHTML);
 
-			const request = new XMLHttpRequest();
-			request.open("POST", "/ajax?action=verse");
-
-			request.onloadend = () => {
-				if (request.status === 200) {
+			clearTimeout(timer);
+			timer = setTimeout(() => 
+				doRequest("POST", "/ajax?action=verse", formData, function(request) {
 					const { results, count, q } = JSON.parse(request.response);
 					searchResults.innerHTML = results
 						.map((res, i) => 
@@ -106,11 +104,8 @@ const searchInput = document.getElementById('search-input');
 						searchResults.innerHTML = `<small><em>No results</em></small>`;
 
 					selectedIndex = -1;
-				}
-			}
-
-			clearTimeout(timer);
-			timer = setTimeout(() => request.send(formData), 300);
+				}),
+			300);
 		}
 	}
 })();

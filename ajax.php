@@ -298,7 +298,7 @@ switch($_REQUEST['action']) {
 		$ref_like = db_esc_like($q)."%";
 
 		$results = select("
-			SELECT cc.id verse_id, b.abbreviation abbr, LOWER(REPLACE(b.name, ' ', '-')) book, c.number chapter, cc.number verse, cc.content as text
+			SELECT cc.id verse_id, b.abbreviation abbr, LOWER(REPLACE(b.name, ' ', '-')) book, c.number chapter, cc.number verse, REPLACE(cc.content, '\n', ' / ') text
 			FROM chapter_contents cc
 			JOIN chapters c ON c.id = cc.chapter_id
 			JOIN books b ON b.id = c.book_id

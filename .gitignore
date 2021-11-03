@@ -2,4 +2,4 @@
 vendor
 test.php
 extras/crawl_hymns.php
-*.tar.gz
+rcv_*.tar.gz

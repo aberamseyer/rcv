@@ -5,6 +5,17 @@ function copyToClip(copyText, element) {
 	setTimeout(() => element.innerHTML = html, 1500);
 }
 
+function doRequest(method, url, body, onsuccess) {
+	const request = new XMLHttpRequest();
+	request.open(method, url);
+	request.onloadend = function() {
+		if (request.status === 200) {
+			onsuccess(request);
+		}
+	};
+	request.send(body);
+}
+
 (() => {
 	// init menu
 	window.addEventListener('load', () => {
@@ -110,13 +121,25 @@ function copyToClip(copyText, element) {
     });
 
     // check for update
-    const checkUpdateRequest = new XMLHttpRequest();
-	checkUpdateRequest.open("POST", "/ajax?action=check_update");
-	checkUpdateRequest.onloadend = () => {
-		if (checkUpdateRequest.status === 200) {
-			const rsp = JSON.parse(checkUpdateRequest.response);
-			console.log(rsp.last_update);
-		}
-	};
-	checkUpdateRequest.send();
+    const ignoreUpdate = localStorage.getItem('ignore_update');
+    if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
+	    doRequest("POST", "/ajax?action=check_update", null, function(request) {
+			const t1 = JSON.parse(request.response).last_update;
+			doRequest("POST", "https://rcv-eba.herokuapp.com/ajax?action=check_update", null, function(request) {
+				const t2 = JSON.parse(request.response).last_update;
+				if (t1.localeCompare(t2) < 0) {
+					if (confirm(`Download update?`)) {
+						const a = document.createElement('a');
+						a.target = `_blank`;
+						a.href = `https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/${t2}`;
+						a.click();
+						alert(`1. Extract the files over top your current files, replacing as necessary\n2. refresh the page\n3. clear cache if necessary`);
+					}
+					else {
+						localStorage.setItem('ignore_update', Date.now());
+					}
+				}
+			});
+	    });
+	}
 })();
