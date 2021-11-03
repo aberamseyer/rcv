@@ -1,4 +1,5 @@
 const searchInput = document.getElementById('search-input');
+
 (() => {
 	const overlay = document.getElementById('search-input-overlay');
 	const searchResults = document.getElementById('search-results');

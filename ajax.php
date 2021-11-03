@@ -324,4 +324,11 @@ switch($_REQUEST['action']) {
 			"results" => $results
 		]);
 		break;
+	case 'check_update':
+		$date = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
+		print_json([ 'last_update' => $date ]);
+		break;	
+	case 'download_update':
+		// logic here
+		break;
 }

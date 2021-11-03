@@ -108,4 +108,15 @@ function copyToClip(copyText, element) {
     			window.location = '/verse';
     	}
     });
+
+    // check for update
+    const checkUpdateRequest = new XMLHttpRequest();
+	checkUpdateRequest.open("POST", "/ajax?action=check_update");
+	checkUpdateRequest.onloadend = () => {
+		if (checkUpdateRequest.status === 200) {
+			const rsp = JSON.parse(checkUpdateRequest.response);
+			console.log(rsp.last_update);
+		}
+	};
+	checkUpdateRequest.send();
 })();
