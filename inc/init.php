@@ -6,6 +6,7 @@
  * Time: 09:05
  */
 
+// nice
 error_reporting(E_ALL^E_NOTICE);
 
 $time = microtime(true);
