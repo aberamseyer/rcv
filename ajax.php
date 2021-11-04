@@ -1,4 +1,5 @@
 <?php
+
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "") {
@@ -325,10 +326,9 @@ switch($_REQUEST['action']) {
 		]);
 		break;
 	case 'check_update':
+		cors();
 		$date = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
+
 		print_json([ 'last_update' => $date ]);
 		break;	
-	case 'download_update':
-		// logic here
-		break;
 }

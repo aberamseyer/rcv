@@ -108,14 +108,12 @@ const verseContainer = document.getElementById('verses');
 	}
 
 	// focus verse bar on left bracket press
-	document.querySelector('body').onkeyup = e => {
-		const { key } = e;
-
+	document.querySelector('body').addEventListener('keyup', ({ key }) => {
 		if (key === "[") {
 			if (!searchInput.innerHTML.length)
 				verseInput.focus();
 		}
-	}
+	});
 
 	// init
 	if (verseInput.value.length)

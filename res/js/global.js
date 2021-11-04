@@ -108,6 +108,8 @@ function doRequest(method, url, body, onsuccess) {
     			window.location = `/bible?random`;
     		else if (toggle === `help`)
     			window.location = `/help`;
+    		else if (toggle === `release`)
+    			window.location = `/release-notes`;
     		saveSettings();
     	});
     });
@@ -130,10 +132,10 @@ function doRequest(method, url, body, onsuccess) {
 				if (t1.localeCompare(t2) < 0) {
 					if (confirm(`Download update?`)) {
 						const a = document.createElement('a');
-						a.target = `_blank`;
 						a.href = `https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/${t2}`;
+						a.target = `_blank`;
 						a.click();
-						alert(`1. Extract the files over top your current files, replacing as necessary\n2. refresh the page\n3. clear cache if necessary`);
+						alert(`1. Extract the files over top your current files, replacing them\n2. refresh the page\n3. clear browser cache if things seem weird`);
 					}
 					else {
 						localStorage.setItem('ignore_update', Date.now());
@@ -141,5 +143,12 @@ function doRequest(method, url, body, onsuccess) {
 				}
 			});
 	    });
+	}
+
+	const dontShowReleaseNotes = localStorage.getItem('dont_show_release_notes');
+	if (!dontShowReleaseNotes) {
+		localStorage.setItem('dont_show_release_notes', "1");
+		window.location = '/release-notes';
+
 	}
 })();

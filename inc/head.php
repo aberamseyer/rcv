@@ -28,7 +28,8 @@
         '<div class="emoji">📝</div>',
         '<div class="emoji">🆎</div>',
         '<div class="emoji">🎲</div>',
-        '<div class="emoji">🙋‍♂️</div>'
+        '<div class="emoji">🙋‍♂️</div>',
+        '<div class="emoji">📦</div>'
       ];
     ?>
     <span class='dots'>&#8942;</span>
@@ -53,6 +54,10 @@
           <a href="/help" tabindex="-1">Help</a>
           <?= $emoji[4] ?>
         </li>
+        <li>
+          <a href="/release-notes" tabindex="-1">Release Notes</a>
+          <?= $emoji[5] ?>
+        </li>
       </ul>
       <ul id='menu-js'>
         <li>
@@ -74,6 +79,10 @@
         <li>
           <span data-toggle='help'>Help</span>
           <?= $emoji[4] ?>
+        </li>
+        <li>
+          <span data-toggle='release'>Release Notes</span>
+          <?= $emoji[5] ?>
         </li>
       </ul>
   </div>
