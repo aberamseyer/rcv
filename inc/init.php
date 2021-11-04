@@ -5,6 +5,7 @@
  * Date: 2020-07-17
  * Time: 09:05
  */
+// neat
 
 error_reporting(E_ALL^E_NOTICE);
 
