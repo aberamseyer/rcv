@@ -126,22 +126,16 @@ function doRequest(method, url, body, onsuccess) {
     const ignoreUpdate = localStorage.getItem('ignore_update');
     if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
 	    doRequest("POST", "/ajax?action=check_update", null, function(request) {
-			const t1 = JSON.parse(request.response).last_update;
-			doRequest("POST", "https://rcv-eba.herokuapp.com/ajax?action=check_update", null, function(request) {
-				const t2 = JSON.parse(request.response).last_update;
-				if (t1.localeCompare(t2) < 0) {
-					if (confirm(`Download update?`)) {
-						const a = document.createElement('a');
-						a.href = `https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/${t2}`;
-						a.target = `_blank`;
-						a.click();
-						alert(`1. Extract the files over top your current files, replacing them\n2. refresh the page\n3. clear browser cache if things seem weird`);
-					}
-					else {
-						localStorage.setItem('ignore_update', Date.now());
-					}
-				}
-			});
+			const url = JSON.parse(request.response).url;
+			if (url && confirm(`Download update?`)) {
+				const a = document.createElement('a');
+				a.href = url; a.target = `_blank`;
+				a.click();
+				alert(`1. Extract the files over top your current files, replacing them\n2. Refresh the page\n3. Clear browser cache if things seem weird`);
+			}
+			else {
+				localStorage.setItem('ignore_update', Date.now());
+			}
 	    });
 	}
 
@@ -149,6 +143,5 @@ function doRequest(method, url, body, onsuccess) {
 	if (!dontShowReleaseNotes) {
 		localStorage.setItem('dont_show_release_notes', "1");
 		window.location = '/release-notes';
-
 	}
 })();
