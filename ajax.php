@@ -328,7 +328,7 @@ switch($_REQUEST['action']) {
 	case 'check_update':
 		cors();
 		$local_date = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
-		if (!HEROKU) { // don't try to update when accessing the heroku domain
+		if (NOT_HEROKU) { // don't try to update when accessing the heroku domain
 			$rsp = @json_decode(file_get_contents("https://rcv-eba.herokuapp.ramseyer.dev/ajax?action=check_update"), true);
 			if ($rsp) {
 				if (strcmp($local_date, $rsp['last_update']) < 0) {
