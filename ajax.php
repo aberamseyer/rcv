@@ -330,29 +330,32 @@ switch($_REQUEST['action']) {
 		]);
 		break;
 	case 'check_update':
-		$local_version = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
-
-		// if this code is not running on heroku, check the latest version from the server
-		$release_version = !NOT_HEROKU
-			? trim(
+		if (strpos($_SERVER['HTTP_REFERRER'], 'herokuapp') === false) { // the javascript requester is running the code locally
+			$local_version = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
+			$release_version = '';
+			if (NOT_HEORKU) { // only a localhost machine should try to figure out the latest version
+				$release_version = trim(
 					@json_decode(
 						@file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update"), true)
-							['local_version']
-				)
-			: '';
-		if ($release_version) { // we might be offline, in that case skip this
-				debug(strcmp($local_version, $release_version), $local_version, $release_version);
-			if (strcmp($local_version, $release_version) >= 0) { // the latest version is the same (or earlier?) than the installed version
-				if (strpos($_SERVER['HTTP_REFERRER'], 'herokuapp') !== false) {	// the requester is running the code locally
+						['url']
+				);
+
+				if (strcmp($local_version, $release_version) >= 0) { // the version of the code running on this localhost is the same (or greater?) than the latest version as defined by a request to the heroku instance
 					$release_version = '';
 				}
 			}
-		}
+			else { // running on heroku, define the release_version as whatever we have
+				$release_version = $local_version;
+			}
 
-		print_json([ 
-			'url' => $release_version
+			print_json([ 'url' => $release_version
 				? 'https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/'.$release_version
 				: ''
-		]);
+			]);
+		}
+		else {	// the requester is making this from the herokuapp website
+			print_json([ 'url' => '' ]);
+		}
+
 		break;	
 }
