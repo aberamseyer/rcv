@@ -332,7 +332,7 @@ switch($_REQUEST['action']) {
 	case 'check_update':
 		if (strpos($_SERVER['HTTP_REFERRER'], 'herokuapp') === false) { // the javascript requester is running the code locally
 			$local_version = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
-			debug(strpos(getenv("DOMAIN"), "heroku") === false, getenv("DOMAIN"), $local_version);
+			debug(HEROKU, getenv("DOMAIN"), "heroku", strpos(getenv("DOMAIN"), "heroku") !== false);
 			$release_version = '';
 			if (NOT_HEORKU) { // only a localhost machine should try to figure out the latest version
 				$release_version = trim(
