@@ -340,7 +340,6 @@ switch($_REQUEST['action']) {
 							['local_version']
 				)
 			: '';
-			debug($release_version);
 		if ($release_version) { // we might be offline, in that case skip this
 				debug(strcmp($local_version, $release_version), $local_version, $release_version);
 			if (strcmp($local_version, $release_version) >= 0) { // the latest version is the same (or earlier?) than the installed version
