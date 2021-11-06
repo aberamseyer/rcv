@@ -334,7 +334,6 @@ switch($_REQUEST['action']) {
 		$local_date = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
 		if (NOT_HEROKU) { // don't try to update when accessing the heroku domain
 			$rsp = file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update");
-			debug($rsp);
 			if ($rsp) {
 				if (strcmp($local_date, $rsp['last_update']) < 0) {
 					print_json([ 'url' => 'https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/'.$rsp['last_update'] ]);
