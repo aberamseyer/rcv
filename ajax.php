@@ -1,5 +1,9 @@
 <?php
 
+if ($_REQUEST['action'] == 'check_update') {
+	$insecure = true;
+}
+
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "") {
@@ -329,7 +333,8 @@ switch($_REQUEST['action']) {
 		cors();
 		$local_date = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
 		if (NOT_HEROKU) { // don't try to update when accessing the heroku domain
-			$rsp = @json_decode(file_get_contents("https://rcv-eba.herokuapp.ramseyer.dev/ajax?action=check_update"), true);
+			$rsp = file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update");
+			debug($rsp);
 			if ($rsp) {
 				if (strcmp($local_date, $rsp['last_update']) < 0) {
 					print_json([ 'url' => 'https://s3.us-west-002.backblazeb2.com/rcv-eba/archives/'.$rsp['last_update'] ]);
