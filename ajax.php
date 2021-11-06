@@ -334,13 +334,15 @@ switch($_REQUEST['action']) {
 			$local_version = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
 			$release_version = '';
 			if (!HEROKU) { // only a localhost machine should try to figure out the latest version
-				$release_version = trim(
+				$release_url = trim(
 					@json_decode(
 						@file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update"), true)
 						['url']
 				);
+				if ($release_url)
+					$release_version = array_pop(explode('/', $release_url));
 
-				if (strcmp($local_version, $release_version) >= 0) { // the version of the code running on this localhost is the same (or greater?) than the latest version as defined by a request to the heroku instance
+				if (strnatcmp($local_version, $release_version) >= 0) { // the version of the code running on this localhost is the same (or greater?) than the latest version as defined by a request to the heroku instance
 					$release_version = '';
 				}
 			}
