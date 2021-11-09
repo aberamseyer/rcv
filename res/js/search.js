@@ -5,7 +5,7 @@ const searchInput = document.getElementById('search-input');
 	const searchResults = document.getElementById('search-results');
 
 	overlay.onclick = () => {
-		searchInput.innerHTML = '';
+		searchInput.value = '';
 		searchResults.innerHTML = '';
 		overlay.classList.add('hidden');
 	}
@@ -14,36 +14,37 @@ const searchInput = document.getElementById('search-input');
 
 	let timer = 0;
 	let selectedIndex = -1;
-	document.querySelector('body').onkeydown = e => {
-		const { key, target } = e;
-
+	document.querySelector('body').onkeydown = ({ key, target, metaKey, ctrlKey, altKey }) => {
 		if ([ 'INPUT', 'SELECT' ].includes(target.nodeName))
 			return;
+		if ((!key && (metaKey || ctrlKey || altKey)) || !key.match(/^[0-9a-zA-Z \.\,:"'!\-\?]$/))
+			return;
+		if (searchInput.value.length === 0) {
+			searchInput.value += key;
+			overlay.classList.remove('hidden');
+			setTimeout(() => searchInput.focus(), 0);
+		}
+	};
+	searchInput.onkeydown = e => {
+		const { key, target } = e;
 
 		if (key == 'Escape') {
-			searchInput.innerHTML = '';
+			searchInput.value = '';
 		}
 		else if (key == ';') {
-			searchInput.innerHTML += ':';
-		}
-		else if (key == 'Backspace') {
-			searchInput.innerHTML = searchInput.innerHTML.split('')
-				.reverse()
-				.slice(1)
-				.reverse()
-				.join('');
+			searchInput.value += ':';
 		}
 		else if (key === 'Enter') {
-			// searchInput.innerHTML.length restricts keystrokes in the following conditions to only when the overlay is visible
-			if (searchInput.innerHTML.length && ~selectedIndex && e.shiftKey)
+			// searchInput.value.length restricts keystrokes in the following conditions to only when the overlay is visible
+			if (searchInput.value.length && ~selectedIndex && e.shiftKey)
 				copyToClip(searchResults.children[selectedIndex].firstChild.text.trim(), searchResults.children[selectedIndex].firstChild);
-			else if (searchInput.innerHTML.length && (~selectedIndex && !(e.metaKey || e.ctrlKey)))
+			else if (searchInput.value.length && (~selectedIndex && !(e.metaKey || e.ctrlKey)))
 				window.location = searchResults.children[selectedIndex].firstChild.href;
-			else if (searchInput.innerHTML.length > 2)
-				window.location = `/search?q=${searchInput.innerHTML}`;
+			else if (searchInput.value.length > 2)
+				window.location = `/search?q=${searchInput.value}`;
 			return;
 		}
-		else if (searchInput.innerHTML.length && (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey))) {
+		else if (searchInput.value.length && (key === 'ArrowUp' || (key === 'Tab' && e.shiftKey))) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.max(selectedIndex - 1, -1);
@@ -52,7 +53,7 @@ const searchInput = document.getElementById('search-input');
 			e.preventDefault();
 			return;
 		}
-		else if (searchInput.innerHTML.length && (key === 'ArrowDown' || (key === 'Tab' && !e.shiftKey))) {
+		else if (searchInput.value.length && (key === 'ArrowDown' || (key === 'Tab' && !e.shiftKey))) {
 			if (~selectedIndex)
 				searchResults.children[selectedIndex].classList.remove('selected');
 			selectedIndex = Math.min(selectedIndex + 1, searchResults.childElementCount - 1);
@@ -61,26 +62,18 @@ const searchInput = document.getElementById('search-input');
 			e.preventDefault();
 			return;
 		}
-		else if (!e.metaKey && !e.ctrlKey && key.match(/^[0-9a-zA-Z \.\,:"'!\-\?]$/)) {
-			if (key === ' ' && !searchInput.innerHTML.length) // allows scrolling with spacebar when overlay is not shown
-				return;
-			searchInput.innerHTML += key;
-			if (key === ' ')
-				e.preventDefault();
-		}
-		else {
-			return;
+		else if (key === ' ') {
+			e.preventDefault();
 		}
 
-		overlay.classList[
-			searchInput.innerHTML.length
-				? 'remove'
-				: 'add'
-		]('hidden');
+		if (searchInput.value.length === 1 /* current length before character pressed is added */ && key === 'Backspace') {			
+			overlay.classList.add('hidden');
+			searchInput.value = '';
+		}
 
-		if (searchInput.innerHTML.length > 1) {
+		if (searchInput.value.length > 1) {
 			const formData = new FormData();
-			formData.append('q', searchInput.innerHTML);
+			formData.append('q', searchInput.value);
 
 			clearTimeout(timer);
 			timer = setTimeout(() => 

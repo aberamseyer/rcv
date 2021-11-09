@@ -223,6 +223,15 @@ br { user-select: none; }
 	filter: brightness(0.5);
 }
 
+#search-input {
+    border: none;
+    background: none;
+    color: var(--main-text);
+    font-size: 2rem;
+    outline:  none;
+    font-weight:  bold;
+}
+
 #search-input-overlay {
     z-index: 3;
     position: fixed;

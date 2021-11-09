@@ -1,7 +1,7 @@
         <div id='search-input-overlay' class='hidden'>
             <div>
                 <h5>Look up a verse:</h5>
-                <b id='search-input'></b>
+                <input id='search-input'>
                 <div id='search-results'></div>
             </div>
         </div>
