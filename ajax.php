@@ -323,20 +323,27 @@ switch($_REQUEST['action']) {
 		}
 		unset($result);
 
+		$book_results = select("
+			SELECT b.id book_id, LOWER(REPLACE(b.name, ' ', '-')) book_url, b.name book
+			FROM books b
+			WHERE book LIKE '%$ref_like'
+			ORDER BY b.sort_order");
+
 		print_json([
 			"q" => $_POST['q'],
 			"count" => $count,
-			"results" => $results
+			"results" => $results,
+			"book_results" => $book_results
 		]);
 		break;
 	case 'check_update':
-		if (strpos($_SERVER['HTTP_REFERRER'], 'herokuapp') === false) { // the javascript requester is running the code locally
+		if (strpos($_REQUEST['domain'], 'herokuapp') === false) { // the javascript requester is running the code locally
 			$local_version = trim(file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/date"));
 			$release_version = '';
 			if (!HEROKU) { // only a localhost machine should try to figure out the latest version
 				$release_url = trim(
 					@json_decode(
-						@file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update"), true)
+						@file_get_contents("https://rcv-eba.herokuapp.com/ajax?action=check_update&domain=localhost"), true)
 						['url']
 				);
 				if ($release_url)

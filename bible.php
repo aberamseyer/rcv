@@ -168,7 +168,7 @@
         foreach($contents as $content) {
             foreach($content['notes']['fn'] as $i => $note) {
                 echo "<small id='fn-$note[id]' class='footnote'>";
-                echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup></a>&nbsp;";
+                echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup>".($note['matching_word'] ? " $note[matching_word]: " : '')."</a>&nbsp;";
                 echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'>↩</a>";
                 echo "</small>";
             }

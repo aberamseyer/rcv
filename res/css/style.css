@@ -72,7 +72,7 @@
     user-select: none;
     cursor: pointer;
 }
-.play { display:  none; }
+.inter { display:  none; }
 .has-js .verse.highlight .play,
 .has-js .verse.highlight .inter { 
     visibility:  visible;

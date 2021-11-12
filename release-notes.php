@@ -10,7 +10,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 <small>Press "Enter" to return to the home page</small>
 <hr>
 <p class='serif-text'>
-<?= file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/release_notes") ?>
+<?= file_get_contents($_SERVER['DOCUMENT_ROOT']."/extras/release_notes.html") ?>
 </p>
 <script>
 	document.documentElement.addEventListener('keyup', ({ key }) => {

@@ -116,7 +116,7 @@ function doRequest(method, url, body, onsuccess) {
 
     // global shortcut to verse lookup page
     document.querySelector('body').addEventListener('keydown', e => {
-    	if (e.key === 'e' && (e.metaKey || e.ctrlKey)) {
+    	if (e.key === 'i' && (e.metaKey || e.ctrlKey)) {
     		if (window.location.pathname != '/verse')
     			window.location = '/verse';
     	}
@@ -125,7 +125,7 @@ function doRequest(method, url, body, onsuccess) {
     // check for update
     const ignoreUpdate = localStorage.getItem('ignore_update');
     if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
-	    doRequest("GET", "/ajax?action=check_update", null, function(request) {
+	    doRequest("GET", "/ajax?action=check_update&domain=".urlencode(window.location.hostname), null, function(request) {
 			const url = JSON.parse(request.response).url;
 			if (url && confirm(`Download update?`)) {
 				const a = document.createElement('a');
