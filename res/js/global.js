@@ -125,7 +125,7 @@ function doRequest(method, url, body, onsuccess) {
     // check for update
     const ignoreUpdate = localStorage.getItem('ignore_update');
     if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
-	    doRequest("GET", "/ajax?action=check_update&domain=".urlencode(window.location.hostname), null, function(request) {
+	    doRequest("GET", "/ajax?action=check_update&domain=" + encodeURIComponent(window.location.hostname), null, function(request) {
 			const url = JSON.parse(request.response).url;
 			if (url && confirm(`Download update?`)) {
 				const a = document.createElement('a');
