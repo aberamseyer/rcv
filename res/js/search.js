@@ -20,16 +20,18 @@ const searchInput = document.getElementById('search-input');
 			return;
 		if (metaKey || ctrlKey || altKey || !key.match(/^[0-9a-zA-Z \.\,:"'!\-\?]$/))
 			return;
-		if (searchInput.value.length === 0) {
-			searchInput.value += key;
+		if (overlay.classList.contains('hidden') && key != ' ') {
+			searchInput.value = key;
 			overlay.classList.remove('hidden');
 			setTimeout(() => searchInput.focus(), 0);
 		}
 	};
 	searchInput.onkeydown = e => {
-		const { key, target, shiftKey, ctrlKey, metaKey } = e;
+		const { key, shiftKey, ctrlKey, metaKey } = e;
 
 		if (key == 'Escape') {
+			if (searchInput.value == '')
+				overlay.classList.add('hidden');
 			searchInput.value = '';
 		}
 		else if (key == ';') {
@@ -66,7 +68,7 @@ const searchInput = document.getElementById('search-input');
 			return false;
 		}
 
-		if (!searchInput.value.length || searchInput.value.length === 1 /* current length before character pressed is added */ && key === 'Backspace') {
+		if (!searchInput.value.length /* current length before character pressed is added */ && key === 'Backspace') {
 			overlay.classList.add('hidden');
 			searchInput.value = '';
 		}

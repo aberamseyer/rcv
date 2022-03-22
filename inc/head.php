@@ -18,71 +18,40 @@
   <link rel="manifest" href="/res/site/manifest.json?v=<?= COMMIT_HASH ?>">
   <link rel="search" type="application/opensearchdescription+xml" title="Recovery Version" href="/res/site/opensearch.xml?v=<?= COMMIT_HASH ?>">
   <link rel="stylesheet" href="/res/css/sakura-dark.css?v=<?= COMMIT_HASH ?>" type="text/css">
+  <link rel="stylesheet" href="/res/css/font-awesome.min.css">
   <link rel="stylesheet" href="/res/css/style.css?v=<?= COMMIT_HASH ?>" type="text/css">
 </head>
 <body id="top">
   <div id="menu">
-    <?php
-      $emoji = [
-        '<div class="emoji">🌗</div>',
-        '<div class="emoji">📝</div>',
-        '<div class="emoji">🆎</div>',
-        '<div class="emoji">🎲</div>',
-        '<div class="emoji">🙋‍♂️</div>',
-        '<div class="emoji">📦</div>'
-      ];
-    ?>
     <span class='dots'>&#8942;</span>
-      <ul id='menu-href'>
-        <li>
-          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_theme=<?= $light_theme ? 'dark' : 'light' ?>">Switch to <?= $light_theme ? 'dark' : 'light' ?> theme</a>
-          <?= $emoji[0] ?>
-        </li>
-        <li>
-          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_minimal=<?= $minimal_layout ? 'false' : 'true' ?>"><?= $minimal_layout ? 'Show' : 'Hide' ?> notes</a>
-          <?= $emoji[1] ?>
-        </li>
-        <li>
-          <a rel="nofllow" tabindex="-1" href="?<?= http_build_query($_GET) ?>&set_sans=<?= $serif_text ? 'true' : 'false' ?>">Use <?= $serif_text ? 'sans-' : ''?>serif font</a>
-          <?= $emoji[2] ?>
-        </li>
-        <li>
-          <a rel="nofllow" tabindex="-1" href="?random">Random Verse </a>
-          <?= $emoji[3] ?>
-        </li>
-        <li>
-          <a href="/help" tabindex="-1">Help</a>
-          <?= $emoji[4] ?>
-        </li>
-        <li>
-          <a href="/release-notes" tabindex="-1">Release Notes</a>
-          <?= $emoji[5] ?>
-        </li>
-      </ul>
       <ul id='menu-js'>
         <li>
           <span data-toggle='theme'>Switch to light theme</span>
-          <?= $emoji[0] ?>
+          <div class="emoji">🌗</div>
         </li>
         <li>
           <span data-toggle='layout'>Hide notes</span>
-          <?= $emoji[1] ?>
+          <div class="emoji">📝</div>
         </li>
         <li>
           <span data-toggle='font'>Use sans-serif font</span>
-          <?= $emoji[2] ?>
+          <div class="emoji">🆎</div>
         </li>
         <li>
           <span data-toggle='random'>Random Verse </span>
-          <?= $emoji[3] ?>
+          <div class="emoji">🎲</div>
         </li>
-        <li>
-          <span data-toggle='help'>Help</span>
-          <?= $emoji[4] ?>
-        </li>
-        <li>
-          <span data-toggle='release'>Release Notes</span>
-          <?= $emoji[5] ?>
         </li>
       </ul>
+  </div>
+  <div id="sidebar">
+    <ul id="navigation">
+      <li><a tabindex='-1' href='/bible'><i class='fa fa-book'></i>&nbsp;&nbsp;Books</a></li>
+      <li><a tabindex='-1' href='/search'><i class='fa fa-search'></i>&nbsp;&nbsp;Search</a></li>
+      <li><a tabindex='-1' href='/concordance'><i class='fa fa-map-signs'></i>&nbsp;&nbsp;Concordance</a></li>
+      <li><a tabindex='-1' href='/language-concordance'><i class='fa fa-language'></i>&nbsp;&nbsp;Language Concordance</a></li>
+      <li><a tabindex='-1' href='/verse'><i class='fa fa-crosshairs'></i>&nbsp;&nbsp;Verse Lookup</a></li>
+      <li><a tabindex='-1' href='/help'><i class='fa fa-question-circle-o'></i>&nbsp;&nbsp;Help</a></li>
+      <li><a tabindex='-1' href='/release-notes'><i class='fa fa-rocket'></i>&nbsp;&nbsp;Release Notes</a></li>
+    </ul>
   </div>

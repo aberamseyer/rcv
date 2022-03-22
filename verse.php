@@ -44,7 +44,7 @@ $permalink = htmlentities($_GET['verses'], ENT_HTML5);
 	</div>
 </details>
 <small class='smaller'>Recognized verses: <span id='recognized-verses'></span></small>
-<hr id='hr' class='hidden' />
+<hr id='hr' class='hidden'>
 
 <div style="margin-top: 12px;" id='verses'></div>
 <noscript>This page only works with JavaScript enabled. You can search manually using the <a href='/search'>Search</a> page.</noscript>
@@ -92,10 +92,11 @@ const verseContainer = document.getElementById('verses');
 					recognizedVerses.innerText = requested;
 
 					if (results.length) {
+						// encodeURIComponent in the copyToClip call is so single and double quotes don't break the html
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;verses with refs</a> <br>
-							<a href='' onclick='copyToClip("${results.map(r => r.text).join(' ')}\\n${requested}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;joined verse text</a> <br>
-							<a href='' onclick='copyToClip("<?= $_SERVER['REQUEST_SCHEME'] ?>://<?= getenv("DOMAIN") ?: $_SERVER['HTTP_HOST'] ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><div class="emoji">&#128203</div>&nbsp;&nbsp;link to verses</a>`;
+							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><span class="emoji">&#128203</span>&nbsp;&nbsp;verses with refs</a> <br>
+							<a href='' onclick="copyToClip(\`${encodeURIComponent(results.map(r => r.text).join(` `) + `\n` + requested)}\`, this, true); return false;"><span class="emoji">&#128203</span>&nbsp;&nbsp;joined verse text</a> <br>
+							<a href='' onclick='copyToClip("<?= $_SERVER['REQUEST_SCHEME'] ?>://<?= getenv("DOMAIN") ?: $_SERVER['HTTP_HOST'] ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><span class="emoji">&#128203</span>&nbsp;&nbsp;link to verses</a>`;
 					}
 					hr.classList[results.length === 0 ? 'add' : 'remove']('hidden'); // hide <hr> if no results
 				}
@@ -121,7 +122,7 @@ const verseContainer = document.getElementById('verses');
 	verseInput.focus();
 })();
 </script>
-<hr />
+<hr>
 <?php
 
 echo nav_line();

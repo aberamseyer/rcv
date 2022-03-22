@@ -37,7 +37,7 @@ echo "</div>";
   </label>
 </form>
 <?php
-echo nav_line(true)."<hr/>";
+echo nav_line(true)."<hr>";
 
 
 if ($letter) {
@@ -62,12 +62,7 @@ if ($letter) {
   }
 
   // print them
-  $count = 0;
   foreach($rows as $row) {
-		if (++$count && $count % 50 == 0 && count($rows) - $count > 30) {
-			echo "<hr />";
-			echo nav_line();
-		}
     echo "<details ontoggle='getRefs($row[id], this)'>
       <summary><b>$row[word]</b>: ".number_format($row['refs'])."</summary>
       <small></small>
@@ -76,7 +71,7 @@ if ($letter) {
 }
 
 if ($letter) {
-	echo "<hr />".nav_line();
+	echo "<hr>".nav_line();
 	echo copyright;
 }
 
@@ -89,22 +84,16 @@ function getRefs(id, details) {
     formData.append('type', '<?= $q_conc ?>');
 	  formData.append('id', id); 
 
-	  const request = new XMLHttpRequest();
-	  request.open("POST", "/ajax?action=conc");
+	  doRequest("POST", "/ajax?action=conc", formData, request => {
+      const results = JSON.parse(request.response);
 
-	  request.onloadend = () => {
-	  	if (request.status === 200) {
-	  		const results = JSON.parse(request.response);
-
-        if (results.length) {
-          container.innerHTML = 
-            results.map(ref => 
-              `<a target='_blank' href='${ref.href}'>${ref.reference}${+ref.number ? '<sup>' + ref.number + '</sup>' : ''}</a>`
-            ).join(`&nbsp; &nbsp;`);
-        }
-	  	}
-    }
-    request.send(formData); 
+      if (results.length) {
+        container.innerHTML = 
+          results.map(ref => 
+            `<a target='_blank' href='${ref.href}'>${ref.reference}${+ref.number ? '<sup>' + ref.number + '</sup>' : ''}</a>`
+          ).join(`&nbsp; &nbsp;`);
+      }
+    });
   }
 }
 </script>

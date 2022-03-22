@@ -20,6 +20,6 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
 </script>
 <?php
 
-echo "<hr />".nav_line();
+echo "<hr>".nav_line();
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";

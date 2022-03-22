@@ -5,6 +5,7 @@
                 <div id='search-results'></div>
             </div>
         </div>
+        <a id='to-top' href='#top' class='hidden'>&uarr;</a>
         <script src='/res/js/search.js?v=<?= COMMIT_HASH ?>'></script>
         <script src='/res/js/global.js?v=<?= COMMIT_HASH ?>'></script>
         <!--

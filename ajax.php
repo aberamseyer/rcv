@@ -367,4 +367,11 @@ switch($_REQUEST['action']) {
 		}
 
 		break;	
+	case 'original_text':
+		print_json(
+			@json_decode(
+				col("SELECT text_content FROM original_text WHERE id = ".(int)$_REQUEST['id'],
+					l_db()
+				), true) ?: []);
+		break;
 }

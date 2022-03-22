@@ -1,8 +1,36 @@
+// runs when the hebrew/greek letter is clicked next to each verse
+async function toggleOriginalText(event, id, el) {
+  const parentEl = el.closest('.verse');
+  const textEl = parentEl.querySelector('.verse-content');
+  const showOrig = parentEl.children.length < 4;
+  if (showOrig) {
+    doRequest("POST", `/ajax?action=original_text&id=${encodeURIComponent(id)}`, null, function(request) {
+      const data = JSON.parse(request.response)
+      const newEl = document.createElement('span');
+      newEl.classList.add('original-text');
+      newEl.innerHTML = data.map(word => 
+        `<span>
+            <span>${word.word}</span>
+            <a target='_blan' href='/language-concordance?strongs=${word.number}&word=${encodeURIComponent(word.word)}' data-orig-text>${word.number}</a>
+          </span>`).join('');
+      parentEl.insertBefore(newEl, textEl);
+      parentEl.querySelector('.link').classList.remove('hidden');
+      textEl.classList.add('hidden');
+    });
+  }
+  else {
+    textEl.classList.remove('hidden');
+    parentEl.querySelector('.original-text').remove();
+    parentEl.querySelector('.link').classList.add('hidden');
+  }
+  event.stopImmediatePropagation();
+}
+
+// audio reading and functions
 let menu, audio1, audio2, thingsToSpeak,
 menuEL = document.createElement('li');
 menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a><div class='emoji'>🛑</div>`;
 
-// audio reading and functions
 window.addEventListener('load', () => {
   menu = document.getElementById('menu');
   audio1 = document.createElement('audio');
@@ -176,41 +204,37 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
   let newEl = document.createElement('div');
   const handleMouseEnter = e => {
     if (aEl.querySelectorAll('.hover-verse').length === 0) {
-      const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/)
+      const matches = aEl.href.match(/\w+\/\d+#verse-(\d+)/);
       const verseRange = aEl.innerText;
       if (matches.length) {
         const formData = new FormData();
         formData.append('range', verseRange);
-        formData.append('id', +matches[1]); 
+        formData.append('id', +matches[1]);
 
-        const request = new XMLHttpRequest();
-        request.open("POST", "/ajax?action=a-verse");
+        doRequest("POST", "/ajax?action=a-verse", formData, request => {
+          const results = JSON.parse(request.response);
+          if (results.length) {
+            newEl.innerHTML = results.map(res => 
+              `<div>
+                <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
+                  &nbsp;&nbsp;
+                  <span>${res.content}</span>
+                </div>`
+            ).join('');
+            document.querySelectorAll('.hover-verse').forEach(el => el.remove());
+            
+            newEl.classList.add('hover-verse');
+            newEl.addEventListener('mouseleave', () => newEl.remove());
 
-        request.onloadend = () => {
-          if (request.status === 200) {
-            const results = JSON.parse(request.response);
+            const rect = aEl.getBoundingClientRect();
+            
+            newEl.style.left = rect.x + 200 > window.innerWidth // 200 bc that's the width of a .hover-verse element
+              ? `-200px`
+              : ``;
 
-            if (results.length) {
-              newEl.innerHTML = results.map(res => 
-                `<div>
-                  <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
-                    &nbsp;&nbsp;
-                    <span>${res.content}</span>
-                  </div>`
-              ).join('');
-              document.querySelectorAll('.hover-verse').forEach(el => el.remove());
-              newEl.classList.add('hover-verse');
-              
-              // if the verse container can't fit in the space to the right of the link, push it left
-              const aElOffset = aEl.getBoundingClientRect().left;
-              const parentRect = aEl.closest('.verse, .footnote').getBoundingClientRect();
-              newEl.style.left = `${Math.min(0, parentRect.left + parentRect.width - aElOffset - 250)}px`;
-              
-              aEl.appendChild(newEl);
-            }
+            aEl.appendChild(newEl);
           }
-        }
-        request.send(formData);
+        });
       }
     }
   };

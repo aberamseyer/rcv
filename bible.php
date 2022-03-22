@@ -81,13 +81,13 @@
     if (!$book) {
         // show book names to select
         echo "<div class='justify'>";
-        foreach(select("SELECT name FROM books WHERE testament = 0 ORDER BY sort_order") as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
+        foreach(select("SELECT name, type FROM books WHERE testament = 0 ORDER BY sort_order") as $i => $book_option) {
+            echo "<a class='button $book_option[type]' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
         echo "<div class='justify' style='margin-top: 1rem;'>";
-        foreach(select("SELECT name FROM books WHERE testament = 1 ORDER BY sort_order") as $i => $book_option) {
-            echo "<a class='button' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
+        foreach(select("SELECT name, type FROM books WHERE testament = 1 ORDER BY sort_order") as $i => $book_option) {
+            echo "<a class='button $book_option[type]' href='/bible/".link_book($book_option['name'])."'>".html($book_option['name'])."</a>";
         }
         echo "</div>";
     }
@@ -111,7 +111,7 @@
         foreach($chapters as $chapter_option) {
             echo "<a class='button' href='/bible/".link_book($book['name'])."/$chapter_option[number]'>$chapter_option[number]</a>";
         }
-        echo "</div><hr />";
+        echo "</div><hr>";
         echo nav_line(true);
 
         // book outline
@@ -163,19 +163,23 @@
        // the footnotes
         if ($footnotes) {
             echo nav_line(null, "data-note");
-            echo "<hr data-note />";
+            echo "<hr data-note>";
         }
         foreach($contents as $content) {
             foreach($content['notes']['fn'] as $i => $note) {
                 echo "<small id='fn-$note[id]' class='footnote'>";
-                echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup>".($note['matching_word'] ? " $note[matching_word]: " : '')."</a>&nbsp;";
+                echo "<a href='#verse-$note[verse_id]' class='no-select'>".($content['number'] ?: 'Title')."<sup>$note[number]</sup>".(
+                        $note['matching_word']
+                            ? " ".implode(', ', explode(',', $note['matching_word'])).": "
+                            : '').
+                "</a>&nbsp;";
                 echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'>↩</a>";
                 echo "</small>";
             }
         }
     }
 ?>
-<hr/>
+<hr>
 <?= nav_line() ?>
 <?php
     if ($book) {

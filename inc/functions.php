@@ -11,9 +11,9 @@
 	  (?:
 	    (?<vStart>\d+)[a-z]*      # verse start
 	    (?:-
-			(?<vEnd>\d+)[a-z]* # verse end
-			(?!\d*:)			# dont match the next chapter in "11:2-12:3"
-		)?
+				(?<vEnd>\d+)[a-z]* # verse end
+				(?!\d*:)			# dont match the next chapter in "11:2-12:3"
+			)?
 	    (?:,[ \xA0]+)?      # comma
 	  )+
 	)+
@@ -25,11 +25,11 @@
 	  [ \xA0]?      # semi-colon separating chapter\verse fields or a space\nbsp
 	  (?:	# no chapter ":" here
 	    (?<vStart>\d+)[a-z]*      # verse start
-		(?:-
-			(?<vEnd>\d+)[a-z]* # verse end
-			(?!\d*:)			# dont match the next chapter in "11:2-12:3"
-		)?
-		(?:,[ \xA0]+)?      # comma
+			(?:-
+				(?<vEnd>\d+)[a-z]* # verse end
+				(?!\d*:)			# dont match the next chapter in "11:2-12:3"
+			)?
+			(?:,[ \xA0]+)?      # comma
 	  )+
 	)+
 	/ix');
@@ -55,9 +55,25 @@
 		}
 		return $book ? false : [ 'book' => 0, 'chapter' => 0 ];
 	}
+
+	function db($alt_db = null) {
+		static $db;
+		if (!$db) {
+			$db = new SQLite3(__DIR__."/../extras/sqlite3/rcv.db");
+		}
+		return $alt_db ?: $db;
+	}
+
+	function l_db() {
+		static $l_db;
+		if (!$l_db) {
+			$l_db = new SQLite3(__DIR__."/../extras/sqlite3/language.db");
+		}
+		return $l_db;
+	}
 	
-	function query ($query, $return = "") {
-		$db = db();
+	function query ($query, $return = "", $db = null) {
+		$db = db($db);
 		$result = $db->query($query);
 		if (!$result) {
 			echo "<p><b>Warning:</b> A sqlite3 error occurred: <b>" . $db->lastErrorMsg() . "</b></p>";
@@ -70,24 +86,28 @@
 		return $result;
 	}
 
-	function select ($query) {
-		$rows = query($query);
-		for ($result = []; $row = $rows->fetchArray(); $result[] = $row);
+	function select ($query, $db = null) {
+		$rows = query($query, null, $db);
+		for ($result = []; $row = $rows->fetchArray(); $result[] = $row) {
+			foreach(array_keys($row) as $key)
+				if (is_numeric($key))
+					unset($row[$key]);
+		}
 		return $result;
 	}
 
-	function row ($query) {
-		$results = select($query);
+	function row ($query, $db = null) {
+		$results = select($query, $db);
 		return $results[0];
 	}
 
-	function col ($query) {
-		$row = query($query)->fetchArray();
+	function col ($query, $db = null) {
+		$row = query($query, null, $db)->fetchArray();
 		return $row ? $row[0] : null;
 	}
 
-	function cols ($query) {
-		$rows = query($query);
+	function cols ($query, $db = null) {
+		$rows = query($query, null, $db);
 		if ($rows) {
 			$results = [];
 			while ($row = $rows->fetchArray(SQLITE3_NUM))
@@ -161,7 +181,7 @@
 	 *						case its literal value will be used.
 	 * @param $where
 	 */
-	function update ($table, $vals, $where) {
+	function update ($table, $vals, $where, $db = null) {
 		$SET = array();
 		foreach (format_db_vals($vals) as $col => $val) {
 			$col = preg_replace("/^__/", "", $col, 1, $use_literal);
@@ -172,20 +192,20 @@
 			UPDATE $table
 			SET " . implode(",", $SET) . "
 			WHERE $where
-		");
+		", null, $db);
 	}
 
-	function insert ($table, array $db_vals, array $options = []) {
+	function insert ($table, array $db_vals, array $options = [], $db = null) {
 		$db_vals = format_db_vals($db_vals, $options);
 		return query("
 			INSERT INTO $table (" . implode(", ", array_keys($db_vals)) . ")
 			VALUES (" . implode(", ", array_values($db_vals)) . ")
-		", "insert_id");
+		", "insert_id", $db);
 	}
 
-	function num_rows ($query) {
+	function num_rows ($query, $db = null) {
 		$i = 0;
-		$res = query($query);
+		$res = query($query, null, $db);
 		while ($res->fetchArray(SQLITE3_NUM))
 			$i++;
 		return $i;
@@ -325,15 +345,16 @@
 		$content = implode('', $content);
 
 		// on regular verses, add a verse number and play button
-		$parts = [ "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]'>" ];
+		$parts = [ "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]' data-".($book['testament'] ? 'new' : 'old')."-testament>" ];
 		if ($element['number'])
-			$parts[] = "<span><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
-		$parts[] = "<span>$content</span>";
+			$parts[] = "<span class='verse-start'><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
+		$parts[] = "<span class='verse-content'>$content</span>";
 		if ($element['number']) {
 			$parts[] = "
 			<span class='verse-end'>
-				<a class='play' onclick='startReading(event, $element[id])'>&#9658;</a>
-				<a class='inter' target='_blank' href='".biblehub_interlinear_href($element)."'>".($book['testament'] ? "&Omega;" : "&#1513;")."</a>
+				<span class='play' onclick='startReading(event, $element[id])'>&#9658;</span>
+				<span class='inter' onclick='toggleOriginalText(event, $element[id], this)'><span>".($book['testament'] ? "&Omega;" : "&#1514;")."</span></a>
+				<a class='link hidden' target='_blank' href='".biblehub_interlinear_href($element)."'><i class='fa fa-external-link'></i></a>
 			</span>";
 		}
 		$parts[] = "</p>";
@@ -351,7 +372,47 @@
 		return $with_no_breaks;
 	}
 
+	// use some best-guess method to change footnotes that say "see note 123" -> "see note 12.3"
+	// http://localhost/search?book=&chapter=&q=see+note&also%5Bfn%5D=true
+	function add_dots($note) {
+		$needles = [];
+		$replacements = [];
+		// everything in this regex is deliberate, including that trailing '.'. or at least it was at one point. idk.
+		// '/(?:note|notes)(?:(ch|in|par|and|\W)+\d\d+(?:\.\d)?+)+./i' // original regex
+		preg_match_all( // this one accounts for notes like Gen. 3:21 note 2
+		 '/(?:note|notes)
+			(?:
+				(?:
+					(?:(?:ch|in|par|\d)+)
+					|and|\W
+				)+
+				\d\d+
+				(?:\.\d)?+
+			)+./ix', $note, $matches);
+		foreach($matches[0] as $match) {
+			$needles[] = $match;
+			$replacements[] = preg_replace_callback('/
+				(?<!
+					(?:ch\.\ )|(?:par )
+				)\d\d+
+				(?!\.\d)
+			/ix', function($number_match) use ($needles) {
+				$number = (int)$number_match[0];
+				$remain = $number % 10;
+				if ($number > 10 && $remain != 0) {
+					$by_10 = floor($number / 10);
+					return $by_10.'.'.$remain;
+				}
+				else
+					return $number;
+			}, $match);
+		}
+
+		return str_replace($needles, $replacements, $note);	
+	}
+
 	function format_note($note, $break = true) {
+		$note = add_dots($note);
 		$note = html($note);
 		$content = add_links($note);
 
@@ -479,8 +540,7 @@
 		if (!$no_top) {
 			$parts[] = "<a href='#top'>Top</a>";
 		}
-		$parts[] = "<a href='/concordance'>Concordance</a>";
-	  	$parts[] = "<a href='/verse'>Verse Lookup</a>";
+		$parts[] = "<a href='/verse'>Verse Lookup</a>";
 		$parts[] = "<a href='/help'>Help</a>";
 		if ($book) {
 			if ($chapter) {
