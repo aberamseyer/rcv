@@ -230,7 +230,7 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
             
             newEl.style.left = rect.x + 200 > window.innerWidth // 200 bc that's the width of a .hover-verse element
               ? `-200px`
-              : ``;
+              : `0px`;
 
             aEl.appendChild(newEl);
           }

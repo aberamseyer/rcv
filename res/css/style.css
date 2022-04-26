@@ -322,7 +322,7 @@ br { user-select: none; }
 }
 
 .no-select { user-select: none; }
-[data-content]:before { content: attr(data-content); /* this lets Ctrl+F to work over superscripts */ }
+[data-content]:before { content: attr(data-content); /* this allows Ctrl+F to work over superscripts */ }
 
 .footnote { line-height: 2.2rem; position: relative; }
 

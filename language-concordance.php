@@ -143,7 +143,6 @@ else {
 		</label>
 	</form>
 	<?php
-	echo nav_line(true)."<hr>";
 	if ($letter) {
 		if ($q_conc == 'greek') {
 			$rows = select("
