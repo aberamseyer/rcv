@@ -53,12 +53,12 @@ function doRequest(method, url, body, onsuccess) {
 			}
 		});
 	});
-	document.querySelector('body').addEventListener("touchstart", startTouch, false);
-  document.querySelector('body').addEventListener("touchmove", moveTouch, false);
+	document.querySelector('html').addEventListener("touchstart", startTouch, false);
+  document.querySelector('html').addEventListener("touchmove", moveTouch, false);
 
-		// Swipe Up / Down / Left / Right
-  var initialX = null;
-  var initialY = null;
+	// Swipe Up / Down / Left / Right
+  let initialX = null;
+  let initialY = null;
 
   function startTouch(e) {
     initialX = e.touches[0].clientX;
@@ -74,19 +74,19 @@ function doRequest(method, url, body, onsuccess) {
       return;
     }
 
-    var currentX = e.touches[0].clientX;
-    var currentY = e.touches[0].clientY;
+    let currentX = e.touches[0].clientX;
+    let currentY = e.touches[0].clientY;
 
-    var diffX = initialX - currentX;
-    var diffY = initialY - currentY;
+    let diffX = initialX - currentX;
+    let diffY = initialY - currentY;
 
     if (Math.abs(diffX) > Math.abs(diffY)) {
       // sliding horizontally
-      if (diffX > 0) {
+      if (diffX > 10) {
         // swiped left
         console.log("swiped left");
 				sidebar.classList.remove('swiped');
-      } else {
+      } else if (diffX < -10) {
 				// swiped right
         console.log("swiped right");
 				sidebar.classList.add('swiped');
@@ -95,10 +95,8 @@ function doRequest(method, url, body, onsuccess) {
       // sliding vertically
       if (diffY > 0) {
         // swiped up
-        console.log("swiped up");
       } else {
         // swiped down
-        console.log("swiped down");
       }  
     }
 
@@ -204,7 +202,7 @@ function doRequest(method, url, body, onsuccess) {
 	// check for update
 	const ignoreUpdate = localStorage.getItem('ignore_update');
 	if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
-		doRequest("GET", "/ajax?action=check_update&domain=" + encodeURIComponent(window.location.hostname), null, function(request) {
+		doRequest("GET", "/ajax?action=check_update&domain=" + encodeURIComponent(window.location.hostname), null, request => {
 			const url = JSON.parse(request.response).url;
 			if (url && confirm(`Download update?`)) {
 				const a = document.createElement('a');

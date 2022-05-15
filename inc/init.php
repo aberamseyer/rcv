@@ -20,7 +20,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
 session_start();
 
-if (!$_SESSION['user'] && !$login && !$insecure) {
+if (!LOCAL && !$_SESSION['user'] && !$login && !$insecure) {
 	redirect('/login?thru='.urlencode($_SERVER['REQUEST_URI']));
 }
 
