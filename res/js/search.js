@@ -24,6 +24,7 @@ const searchInput = document.getElementById('search-input');
 			searchInput.value = key;
 			overlay.classList.remove('hidden');
 			setTimeout(() => searchInput.focus(), 0);
+			return false;
 		}
 	};
 	searchInput.onkeydown = e => {

@@ -6,7 +6,6 @@
  * Time: 12:21
  */
 
-$concordance = true;
 $title = "Concordance";
 $meta_description = "Browse concordances of the Holy Bible Recovery Version and the footnotes.";
 $meta_canonical = "https://".getenv("DOMAIN")."/concordance";

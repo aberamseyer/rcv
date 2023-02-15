@@ -194,8 +194,10 @@ function doRequest(method, url, body, onsuccess) {
 	// global shortcut to verse lookup page
 	document.querySelector('body').addEventListener('keydown', e => {
 		if (e.key === 'u' && (e.metaKey || e.ctrlKey)) {
-			if (window.location.pathname != '/verse')
+			if (window.location.pathname != '/verse') {
+				e.preventDefault() // Cmd + U triggers "View Source" in firefox
 				window.location = '/verse';
+			}
 		}
 	});
 

@@ -138,20 +138,23 @@
             <?php endforeach ?>
             </div>
         </details>
-        <details open id='verse-nav'>
-            <summary><h6>Verses</h6></summary>
-            <div class='justify'>
+        <!-- <details open id='verse-nav'> -->
+            <!-- <summary><h6>Verses</h6></summary> -->
+            <div class='center'>
                 <?php
                     $i = 1;
                     foreach($contents as $id => $element) {
                         if ((int)$element['number']) {
-                            echo "<a class='button' href='#verse-$id'>".($i++)."</a>";
+                            echo $i == 1 || $i % 5 == 0
+                                ? "<a class='' href='#verse-$id'>$i</a>"
+                                : "<a class='' href='#verse-$id'>.</a>";
+                            $i++;
                         }
                     }
                 ?>
             </div>
-        </details>
-        <?= nav_line(true) ?>
+        <!-- </details> -->
+        <!-- <?= nav_line(true) ?> -->
         <hr>
         <?php
 	    echo "<div id='chapter' data-num='$chapter[id]'>";

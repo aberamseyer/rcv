@@ -35,6 +35,13 @@
     justify-content: space-evenly;
     align-items: center;
 }
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
 
 .title {
     font-size: 1.1rem;
@@ -196,7 +203,7 @@ br { user-select: none; }
     left: 0;
     bottom: 0;
     padding: 1rem 5rem 1rem 1rem;
-    transform: translateX(calc(-100% + 3rem));
+    transform: translateX(calc(-100% + 2rem));
     background: var(--contrast-bg);
     transition: .15s all ease-in-out;
     display: flex;

@@ -9,7 +9,13 @@
 error_reporting(E_ALL^E_NOTICE);
 
 $time = microtime(true);
-define("LOCAL", $_SERVER['HTTP_HOST'] !== getenv("DOMAIN"));
+if ($_SERVER['HTTP_HOST'] !== getenv("DOMAIN")) {
+	define("LOCAL", true);
+	apache_setenv("DOMAIN", $_SERVER['HTTP_HOST']);
+}
+else {
+	define("LOCAL", false);
+}
 define("HEROKU", strpos(getenv("DOMAIN"), "heroku") !== false);
 define("COMMIT_HASH", HEROKU
 	? `git log -1 --pretty=format:%h`

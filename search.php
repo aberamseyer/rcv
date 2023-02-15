@@ -124,7 +124,8 @@ if ($q) {
 	}
 	if ($also['cr']) {
 		$results['Cross Reference'] = select("
-			SELECT '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#verse-' || cc.id href, cc.reference a_tag, f.cross_reference content
+			SELECT '/bible/' || LOWER(REPLACE(b.name, ' ', '-')) || '/' || c.number || '#verse-' || cc.id href, cc.reference a_tag,
+				f.cross_reference || '<br>' || cc.content content
 			FROM footnotes f
 			JOIN chapter_contents cc ON cc.id = f.verse_id
 			JOIN chapters c ON c.id = cc.chapter_id
@@ -185,7 +186,7 @@ echo "<h1><a href='/bible'>Search".($q ? ": '".html($q)."'" : '')."</a></h1>";
 		if ($also['fn'] || $also['cr'] || $also['out'] || $also['subj'])
 			$checked = true;
 ?></select> chapter <input name='chapter' placeholder="Any Chapter" type="number" min="1" value="<?= $chapter['number'] ?>"> for
-	<input type="search" name="q" minlength="3" maxlength="2000" placeholder="this phrase..." value="<?= htmlentities($q, ENT_HTML5) ?>">
+	<input type="search" name="q" minlength="3" maxlength="2000" placeholder="this phrase..." value="<?= htmlentities($q, ENT_HTML5) ?>" autocomplete="off">
 	<fieldset>
 		<legend>Also search in</legend>
 		<ul style="list-style:none;">
@@ -223,7 +224,7 @@ if ($q) {
 					echo nav_line();
 					$count = 0;
 				}
-				$formatted_result = trim(format_note($result['content'], false));
+				$formatted_result = trim(add_dots($result['content']));
 				if ($cat != "Cross Reference") {
 					$formatted_result = preg_replace("/($q)/i", "<span class='match'>\$1</span>", $formatted_result);
 				}

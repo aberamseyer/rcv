@@ -347,20 +347,24 @@
 		// on regular verses, add a verse number and play button
 		$parts = [ "<p id='verse-$element[id]' class='$heading_class' data-ref='$element[reference]' data-".($book['testament'] ? 'new' : 'old')."-testament>" ];
 		if ($element['number'])
-			$parts[] = "<span class='verse-start'><a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a></span>";
+			$parts[] = 
+			"<span class='verse-start'>
+				<a href='/bible/".link_book($book['name'])."' class='verse-number'>$element[number]</a>
+			</span>";
 		$parts[] = "<span class='verse-content'>$content</span>";
 		if ($element['number']) {
 			$parts[] = "
 			<span class='verse-end'>
 				<span class='play' onclick='startReading(event, $element[id])'>&#9658;</span>
-				<span class='inter' onclick='toggleOriginalText(event, $element[id], this)'><span>".($book['testament'] ? "&Omega;" : "&#1514;")."</span></a>
+				<span class='inter' onclick='toggleOriginalText(event, $element[id], this)'><span>".($book['testament'] ? "&Omega;" : "&#1514;")."</span></span>
+				<a class='inter' target='_blank' href='/search?q=$element[reference]&also[cr]=true&also[no_verses]=true'><span style='transform: rotate(45deg)' title='Find Usages'>&#9906;</span></a>
 				<a class='link hidden' target='_blank' href='".biblehub_interlinear_href($element)."'><i class='fa fa-external-link'></i></a>
 			</span>";
 		}
 		$parts[] = "</p>";
 
 		// right-align "Selah"s, including the footnotes attached to them
-		$with_right_aligned_selahs = preg_replace_callback('/(?:<sup>.*<\/sup>)?Selah/i', function($matches) {
+		$with_right_aligned_selahs = preg_replace_callback('/(?:<sup>.*<\/sup>)?Selah/', function($matches) {
 			return "<span style='float: right;'>".$matches[0]."</span>";
 		}, implode('', $parts));
 
@@ -530,7 +534,7 @@
 	}
 
 	function nav_line($no_top = false, $attr = "") {
-		global $book, $chapter, $search, $concordance;
+		global $book, $chapter, $search;
 		$next = $prev = '';
 
 		$parts = [
