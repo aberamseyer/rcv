@@ -82,7 +82,9 @@ function startReading(event, id) {
     if (verseNum) {
       // translate this verse into an id that files.ramseyer.dev can match
         thingsToSpeak = [ ...Array(window.verses - verseNum + 1).keys() ].map(i =>
-          `https://files.ramseyer.dev/tts/rcv-ref/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.ogg`);
+          `https://files.ramseyer.dev/rcv-tts/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.mp3`);
+          // `https://files.ramseyer.dev/tts/rcv-ref/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.ogg`);
+          // `https://f002.backblazeb2.com/file/bible-api/tts/rcv-ref-mp3/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.mp3`)
   
       // play each track synchronously
       menu.querySelector('ul').prepend(menuEL);

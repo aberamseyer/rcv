@@ -171,7 +171,7 @@ function doRequest(method, url, body, onsuccess) {
 			jsMenuEls[2].innerText = `Use serif font`;
 		}
 	}
-	setTheme(settings.theme);
+	// setTheme(settings.theme);
 	setNotes(settings.notes);
 	setFont(settings.serif);
 

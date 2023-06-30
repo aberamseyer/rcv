@@ -101,8 +101,8 @@ const verseContainer = document.getElementById('verses');
 					if (results.length) {
 						// encodeURIComponent in the copyToClip call is so single and double quotes don't break the html
 						recognizedVerses.innerHTML += `<br>
-							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><span class="emoji">&#128203</span>&nbsp;&nbsp;verses with refs</a> <br>
-							<a href='' onclick="copyToClip(\`${encodeURIComponent(results.map(r => r.text).join(` `) + `\n` + requested)}\`, this, true); return false;"><span class="emoji">&#128203</span>&nbsp;&nbsp;joined verse text</a> <br>
+							<a href='' onclick='copyToClip(verseContainer.innerText, this); return false;'><span class="emoji">&#128203</span>&nbsp;&nbsp;verses with refs</a>
+							<a href='' onclick="copyToClip(\`${encodeURIComponent(results.map(r => r.text).join(` `) + `\n` + requested)}\`, this, true); return false;"><span class="emoji">&#128203</span>&nbsp;&nbsp;joined verse text</a>
 							<a href='' onclick='copyToClip("<?= $_SERVER['REQUEST_SCHEME'] ?>://<?= getenv("DOMAIN") ?: $_SERVER['HTTP_HOST'] ?>/verse?verses=${encodeURIComponent(recognizedVerses.innerText)}", this); return false;'><span class="emoji">&#128203</span>&nbsp;&nbsp;link to verses</a>`;
 					}
 					hr.classList[results.length === 0 ? 'add' : 'remove']('hidden'); // hide <hr> if no results

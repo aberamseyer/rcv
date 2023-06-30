@@ -15,7 +15,7 @@ if ($_SESSION['user']) {
 }
 
 if ($_POST['user'] && $_POST['password']) {
-    $user_row = row("SELECT * FROM users WHERE user = '".db_esc($_POST['user'])."'");
+    $user_row = row("SELECT * FROM users WHERE user = '".db_esc($_POST['user'])."'", s_db());
     if ($user_row) {
         if (password_verify($_POST['password'], $user_row['password'])) {
             $_SESSION['user'] = $user_row;

@@ -6,16 +6,16 @@
   --tooltip-bg: #545454;
 }
 .light:root {
-  filter: invert(1) hue-rotate(180deg);
-  --main-bg: #020202;
-  --main-text: #b5b5b5;
-  --white: #e6e6e6;
-  --contrast-bg: #232323;
+  /* filter: invert(1) hue-rotate(180deg); */
+  --main-bg: rgb(253,253,253);
+  --main-text: rgb(25,25,25);
+  --white: rgb(102,102,102);
+  --contrast-bg: rgb(220,220,220);
   /*--tooltip-bg: #545454;*/
 }
-.light .emoji {
-  filter: invert(1) hue-rotate(180deg);
-}
+/* .light .emoji { */
+  /* filter: invert(1) hue-rotate(180deg); */
+/* } */
 
 /* $color-text: #dedce5; */
 /* Sakura.css v1.3.0
@@ -87,11 +87,11 @@ hr {
 
 a {
   text-decoration: none;
-  color: var(--white); 
+  color: var(--main-text); 
   border-bottom:  2px solid transparent; }
-  a:hover {
-    color: var(--main-text);
-    border-bottom: 2px solid var(--main-text); }
+a:hover {
+  color: var(--main-text);
+  border-bottom: 2px solid var(--main-text); }
 
 ul {
   padding-left: 1.4em;

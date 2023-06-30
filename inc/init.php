@@ -6,16 +6,17 @@
  * Time: 09:05
  */
 
-error_reporting(E_ALL^E_NOTICE);
+error_reporting(E_ALL^E_NOTICE^E_WARNING);
 
 $time = microtime(true);
-if ($_SERVER['HTTP_HOST'] !== getenv("DOMAIN")) {
+if (strpos(getenv("DOMAIN"), $_SERVER['HTTP_HOST']) !== false) {
 	define("LOCAL", true);
 	apache_setenv("DOMAIN", $_SERVER['HTTP_HOST']);
 }
 else {
 	define("LOCAL", false);
 }
+
 define("HEROKU", strpos(getenv("DOMAIN"), "heroku") !== false);
 define("COMMIT_HASH", HEROKU
 	? `git log -1 --pretty=format:%h`
@@ -23,7 +24,11 @@ define("COMMIT_HASH", HEROKU
 
 require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 
-ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 2);
+# phpinfo();
+# die;
+ini_set('session.gc_maxlifetime', 60*60*24*14); // seconds in 2 weeks
+require_once "session.php";
+session_set_save_handler(new MySessionHandler(), true);
 session_start();
 
 if (!LOCAL && !$_SESSION['user'] && !$login && !$insecure) {

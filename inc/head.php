@@ -25,7 +25,7 @@
   <div id="menu">
     <span class='dots'>&#8942;</span>
       <ul id='menu-js'>
-        <li>
+        <li style='display: none;'>
           <span data-toggle='theme'>Switch to light theme</span>
           <div class="emoji">🌗</div>
         </li>

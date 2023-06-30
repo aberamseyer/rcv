@@ -143,33 +143,38 @@ function ajax_request_verse($q) {
 		// split into separate books/verses
 		$prev_book = null;
 		$verses = explode(';', $q);
+		$i = -1;
 		foreach($verses as $verse) {
+			$i++;
 			$verse = trim($verse);
 				
-				preg_match('/((?>\d? )?\w+\.?) (.*)/i', $verse, $matches);
-				list( , $book, $section_str ) = $matches;
+			preg_match('/((?>\d? )?\w+\.?) (.*)/i', $verse, $matches);
+			list( , $book, $section_str ) = $matches;
 			$book = trim($book);
 
 			if (!$book && !$prev_book)
-						continue;
-			
+				continue;
+				
 			if ($books_by_abbr[$book] || $books_by_name[$book]) {
 				$book = $books_by_abbr[$book] ?: $books_by_name[$book];
 			}
 			else {
 				foreach($books as $to_check) {
 					if (
-						stripos($to_check['name'], $book) === 0 ||
-						stripos($to_check['abbreviation'], $book) === 0
-					)
+						$book && // stripos was returning '0' for an empty string: php v8.2.3
+							(stripos($to_check['name'], $book) === 0 ||
+							stripos($to_check['abbreviation'], $book) === 0)
+					) {
 						$book = $to_check['abbreviation'];
+					}
 				}
 			}
 
-				if (!$book)
-					$book = $prev_book;
+			if (!$book)
+				$book = $prev_book;
 			if (!$section_str)
 				$section_str = $verse;
+			
 
 			$is_single_book = in_array($book, $single_books, true);
 

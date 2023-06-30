@@ -71,6 +71,14 @@
 		}
 		return $l_db;
 	}
+
+	function s_db() {
+		static $s_db;
+		if (!$s_db) {
+			$s_db = new SQLite3(__DIR__."/../extras/sqlite3/sessions.db");
+		}
+		return $s_db;
+	}
 	
 	function query ($query, $return = "", $db = null) {
 		$db = db($db);
@@ -261,17 +269,17 @@
 			die;
 	}
 
-	function db_esc ($string) {
-		$db = db();
+	function db_esc ($string, $alt_db = null) {
+		$db = db($alt_db);
 		return $db->escapeString($string);
 	}
 
-	function db_esc_like ($string) {
+	function db_esc_like ($string, $alt_db = null) {
 		return db_esc(str_replace(
 			["\\", "_", "%"],
 			["\\\\", "\\_", "\\%"],
 			$string
-		));
+		), $alt_db);
 	}
 
 	function redirect($url) {

@@ -2,7 +2,7 @@
     $bible = true;
     require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
-    require $_SERVER['DOCUMENT_ROOT']."/inc/cache-head.php";
+    // require $_SERVER['DOCUMENT_ROOT']."/inc/cache-head.php";
 
     $footnotes = null;
 
@@ -196,5 +196,5 @@
     echo "<script>window.book = '".$book['name']."', window.chapter = '".$chapter['number']."'; window.verses = '".$chapter['verses']."'; </script>";
     echo '<script src="/res/js/bible.js?v='.COMMIT_HASH.'"></script>';
     require $_SERVER['DOCUMENT_ROOT']."/inc/foot.php";
-    require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
+    // require $_SERVER['DOCUMENT_ROOT']."/inc/cache-foot.php";
 ?>
