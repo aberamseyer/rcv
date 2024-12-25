@@ -50,7 +50,7 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/head.php";
       <li>Philemon<pre>https://<?= getenv("DOMAIN") ?>/bible/philemon</pre></li>
     </ul>
   </li>
-  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> (Cmd/Ctrl+i anywhere) page to find a set list of verses.
+  <li>You can use the <a href='/verse' target='_blank'>Verse Lookup</a> (Cmd/Ctrl+u anywhere) page to find a set list of verses.
     <ul>
       <li>Separate verses with a semicolon: Gen. 1:26; 2:14</li>
       <li>verses can have a range: Dan. 2:4-7</li>
