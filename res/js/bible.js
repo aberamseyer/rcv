@@ -4,11 +4,11 @@ async function toggleOriginalText(event, id, el) {
   const textEl = parentEl.querySelector('.verse-content');
   const showOrig = parentEl.children.length < 4;
   if (showOrig) {
-    doRequest("POST", `/ajax?action=original_text&id=${encodeURIComponent(id)}`, null, function(request) {
+    doRequest("POST", `/ajax?action=original_text&id=${encodeURIComponent(id)}`, null, function (request) {
       const data = JSON.parse(request.response)
       const newEl = document.createElement('span');
       newEl.classList.add('original-text');
-      newEl.innerHTML = data.map(word => 
+      newEl.innerHTML = data.map(word =>
         `<span>
             <span>${word.word}</span>
             <a target='_blan' href='/language-concordance?strongs=${word.number}&word=${encodeURIComponent(word.word)}' data-orig-text>${word.number}</a>
@@ -28,7 +28,7 @@ async function toggleOriginalText(event, id, el) {
 
 // audio reading and functions
 let menu, audio1, audio2, thingsToSpeak,
-menuEL = document.createElement('li');
+  menuEL = document.createElement('li');
 menuEL.innerHTML = `<a onclick='stopReading();' style="cursor:pointer;">Stop Reading</a><div class='emoji'>🛑</div>`;
 
 window.addEventListener('load', () => {
@@ -45,13 +45,13 @@ function playAudio(src, nextSrc) {
 
     const unload = () => {
       audio1.pause();
-      [ audio1, audio2 ].forEach(el => {
+      [audio1, audio2].forEach(el => {
         el.src = '';
         el.load();
       });
     };
 
-    if (!src)  {
+    if (!src) {
       // for some reason there's nothing to speak. stop reading, remove the source
       unload();
       resolve();
@@ -81,23 +81,23 @@ function startReading(event, id) {
     const verseNum = parseInt(matches[1]);
     if (verseNum) {
       // translate this verse into an id that files.ramseyer.dev can match
-        thingsToSpeak = [ ...Array(window.verses - verseNum + 1).keys() ].map(i =>
-          `https://files.ramseyer.dev/rcv-tts/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.mp3`);
-          // `https://files.ramseyer.dev/tts/rcv-ref/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.ogg`);
-          // `https://f002.backblazeb2.com/file/bible-api/tts/rcv-ref-mp3/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.mp3`)
-  
+      thingsToSpeak = [...Array(window.verses - verseNum + 1).keys()].map(i =>
+        `https://files2.ramseyer.dev/tts/rcv-serdavid/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.m4a`);
+      // `https://files.ramseyer.dev/tts/rcv-ref/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.ogg`);
+      // `https://f002.backblazeb2.com/file/bible-api/tts/rcv-ref-mp3/${window.location.pathname.replace('/bible/', '').replace('/', '_')}_${i + verseNum}.mp3`)
+
       // play each track synchronously
       menu.querySelector('ul').prepend(menuEL);
       menu.classList.add('show');
-  
+
       for (let i = 0, p = Promise.resolve(); i < thingsToSpeak.length; i++) {
         p = p.then(() => {
           return new Promise(resolve => {
-            const el = Array.from(document.querySelectorAll('.verse')).slice(verseNum - 1)[ i ];
+            const el = Array.from(document.querySelectorAll('.verse')).slice(verseNum - 1)[i];
             el.classList.add('highlight');
             el.scrollIntoView({ behavior: "smooth", block: "center" });
             playAudio(thingsToSpeak[i],
-                thingsToSpeak[i+1] ? thingsToSpeak[i+1] : ''
+              thingsToSpeak[i + 1] ? thingsToSpeak[i + 1] : ''
             ).then(() => {
               el.classList.remove('highlight');
               resolve();
@@ -114,17 +114,17 @@ function startReading(event, id) {
 }
 function stopReading() {
   return new Promise(res => {
-    thingsToSpeak = [ ];
-    
+    thingsToSpeak = [];
+
     this.playAudio('')
-    .then(() => {
-      document.querySelectorAll('.verse').forEach(x => {
-        x.classList.remove('highlight');
+      .then(() => {
+        document.querySelectorAll('.verse').forEach(x => {
+          x.classList.remove('highlight');
+        });
+        menuEL.remove();
+        menu.classList.remove('show');
+        res();
       });
-      menuEL.remove();
-      menu.classList.remove('show');
-      res();
-    });
   });
 }
 
@@ -133,8 +133,8 @@ if (!window.location.hash) {
   const matches = window.location.search.match(/verse=(\d+)/);
   if (matches) {
     window.addEventListener('load', () => {
-      setTimeout(()  => {
-        const el = document.querySelectorAll('.verse')[ parseInt(matches[1]) - 1 ];
+      setTimeout(() => {
+        const el = document.querySelectorAll('.verse')[parseInt(matches[1]) - 1];
         el.classList.add('highlight');
         el.scrollIntoView();
         setTimeout(() => el.classList.remove('highlight'), 1000);
@@ -194,10 +194,12 @@ htmlNode.addEventListener('keyup', e => {
   if (leftArrow && e.key === `ArrowLeft`) {
     checkReferrer(leftArrow.getAttribute('href'));
     window.location = leftArrow.getAttribute('href');
+    e.preventDefault();
   }
   else if (rightArrow && e.key === `ArrowRight`) {
     checkReferrer(rightArrow.getAttribute('href'));
     window.location = rightArrow.getAttribute('href');
+    e.preventDefault();
   }
 });
 
@@ -216,7 +218,7 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
         doRequest("POST", "/ajax?action=a-verse", formData, request => {
           const results = JSON.parse(request.response);
           if (results.length) {
-            newEl.innerHTML = results.map(res => 
+            newEl.innerHTML = results.map(res =>
               `<div>
                 <b><a href='${res.href}' target='_blank'>${res.reference}</a></b>
                   &nbsp;&nbsp;
@@ -224,12 +226,12 @@ document.querySelectorAll('[verse-hover]').forEach(aEl => {
                 </div>`
             ).join('');
             document.querySelectorAll('.hover-verse').forEach(el => el.remove());
-            
+
             newEl.classList.add('hover-verse');
             newEl.addEventListener('mouseleave', () => newEl.remove());
 
             const rect = aEl.getBoundingClientRect();
-            
+
             newEl.style.left = rect.x + 200 > window.innerWidth // 200 bc that's the width of a .hover-verse element
               ? `-200px`
               : `0px`;

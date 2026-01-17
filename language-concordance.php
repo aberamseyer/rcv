@@ -50,7 +50,7 @@ if ($strongs &&
 	$data = row("SELECT * FROM lexicon WHERE strongs = '".db_esc($strongs)."'", l_db())) {
 	ob_start();
 	echo "<h3><a href='/bible'>Strong's $strongs".($passed_word ? ": $passed_word" : "")."</a></h3>";
-	echo "<p class='smaller'><a href='/language-concordance'>↩ Back</a> to search</p>";
+	echo "<p class='smaller'><a href='/language-concordance'><span class='mono'>↩</span> Back</a> to search</p>";
 	row("SELECT * FROM books");
 	
 	echo "<p><b>Base word</b>: $data[word] <em>$data[pronunciation]</em></p>";
@@ -67,7 +67,7 @@ if ($strongs &&
 }
 else if ($list_usages) {
 	echo "<h3><a href='/bible'>Usages of $list_usages</a></h3>";
-	echo "<p class='smaller'><a href='/language-concordance?strongs=$list_usages'>↩ Back</a> to the definition</p>";
+	echo "<p class='smaller'><a href='/language-concordance?strongs=$list_usages'><span class='mono'>↩</span> Back</a> to the definition</p>";
 	$q_like = "'%\"".db_esc_like(strtolower($list_usages))."\"%'";
 
 	$ids = select("SELECT id, text_content FROM original_text WHERE text_content LIKE $q_like", l_db());

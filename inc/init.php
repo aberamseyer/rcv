@@ -31,9 +31,12 @@ require_once "session.php";
 session_set_save_handler(new MySessionHandler(), true);
 session_start();
 
+/*
+switched to basic http authentication in nginx proxy
 if (!LOCAL && !$_SESSION['user'] && !$login && !$insecure) {
 	redirect('/login?thru='.urlencode($_SERVER['REQUEST_URI']));
 }
+*/
 
 if (!$_POST['action']) {
 

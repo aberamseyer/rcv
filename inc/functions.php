@@ -365,8 +365,8 @@
 			<span class='verse-end'>
 				<span class='play' onclick='startReading(event, $element[id])'>&#9658;</span>
 				<span class='inter' onclick='toggleOriginalText(event, $element[id], this)'><span>".($book['testament'] ? "&Omega;" : "&#1514;")."</span></span>
-				<a class='inter' target='_blank' href='/search?q=$element[reference]&also[cr]=true&also[no_verses]=true'><span style='transform: rotate(45deg)' title='Find Usages'>&#9906;</span></a>
-				<a class='link hidden' target='_blank' href='".biblehub_interlinear_href($element)."'><i class='fa fa-external-link'></i></a>
+				<!-- a class='inter' target='_blank' href='/search?q=$element[reference]&also[cr]=true&also[no_verses]=true'><span style='transform: rotate(45deg)' title='Find Usages'>&#9906;</span></a --!>
+				<a class='link hidden' target='_blank' href='".biblehub_interlinear_href($element)."'><span class='external-link'>🔗</span></a>
 			</span>";
 		}
 		$parts[] = "</p>";

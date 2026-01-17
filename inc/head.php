@@ -41,17 +41,5 @@
           <span data-toggle='random'>Random Verse </span>
           <div class="emoji">🎲</div>
         </li>
-        </li>
       </ul>
-  </div>
-  <div id="sidebar">
-    <ul id="navigation">
-      <li><a tabindex='-1' href='/bible'><i class='fa fa-book'></i>&nbsp;&nbsp;Books</a></li>
-      <li><a tabindex='-1' href='/search'><i class='fa fa-search'></i>&nbsp;&nbsp;Search</a></li>
-      <li><a tabindex='-1' href='/concordance'><i class='fa fa-map-signs'></i>&nbsp;&nbsp;Concordance</a></li>
-      <li><a tabindex='-1' href='/language-concordance'><i class='fa fa-language'></i>&nbsp;&nbsp;Language Concordance</a></li>
-      <li><a tabindex='-1' href='/verse'><i class='fa fa-crosshairs'></i>&nbsp;&nbsp;Verse Lookup</a></li>
-      <li><a tabindex='-1' href='/help'><i class='fa fa-question-circle-o'></i>&nbsp;&nbsp;Help</a></li>
-      <li><a tabindex='-1' href='/release-notes'><i class='fa fa-rocket'></i>&nbsp;&nbsp;Release Notes</a></li>
-    </ul>
   </div>

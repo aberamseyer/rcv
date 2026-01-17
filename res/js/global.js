@@ -10,7 +10,7 @@ function copyToClip(copyText, element, decode) {
 function doRequest(method, url, body, onsuccess) {
 	const request = new XMLHttpRequest();
 	request.open(method, url);
-	request.onloadend = function() {
+	request.onloadend = function () {
 		if (request.status === 200) {
 			onsuccess(request);
 		}
@@ -19,105 +19,23 @@ function doRequest(method, url, body, onsuccess) {
 }
 
 (() => {
-	// init sidebar
 	window.addEventListener('load', () => {
 	  document.querySelector('body').classList.add('has-js');
-		const sidebar = document.getElementById('sidebar');
-		
-		let mouseStartedMoving = false;
-		let mouseMoved = false;
-		const MINIMUM_MOUSE_MOVE_TIME = 100;
-		
-		setInterval(() => { 
-			if (!mouseMoved && mouseStartedMoving) {
-				sidebar.classList.remove('active')
-				mouseStartedMoving = false;
-			}
-			mouseMoved = false;
-		}, MINIMUM_MOUSE_MOVE_TIME);
-		
-		let startTime = 0;
-		window.onmousemove = function(e) {
-			if (e.clientX < Math.min(window.innerWidth / 4, 75) &&
-				Date.now() - startTime > MINIMUM_MOUSE_MOVE_TIME) {
-				sidebar.classList.add('active');
-				startTime = Date.now();
-			}
-			mouseStartedMoving = true;
-			mouseMoved = true;
-		}
-
-		document.querySelectorAll('#navigation a').forEach(el => {
-			if (window.location.href.includes(el.href)) {
-				el.classList.add('active');
-			}
-		});
 	});
-	document.querySelector('html').addEventListener("touchstart", startTouch, false);
-  document.querySelector('html').addEventListener("touchmove", moveTouch, false);
-
-	// Swipe Up / Down / Left / Right
-  let initialX = null;
-  let initialY = null;
-
-  function startTouch(e) {
-    initialX = e.touches[0].clientX;
-    initialY = e.touches[0].clientY;
-  };
-
-  function moveTouch(e) {
-    if (initialX === null) {
-      return;
-    }
-
-    if (initialY === null) {
-      return;
-    }
-
-    let currentX = e.touches[0].clientX;
-    let currentY = e.touches[0].clientY;
-
-    let diffX = initialX - currentX;
-    let diffY = initialY - currentY;
-
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      // sliding horizontally
-      if (diffX > 10) {
-        // swiped left
-        console.log("swiped left");
-				sidebar.classList.remove('swiped');
-      } else if (diffX < -10) {
-				// swiped right
-        console.log("swiped right");
-				sidebar.classList.add('swiped');
-      }  
-    } else {
-      // sliding vertically
-      if (diffY > 0) {
-        // swiped up
-      } else {
-        // swiped down
-      }  
-    }
-
-    initialX = null;
-    initialY = null;
-  };
-
 	// menu show/hide on scroll
 	const menu = document.getElementById('menu');
 	let scrollPos = 0;
 	window.addEventListener("ontouchstart" in window
-        ? 'touchmove'
-        : 'wheel',
-    () => {
-        const top = document.documentElement.scrollTop;
-        if (top < scrollPos)
-            menu.classList.remove('hide');
-        else
-            menu.classList.add('hide');
-        scrollPos = top;
-    });
+		? 'touchmove'
+		: 'wheel',
+		() => {
+			const top = document.documentElement.scrollTop;
+			if (top < scrollPos)
+				menu.classList.remove('hide');
+			else
+				menu.classList.add('hide');
+			scrollPos = top;
+		});
 
 	// menu changing settings
 	let settings;
@@ -125,13 +43,13 @@ function doRequest(method, url, body, onsuccess) {
 	const jsMenuEls = document.querySelectorAll('#menu-js span');
 	settings = JSON.parse(localStorage.getItem('settings'));
 	if (!settings) {
-    	settings = {
-    		theme: 'dark',
-    		notes: true,
-    		serif: true,
-    	};
-    }
-	
+		settings = {
+			theme: 'dark',
+			notes: true,
+			serif: true,
+		};
+	}
+
 	function saveSettings() {
 		localStorage.setItem('settings', JSON.stringify(settings));
 	}
@@ -160,7 +78,7 @@ function doRequest(method, url, body, onsuccess) {
 		}
 	}
 	function setFont(newVal) {
-    	if (newVal) {
+		if (newVal) {
 			html.classList.add(`serif`);
 			settings.serif = true;
 			jsMenuEls[2].innerText = `Use sans-serif font`;
@@ -203,7 +121,7 @@ function doRequest(method, url, body, onsuccess) {
 
 	// check for update
 	const ignoreUpdate = localStorage.getItem('ignore_update');
-	if (!ignoreUpdate ||  Date.now() - parseInt(ignoreUpdate) > 1000*60*60*24*3) { // ignore updates for 3 days before re-prompting
+	if (!ignoreUpdate || Date.now() - parseInt(ignoreUpdate) > 1000 * 60 * 60 * 24 * 3) { // ignore updates for 3 days before re-prompting
 		doRequest("GET", "/ajax?action=check_update&domain=" + encodeURIComponent(window.location.hostname), null, request => {
 			const url = JSON.parse(request.response).url;
 			if (url && confirm(`Download update?`)) {
@@ -221,7 +139,7 @@ function doRequest(method, url, body, onsuccess) {
 	const dontShowReleaseNotes = localStorage.getItem('dont_show_release_notes');
 	if (!dontShowReleaseNotes) {
 		localStorage.setItem('dont_show_release_notes', "1");
-		window.location = '/release-notes';
+		// window.location = '/release-notes';
 	}
 
 	// reveal "jump to top" button

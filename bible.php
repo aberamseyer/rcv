@@ -176,7 +176,7 @@
                             ? " ".implode(', ', explode(',', $note['matching_word'])).": "
                             : '').
                 "</a>&nbsp;";
-                echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'>↩</a>";
+                echo format_note($note['note'])." <a href='#verse-$note[verse_id]' class='no-select'><span class='mono'>↩</span></a>";
                 echo "</small>";
             }
         }
