@@ -1,0 +1,13 @@
+services:
+  rcv:
+    build: .
+    container_name: rcv
+    restart: unless-stopped
+    environment:
+      # matches ramseyer; a value containing the request host turns on LOCAL mode
+      DOMAIN: ramseyer.dev
+    ports:
+      - "127.0.0.1:8090:80"
+    volumes:
+      # rcv.db, language.db, sessions.db; owned by www-data (uid 33) on the host
+      - ./extras/sqlite3:/var/www/html/extras/sqlite3
