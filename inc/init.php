@@ -26,17 +26,29 @@ require $_SERVER['DOCUMENT_ROOT']."/inc/functions.php";
 
 # phpinfo();
 # die;
-ini_set('session.gc_maxlifetime', 60*60*24*14); // seconds in 2 weeks
+define("SESSION_LIFETIME", 60*60*24*365);
+ini_set('session.gc_maxlifetime', SESSION_LIFETIME);
+session_set_cookie_params([
+	'lifetime' => SESSION_LIFETIME,
+	'path' => '/',
+	'secure' => !LOCAL, // Cloudflare terminates TLS
+	'httponly' => true,
+	'samesite' => 'Lax',
+]);
 require_once "session.php";
 session_set_save_handler(new MySessionHandler(), true);
 session_start();
 
-/*
-switched to basic http authentication in nginx proxy
-if (!LOCAL && !$_SESSION['user'] && !$login && !$insecure) {
+if (!LOCAL && !$_SESSION['user'] && !$login) {
 	redirect('/login?thru='.urlencode($_SERVER['REQUEST_URI']));
 }
-*/
+
+// PHP only sends the cookie at session start; resend so it expires a year after the last visit
+if ($_SESSION['user']) {
+	$cookie = session_get_cookie_params();
+	unset($cookie['lifetime']);
+	setcookie(session_name(), session_id(), ['expires' => time() + SESSION_LIFETIME] + $cookie);
+}
 
 if (!$_POST['action']) {
 

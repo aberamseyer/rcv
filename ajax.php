@@ -1,9 +1,5 @@
 <?php
 
-if ($_REQUEST['action'] == 'check_update') {
-	$insecure = true;
-}
-
 require $_SERVER['DOCUMENT_ROOT']."/inc/init.php";
 
 function adjust_requested_elements($book, $chapter, $prev_chapter, $verses = "") {

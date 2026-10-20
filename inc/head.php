@@ -41,5 +41,9 @@
           <span data-toggle='random'>Random Verse </span>
           <div class="emoji">🎲</div>
         </li>
+        <li>
+          <a href='/logout'>Log out</a>
+          <div class="emoji">🚪</div>
+        </li>
       </ul>
   </div>
