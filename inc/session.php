@@ -12,9 +12,15 @@ class MySessionHandler implements SessionHandlerInterface
         return true;
     }
 
+    // s_db() is a shared handle; closing it breaks session_regenerate_id() and later queries
     public function close(): bool
     {
-        return $this->s_db->close();
+        return true;
+    }
+
+    private function cutoff($maxlifetime)
+    {
+        return date(MySessionHandler::DATE_FORMAT, time() - $maxlifetime);
     }
 
     public function read($id)
@@ -23,7 +29,8 @@ class MySessionHandler implements SessionHandlerInterface
         SELECT data
         FROM sessions
         WHERE id = '".db_esc($id, $this->s_db)."'
-          AND deleted_at IS NULL", $this->s_db);
+          AND deleted_at IS NULL
+          AND last_updated >= '".$this->cutoff(ini_get('session.gc_maxlifetime'))."'", $this->s_db);
       return $data ?: '';
     }
 
@@ -40,18 +47,12 @@ class MySessionHandler implements SessionHandlerInterface
 
     public function destroy($id): bool
     {
-        query("DELETE FROM sessions WHERE id = '".db_esc($id, $this->s_db)."'", $this->s_db);
+        query("DELETE FROM sessions WHERE id = '".db_esc($id, $this->s_db)."'", "", $this->s_db);
         return true;
     }
 
     public function gc($maxlifetime)
     {
-        // query("DELETE FROM sessions WHERE last_udpated < ".date(MySessionHandler::DATE_FORMAT, time() - $maxlifetime), $this->s_db);
-        query("
-          UPDATE sessions
-          SET deleted_at = '".date(MySessionHandler::DATE_FORMAT)."'
-          WHERE last_udpated < ".date(MySessionHandler::DATE_FORMAT, time() - $maxlifetime),
-        $this->s_db);
-        return true;
+        return query("DELETE FROM sessions WHERE last_updated < '".$this->cutoff($maxlifetime)."'", "num_rows", $this->s_db);
     }
 }
